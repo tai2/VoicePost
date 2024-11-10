@@ -3,10 +3,18 @@ import { Text, View, Button } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 
+type RecordedAudio = {
+  file: string;
+  duration: number;
+  fileSize: number;
+};
+
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [recordedFile, setRecordedFile] = useState<string | null>(null);
+  const [recordedAudio, setRecordedAudio] = useState<RecordedAudio | null>(
+    null
+  );
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
 
   const showToast = () => {
@@ -36,7 +44,11 @@ export default function Index() {
             accessibilityLabel="録音を停止する"
             onPress={() => {
               setIsRecording(false);
-              setRecordedFile("file://path/to/recorded.mp3");
+              setRecordedAudio({
+                file: "file://path/to/recorded.mp3",
+                duration: 15,
+                fileSize: 1024 * 100,
+              });
             }}
           />
         ) : (
@@ -45,13 +57,13 @@ export default function Index() {
             accessibilityLabel="録音を開始する"
             onPress={() => {
               setIsRecording(true);
-              setRecordedFile(null);
+              setRecordedAudio(null);
               setUploadedFile(null);
             }}
           />
         )}
 
-        {recordedFile ? (
+        {recordedAudio ? (
           <>
             <Button
               title="戻す"
