@@ -79,6 +79,7 @@ export default function Index() {
             <Button
               title="アップロード"
               accessibilityLabel="録音した音源をアップロードする"
+              disabled={uploadedFile !== null}
               onPress={() => {
                 setUploadedFile("https://example.com/recorded.mp3");
                 showToast();
