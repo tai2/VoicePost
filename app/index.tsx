@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Text, View, Button } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 
 type RecordedAudio = {
   file: string;
-  duration: number;
   fileSize: number;
 };
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const recordingStartedAt = useRef<number>(0);
+  const [recordedDuration, setRecordedDuration] = useState<number>(0);
   const [recordedAudio, setRecordedAudio] = useState<RecordedAudio | null>(
     null
   );
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isRecording) {
+      requestAnimationFrame((t) => {
+        setRecordedDuration(t - recordingStartedAt.current);
+      });
+    }
+  }, [isRecording, recordedDuration]);
 
   const showToast = () => {
     Toast.show("URLをクリップボードにコピーしました", {
@@ -46,7 +55,6 @@ export default function Index() {
               setIsRecording(false);
               setRecordedAudio({
                 file: "file://path/to/recorded.mp3",
-                duration: 15,
                 fileSize: 1024 * 100,
               });
             }}
@@ -56,12 +64,19 @@ export default function Index() {
             title="録音"
             accessibilityLabel="録音を開始する"
             onPress={() => {
+              console.log("Play");
               setIsRecording(true);
+              recordingStartedAt.current = performance.now();
+              setRecordedDuration(0);
               setRecordedAudio(null);
               setUploadedFile(null);
             }}
           />
         )}
+
+        {isRecording || recordedAudio ? (
+          <Text>{formatDuration(recordedDuration)}</Text>
+        ) : null}
 
         {recordedAudio ? (
           <>
@@ -111,3 +126,13 @@ export default function Index() {
     </RootSiblingParent>
   );
 }
+
+const formatDuration = (duration: number): string => {
+  const durationSeconds = duration / 1000;
+  const minutes = Math.floor(durationSeconds / 60);
+  const seconds = Math.floor(durationSeconds % 60);
+  const belowSeconds = Math.floor((duration % 1000) / 10);
+  return `${pad2(minutes)}:${pad2(seconds)}.${pad2(belowSeconds)}`;
+};
+
+const pad2 = (n: number): string => n.toString().padStart(2, "0");
