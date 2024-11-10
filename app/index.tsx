@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Text, View, Button } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
+import * as Progress from "react-native-progress";
 
 type RecordedAudio = {
   file: string;
@@ -17,6 +18,9 @@ export default function Index() {
     null
   );
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const uploadProgressRef = useRef<number>(0);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   useEffect(() => {
     if (isRecording) {
@@ -25,6 +29,24 @@ export default function Index() {
       });
     }
   }, [isRecording, recordedDuration]);
+
+  useEffect(() => {
+    console.log("uploading effect", isUploading);
+    if (isUploading) {
+      const update = () => {
+        if (uploadProgressRef.current < 1.0) {
+          uploadProgressRef.current += 0.5;
+          setUploadProgress(uploadProgressRef.current);
+          setTimeout(update, 100);
+        } else {
+          setUploadedFile("https://example.com/recorded.mp3");
+          showToast();
+        }
+      };
+
+      setTimeout(update, 100);
+    }
+  }, [isUploading]);
 
   const showToast = () => {
     Toast.show("URLをクリップボードにコピーしました", {
@@ -64,12 +86,13 @@ export default function Index() {
             title="録音"
             accessibilityLabel="録音を開始する"
             onPress={() => {
-              console.log("Play");
               setIsRecording(true);
               recordingStartedAt.current = performance.now();
               setRecordedDuration(0);
               setRecordedAudio(null);
               setUploadedFile(null);
+              setIsUploading(false);
+              setUploadProgress(0);
             }}
           />
         )}
@@ -108,11 +131,15 @@ export default function Index() {
               accessibilityLabel="録音した音源をアップロードする"
               disabled={uploadedFile !== null}
               onPress={() => {
-                setUploadedFile("https://example.com/recorded.mp3");
-                showToast();
+                setIsUploading(true);
+                uploadProgressRef.current = 0;
               }}
             />
           </>
+        ) : null}
+
+        {isUploading ? (
+          <Progress.Circle size={30} progress={uploadProgress} />
         ) : null}
 
         {uploadedFile ? (
