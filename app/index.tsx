@@ -3,6 +3,7 @@ import { Text, View, Button } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
+import * as Clipboard from "expo-clipboard";
 
 type RecordedAudio = {
   file: string;
@@ -40,7 +41,7 @@ export default function Index() {
           setTimeout(update, 100);
         } else {
           setUploadedFile("https://example.com/recorded.mp3");
-          showToast();
+          copyToClipboard();
         }
       };
 
@@ -48,7 +49,8 @@ export default function Index() {
     }
   }, [isUploading]);
 
-  const showToast = () => {
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync("hello world");
     Toast.show("URLをクリップボードにコピーしました", {
       duration: Toast.durations.SHORT,
     });
@@ -146,7 +148,7 @@ export default function Index() {
           <Button
             title="コピー"
             accessibilityLabel="アップロードした音源をURLをコピーする"
-            onPress={() => showToast()}
+            onPress={copyToClipboard}
           />
         ) : null}
       </View>
