@@ -4,6 +4,7 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
 import * as Clipboard from "expo-clipboard";
+import { Audio } from "expo-av";
 
 type RecordedAudio = {
   file: string;
@@ -22,6 +23,51 @@ export default function Index() {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const uploadProgressRef = useRef<number>(0);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+
+  const recordingRef = useRef<Audio.Recording | null>(null);
+  const [permissionResponse, requestPermission] = Audio.usePermissions();
+
+  async function startRecording() {
+    try {
+      if (!permissionResponse) {
+        throw new Error("Permission response is not ready");
+      }
+
+      if (permissionResponse.status !== "granted") {
+        console.log("Requesting permission..");
+        await requestPermission();
+      }
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+
+      console.log("Starting recording..");
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      recordingRef.current = recording;
+      console.log("Recording started");
+    } catch (err) {
+      console.error("Failed to start recording", err);
+    }
+  }
+
+  async function stopRecording() {
+    if (!recordingRef.current) {
+      console.error("Recording is not started");
+      return;
+    }
+
+    console.log("Stopping recording..");
+
+    await recordingRef.current.stopAndUnloadAsync();
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+    });
+    const uri = recordingRef.current.getURI();
+    console.log("Recording stopped and stored at", uri);
+  }
 
   useEffect(() => {
     if (isRecording) {
@@ -81,13 +127,15 @@ export default function Index() {
                 file: "file://path/to/recorded.mp3",
                 fileSize: 1024 * 100,
               });
+              stopRecording();
             }}
           />
         ) : (
           <Button
             title="録音"
             accessibilityLabel="録音を開始する"
-            onPress={() => {
+            onPress={async () => {
+              await startRecording();
               setIsRecording(true);
               recordingStartedAt.current = performance.now();
               setRecordedDuration(0);
