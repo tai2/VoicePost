@@ -25,6 +25,7 @@ export default function Index() {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const recordingRef = useRef<Audio.Recording | null>(null);
+  const soundRef = useRef<Audio.Sound | null>(null);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
 
   async function startRecording() {
@@ -46,8 +47,8 @@ export default function Index() {
       const { recording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
-      recordingRef.current = recording;
       console.log("Recording started");
+      recordingRef.current = recording;
     } catch (err) {
       console.error("Failed to start recording", err);
     }
@@ -67,6 +68,35 @@ export default function Index() {
     });
     const uri = recordingRef.current.getURI();
     console.log("Recording stopped and stored at", uri);
+  }
+
+  async function playSound() {
+    if (!recordingRef.current) {
+      console.error("Recording is not started");
+      return;
+    }
+
+    const uri = recordingRef.current.getURI();
+    if (!uri) {
+      console.error("Recording is not stored");
+      return;
+    }
+
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync({ uri });
+
+    console.log("Playing Sound");
+    await sound.playAsync();
+    soundRef.current = sound;
+  }
+
+  async function pauseSound() {
+    if (!soundRef.current) {
+      console.error("Sound is not loaded");
+      return;
+    }
+
+    await soundRef.current.pauseAsync();
   }
 
   useEffect(() => {
@@ -162,13 +192,19 @@ export default function Index() {
               <Button
                 title="停止"
                 accessibilityLabel="再生中の音源を停止する"
-                onPress={() => setIsPlaying(false)}
+                onPress={async () => {
+                  await pauseSound();
+                  setIsPlaying(false);
+                }}
               />
             ) : (
               <Button
                 title="再生"
                 accessibilityLabel="録音した音源を再生する"
-                onPress={() => setIsPlaying(true)}
+                onPress={async () => {
+                  await playSound();
+                  setIsPlaying(true);
+                }}
               />
             )}
             <Button
