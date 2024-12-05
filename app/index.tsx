@@ -4,7 +4,9 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
 import * as Clipboard from "expo-clipboard";
+import * as FileSystem from "expo-file-system";
 import { Audio } from "expo-av";
+import uuid from "react-native-uuid";
 
 type RecordedAudio = {
   file: string;
@@ -19,9 +21,8 @@ export default function Index() {
   const [recordedAudio, setRecordedAudio] = useState<RecordedAudio | null>(
     null
   );
-  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
+  const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const uploadProgressRef = useRef<number>(0);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const recordingRef = useRef<Audio.Recording | null>(null);
@@ -107,29 +108,40 @@ export default function Index() {
     }
   }, [isRecording, recordedDuration]);
 
-  useEffect(() => {
-    console.log("uploading effect", isUploading);
-    if (isUploading) {
-      const update = () => {
-        if (uploadProgressRef.current < 1.0) {
-          uploadProgressRef.current += 0.5;
-          setUploadProgress(uploadProgressRef.current);
-          setTimeout(update, 100);
-        } else {
-          setUploadedFile("https://example.com/recorded.mp3");
-          copyToClipboard();
-        }
-      };
-
-      setTimeout(update, 100);
-    }
-  }, [isUploading]);
-
-  const copyToClipboard = async () => {
-    await Clipboard.setStringAsync("hello world");
+  const copyToClipboard = async (url: string) => {
+    await Clipboard.setStringAsync(url);
     Toast.show("URLをクリップボードにコピーしました", {
       duration: Toast.durations.SHORT,
     });
+  };
+
+  const uploadToGigafile = async (file: string) => {
+    setIsUploading(true);
+    const task = FileSystem.createUploadTask(
+      "https://46.gigafile.nu/upload_chunk.php",
+      file,
+      {
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        fieldName: "file",
+        parameters: {
+          id: uuid.v4(),
+          name: "audio.mp3",
+          chunk: "0",
+          chunks: "1",
+          lifetime: "60",
+        },
+      },
+      (data) => {
+        console.log("Upload progress", data);
+        setUploadProgress(data.totalBytesSent / data.totalBytesExpectedToSend);
+      }
+    );
+    const result = await task.uploadAsync();
+    if (result) {
+      const body = JSON.parse(result.body);
+      setUploadedFileUrl(body.url);
+      copyToClipboard(body.url);
+    }
   };
 
   return (
@@ -170,7 +182,7 @@ export default function Index() {
               recordingStartedAt.current = performance.now();
               setRecordedDuration(0);
               setRecordedAudio(null);
-              setUploadedFile(null);
+              setUploadedFileUrl(null);
               setIsUploading(false);
               setUploadProgress(0);
             }}
@@ -215,10 +227,15 @@ export default function Index() {
             <Button
               title="アップロード"
               accessibilityLabel="録音した音源をアップロードする"
-              disabled={uploadedFile !== null}
+              disabled={uploadedFileUrl !== null}
               onPress={() => {
-                setIsUploading(true);
-                uploadProgressRef.current = 0;
+                const uri = recordingRef.current?.getURI();
+                if (!uri) {
+                  console.error("Recording is not stored");
+                  return;
+                }
+
+                uploadToGigafile(uri);
               }}
             />
           </>
@@ -228,11 +245,13 @@ export default function Index() {
           <Progress.Circle size={30} progress={uploadProgress} />
         ) : null}
 
-        {uploadedFile ? (
+        {uploadedFileUrl ? (
           <Button
             title="コピー"
             accessibilityLabel="アップロードした音源をURLをコピーする"
-            onPress={copyToClipboard}
+            onPress={() => {
+              copyToClipboard(uploadedFileUrl);
+            }}
           />
         ) : null}
       </View>
