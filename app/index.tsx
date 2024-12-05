@@ -3,6 +3,7 @@ import { Text, View, Button } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
+import Slider from "@react-native-community/slider";
 import * as Clipboard from "expo-clipboard";
 import * as FileSystem from "expo-file-system";
 import { Audio } from "expo-av";
@@ -27,6 +28,7 @@ export default function Index() {
 
   const recordingRef = useRef<Audio.Recording | null>(null);
   const soundRef = useRef<Audio.Sound | null>(null);
+  const [soundPosition, setSoundPosition] = useState<number>(0);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
 
   async function startRecording() {
@@ -94,6 +96,12 @@ export default function Index() {
 
         if (status.didJustFinish) {
           setIsPlaying(false);
+          setSoundPosition(0);
+          return;
+        }
+
+        if (status.isPlaying && status.durationMillis) {
+          setSoundPosition(status.positionMillis / status.durationMillis);
         }
       }
     );
@@ -207,6 +215,12 @@ export default function Index() {
 
         {recordedAudio ? (
           <>
+            <Slider
+              style={{ width: 200, height: 40 }}
+              value={soundPosition}
+              minimumTrackTintColor="#FFFFFF"
+              maximumTrackTintColor="#000000"
+            />
             <Button
               title="戻す"
               accessibilityLabel="15秒前に戻す"
@@ -226,8 +240,8 @@ export default function Index() {
                 title="再生"
                 accessibilityLabel="録音した音源を再生する"
                 onPress={async () => {
-                  await playSound();
                   setIsPlaying(true);
+                  await playSound();
                 }}
               />
             )}
