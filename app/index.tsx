@@ -84,7 +84,19 @@ export default function Index() {
     }
 
     console.log("Loading Sound");
-    const { sound } = await Audio.Sound.createAsync({ uri });
+    const { sound } = await Audio.Sound.createAsync(
+      { uri },
+      undefined,
+      (status) => {
+        if (!status.isLoaded) {
+          return;
+        }
+
+        if (status.didJustFinish) {
+          setIsPlaying(false);
+        }
+      }
+    );
 
     console.log("Playing Sound");
     await sound.playAsync();
