@@ -8,6 +8,9 @@ import * as Clipboard from "expo-clipboard";
 import * as FileSystem from "expo-file-system";
 import { Audio } from "expo-av";
 import uuid from "react-native-uuid";
+import { Link } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DEFAULT_PRESERVE_DURATION } from "@/constants/values";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -190,6 +193,11 @@ export default function Index() {
 
   const uploadToGigafile = async (file: string) => {
     setIsUploading(true);
+
+    const preserveDuration =
+      (await AsyncStorage.getItem("preserveDuration")) ||
+      DEFAULT_PRESERVE_DURATION;
+
     const task = FileSystem.createUploadTask(
       "https://46.gigafile.nu/upload_chunk.php",
       file,
@@ -201,11 +209,10 @@ export default function Index() {
           name: "audio.mp3",
           chunk: "0",
           chunks: "1",
-          lifetime: "60",
+          lifetime: preserveDuration,
         },
       },
       (data) => {
-        console.log("Upload progress", data);
         setUploadProgress(data.totalBytesSent / data.totalBytesExpectedToSend);
       }
     );
@@ -226,11 +233,9 @@ export default function Index() {
           alignItems: "center",
         }}
       >
-        <Button
-          title="設定"
-          accessibilityLabel="設定画面を開く"
-          onPress={() => {}}
-        />
+        <Link href="/settings" asChild>
+          <Button title="設定" accessibilityLabel="設定画面を開く" />
+        </Link>
 
         {isRecording ? (
           <Button
