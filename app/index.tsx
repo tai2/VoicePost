@@ -120,6 +120,42 @@ export default function Index() {
     await soundRef.current.pauseAsync();
   }
 
+  async function forward() {
+    const sound = soundRef.current;
+    if (!sound) {
+      console.error("Sound is not loaded");
+      return;
+    }
+
+    const status = await sound.getStatusAsync();
+    if (!status.isLoaded) {
+      console.error("Sound is not loaded");
+      return;
+    }
+
+    sound.setStatusAsync({
+      positionMillis: status.positionMillis + 5000,
+    });
+  }
+
+  async function rewind() {
+    const sound = soundRef.current;
+    if (!sound) {
+      console.error("Sound is not loaded");
+      return;
+    }
+
+    const status = await sound.getStatusAsync();
+    if (!status.isLoaded) {
+      console.error("Sound is not loaded");
+      return;
+    }
+
+    sound.setStatusAsync({
+      positionMillis: status.positionMillis - 5000,
+    });
+  }
+
   useEffect(() => {
     if (isRecording) {
       requestAnimationFrame((t) => {
@@ -223,8 +259,8 @@ export default function Index() {
             />
             <Button
               title="戻す"
-              accessibilityLabel="15秒前に戻す"
-              onPress={() => {}}
+              accessibilityLabel="5秒前に戻す"
+              onPress={rewind}
             />
             {isPlaying ? (
               <Button
@@ -247,8 +283,8 @@ export default function Index() {
             )}
             <Button
               title="進める"
-              accessibilityLabel="15秒先に進める"
-              onPress={() => {}}
+              accessibilityLabel="5秒先に進める"
+              onPress={forward}
             />
             <Button
               title="アップロード"
