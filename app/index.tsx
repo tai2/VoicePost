@@ -9,19 +9,12 @@ import * as FileSystem from "expo-file-system";
 import { Audio } from "expo-av";
 import uuid from "react-native-uuid";
 
-type RecordedAudio = {
-  file: string;
-  fileSize: number;
-};
-
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const recordingStartedAt = useRef<number>(0);
   const [recordedDuration, setRecordedDuration] = useState<number>(0);
-  const [recordedAudio, setRecordedAudio] = useState<RecordedAudio | null>(
-    null
-  );
+  const [recordedFile, setRecordedAudio] = useState<string | null>(null);
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -63,29 +56,18 @@ export default function Index() {
       return;
     }
 
-    console.log("Stopping recording..");
-
     await recordingRef.current.stopAndUnloadAsync();
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
     });
-    const uri = recordingRef.current.getURI();
-    console.log("Recording stopped and stored at", uri);
-  }
-
-  async function playSound() {
-    if (!recordingRef.current) {
-      console.error("Recording is not started");
-      return;
-    }
-
     const uri = recordingRef.current.getURI();
     if (!uri) {
       console.error("Recording is not stored");
       return;
     }
 
-    console.log("Loading Sound");
+    console.log("Recording stopped and stored at", uri);
+
     const { sound } = await Audio.Sound.createAsync(
       { uri },
       undefined,
@@ -105,19 +87,32 @@ export default function Index() {
         }
       }
     );
-
-    console.log("Playing Sound");
-    await sound.playAsync();
     soundRef.current = sound;
+
+    setIsRecording(false);
+    setSoundPosition(0);
+    setRecordedAudio(uri);
   }
 
-  async function pauseSound() {
-    if (!soundRef.current) {
+  async function playSound() {
+    const sound = soundRef.current;
+    if (!sound) {
       console.error("Sound is not loaded");
       return;
     }
 
-    await soundRef.current.pauseAsync();
+    console.log("Playing Sound");
+    await sound.playAsync();
+  }
+
+  async function pauseSound() {
+    const sound = soundRef.current;
+    if (!sound) {
+      console.error("Sound is not loaded");
+      return;
+    }
+
+    await sound.pauseAsync();
   }
 
   async function forward() {
@@ -153,6 +148,24 @@ export default function Index() {
 
     sound.setStatusAsync({
       positionMillis: status.positionMillis - 5000,
+    });
+  }
+
+  async function changePosition(position: number) {
+    const sound = soundRef.current;
+    if (!sound) {
+      console.error("Sound is not loaded");
+      return;
+    }
+
+    const status = await sound.getStatusAsync();
+    if (!status.isLoaded || !status.durationMillis) {
+      console.error("Sound is not loaded");
+      return;
+    }
+
+    sound.setStatusAsync({
+      positionMillis: status.durationMillis * position,
     });
   }
 
@@ -219,14 +232,7 @@ export default function Index() {
           <Button
             title="停止"
             accessibilityLabel="録音を停止する"
-            onPress={() => {
-              setIsRecording(false);
-              setRecordedAudio({
-                file: "file://path/to/recorded.mp3",
-                fileSize: 1024 * 100,
-              });
-              stopRecording();
-            }}
+            onPress={stopRecording}
           />
         ) : (
           <Button
@@ -245,17 +251,18 @@ export default function Index() {
           />
         )}
 
-        {isRecording || recordedAudio ? (
+        {isRecording || recordedFile ? (
           <Text>{formatDuration(recordedDuration)}</Text>
         ) : null}
 
-        {recordedAudio ? (
+        {recordedFile ? (
           <>
             <Slider
               style={{ width: 200, height: 40 }}
               value={soundPosition}
               minimumTrackTintColor="#FFFFFF"
               maximumTrackTintColor="#000000"
+              onValueChange={changePosition}
             />
             <Button
               title="戻す"
@@ -291,13 +298,7 @@ export default function Index() {
               accessibilityLabel="録音した音源をアップロードする"
               disabled={uploadedFileUrl !== null}
               onPress={() => {
-                const uri = recordingRef.current?.getURI();
-                if (!uri) {
-                  console.error("Recording is not stored");
-                  return;
-                }
-
-                uploadToGigafile(uri);
+                uploadToGigafile(recordedFile);
               }}
             />
           </>
