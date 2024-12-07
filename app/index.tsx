@@ -123,14 +123,16 @@ export default function Index() {
     }
 
     const status = await sound.getStatusAsync();
-    if (!status.isLoaded) {
+    if (!status.isLoaded || !status.durationMillis) {
       console.error("Sound is not loaded");
       return;
     }
 
+    const positionMillis = status.positionMillis + 5000;
     sound.setStatusAsync({
-      positionMillis: status.positionMillis + 5000,
+      positionMillis,
     });
+    setSoundPosition(Math.min(1, positionMillis / status.durationMillis));
   }
 
   async function rewind() {
@@ -141,14 +143,16 @@ export default function Index() {
     }
 
     const status = await sound.getStatusAsync();
-    if (!status.isLoaded) {
+    if (!status.isLoaded || !status.durationMillis) {
       console.error("Sound is not loaded");
       return;
     }
 
+    const positionMillis = status.positionMillis - 5000;
     sound.setStatusAsync({
-      positionMillis: status.positionMillis - 5000,
+      positionMillis,
     });
+    setSoundPosition(Math.max(0, positionMillis / status.durationMillis));
   }
 
   async function changePosition(position: number) {
