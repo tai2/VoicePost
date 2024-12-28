@@ -1,0 +1,5 @@
+appId: net.tai2.voicepost
+---
+- launchApp
+- assertVisible: '設定画面を開く'
+- assertVisible: '録音を開始する'
