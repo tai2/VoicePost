@@ -11,6 +11,8 @@ import { Link, Stack } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DEFAULT_PRESERVE_DURATION } from "@/constants/values";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import React from "react";
+import { RecordButton } from "@/components/RecordButton";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -245,28 +247,20 @@ export default function Index() {
           alignItems: "center",
         }}
       >
-        {isRecording ? (
-          <Button
-            title="停止"
-            accessibilityLabel="録音を停止する"
-            onPress={stopRecording}
-          />
-        ) : (
-          <Button
-            title="録音"
-            accessibilityLabel="録音を開始する"
-            onPress={async () => {
-              await startRecording();
-              setIsRecording(true);
-              recordingStartedAt.current = performance.now();
-              setRecordedDuration(0);
-              setRecordedAudio(null);
-              setUploadedFileUrl(null);
-              setIsUploading(false);
-              setUploadProgress(0);
-            }}
-          />
-        )}
+        <RecordButton
+          isRecording={isRecording}
+          onStop={stopRecording}
+          onStart={async () => {
+            await startRecording();
+            setIsRecording(true);
+            recordingStartedAt.current = performance.now();
+            setRecordedDuration(0);
+            setRecordedAudio(null);
+            setUploadedFileUrl(null);
+            setIsUploading(false);
+            setUploadProgress(0);
+          }}
+        />
 
         {isRecording || recordedFile ? (
           <Text>{formatDuration(recordedDuration)}</Text>
