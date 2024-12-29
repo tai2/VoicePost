@@ -228,7 +228,7 @@ export default function Index() {
     <>
       <Stack.Screen
         options={{
-          title: "声のポスト",
+          title: "こえのポスト",
           headerRight: () => (
             <Link href="/settings" asChild>
               <Pressable accessibilityLabel="設定画面を開く">
