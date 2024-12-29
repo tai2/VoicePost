@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { Text, View, Button } from "react-native";
-import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
 import Slider from "@react-native-community/slider";
@@ -225,109 +224,107 @@ export default function Index() {
   };
 
   return (
-    <RootSiblingParent>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Link href="/settings" asChild>
-          <Button title="設定" accessibilityLabel="設定画面を開く" />
-        </Link>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Link href="/settings" asChild>
+        <Button title="設定" accessibilityLabel="設定画面を開く" />
+      </Link>
 
-        {isRecording ? (
-          <Button
-            title="停止"
-            accessibilityLabel="録音を停止する"
-            onPress={stopRecording}
+      {isRecording ? (
+        <Button
+          title="停止"
+          accessibilityLabel="録音を停止する"
+          onPress={stopRecording}
+        />
+      ) : (
+        <Button
+          title="録音"
+          accessibilityLabel="録音を開始する"
+          onPress={async () => {
+            await startRecording();
+            setIsRecording(true);
+            recordingStartedAt.current = performance.now();
+            setRecordedDuration(0);
+            setRecordedAudio(null);
+            setUploadedFileUrl(null);
+            setIsUploading(false);
+            setUploadProgress(0);
+          }}
+        />
+      )}
+
+      {isRecording || recordedFile ? (
+        <Text>{formatDuration(recordedDuration)}</Text>
+      ) : null}
+
+      {recordedFile ? (
+        <>
+          <Slider
+            style={{ width: 200, height: 40 }}
+            value={soundPosition}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
+            onValueChange={changePosition}
           />
-        ) : (
           <Button
-            title="録音"
-            accessibilityLabel="録音を開始する"
-            onPress={async () => {
-              await startRecording();
-              setIsRecording(true);
-              recordingStartedAt.current = performance.now();
-              setRecordedDuration(0);
-              setRecordedAudio(null);
-              setUploadedFileUrl(null);
-              setIsUploading(false);
-              setUploadProgress(0);
-            }}
+            title="戻す"
+            accessibilityLabel="5秒前に戻す"
+            onPress={rewind}
           />
-        )}
-
-        {isRecording || recordedFile ? (
-          <Text>{formatDuration(recordedDuration)}</Text>
-        ) : null}
-
-        {recordedFile ? (
-          <>
-            <Slider
-              style={{ width: 200, height: 40 }}
-              value={soundPosition}
-              minimumTrackTintColor="#FFFFFF"
-              maximumTrackTintColor="#000000"
-              onValueChange={changePosition}
-            />
+          {isPlaying ? (
             <Button
-              title="戻す"
-              accessibilityLabel="5秒前に戻す"
-              onPress={rewind}
-            />
-            {isPlaying ? (
-              <Button
-                title="停止"
-                accessibilityLabel="再生中の音源を停止する"
-                onPress={async () => {
-                  await pauseSound();
-                  setIsPlaying(false);
-                }}
-              />
-            ) : (
-              <Button
-                title="再生"
-                accessibilityLabel="録音した音源を再生する"
-                onPress={async () => {
-                  setIsPlaying(true);
-                  await playSound();
-                }}
-              />
-            )}
-            <Button
-              title="進める"
-              accessibilityLabel="5秒先に進める"
-              onPress={forward}
-            />
-            <Button
-              title="アップロード"
-              accessibilityLabel="録音した音源をアップロードする"
-              disabled={uploadedFileUrl !== null}
-              onPress={() => {
-                uploadToGigafile(recordedFile);
+              title="停止"
+              accessibilityLabel="再生中の音源を停止する"
+              onPress={async () => {
+                await pauseSound();
+                setIsPlaying(false);
               }}
             />
-          </>
-        ) : null}
-
-        {isUploading ? (
-          <Progress.Circle size={30} progress={uploadProgress} />
-        ) : null}
-
-        {uploadedFileUrl ? (
+          ) : (
+            <Button
+              title="再生"
+              accessibilityLabel="録音した音源を再生する"
+              onPress={async () => {
+                setIsPlaying(true);
+                await playSound();
+              }}
+            />
+          )}
           <Button
-            title="コピー"
-            accessibilityLabel="アップロードした音源をURLをコピーする"
+            title="進める"
+            accessibilityLabel="5秒先に進める"
+            onPress={forward}
+          />
+          <Button
+            title="アップロード"
+            accessibilityLabel="録音した音源をアップロードする"
+            disabled={uploadedFileUrl !== null}
             onPress={() => {
-              copyToClipboard(uploadedFileUrl);
+              uploadToGigafile(recordedFile);
             }}
           />
-        ) : null}
-      </View>
-    </RootSiblingParent>
+        </>
+      ) : null}
+
+      {isUploading ? (
+        <Progress.Circle size={30} progress={uploadProgress} />
+      ) : null}
+
+      {uploadedFileUrl ? (
+        <Button
+          title="コピー"
+          accessibilityLabel="アップロードした音源をURLをコピーする"
+          onPress={() => {
+            copyToClipboard(uploadedFileUrl);
+          }}
+        />
+      ) : null}
+    </View>
   );
 }
 
