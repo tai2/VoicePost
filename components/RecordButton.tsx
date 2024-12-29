@@ -1,5 +1,6 @@
 import React from "react";
-import { Button } from "react-native";
+import { Pressable } from "react-native";
+import Feather from "@expo/vector-icons/Feather";
 
 type Props = {
   isRecording: boolean;
@@ -8,20 +9,17 @@ type Props = {
 };
 
 export const RecordButton = ({ isRecording, onStop, onStart }: Props) => {
+  const iconSize = 64;
   return (
     <>
       {isRecording ? (
-        <Button
-          title="停止"
-          accessibilityLabel="録音を停止する"
-          onPress={onStop}
-        />
+        <Pressable accessibilityLabel="録音を停止する" onPress={onStop}>
+          <Feather name="mic" size={iconSize} color="black" />
+        </Pressable>
       ) : (
-        <Button
-          title="録音"
-          accessibilityLabel="録音を開始する"
-          onPress={onStart}
-        />
+        <Pressable accessibilityLabel="録音を開始する" onPress={onStart}>
+          <Feather name="mic" size={iconSize} color="red" />
+        </Pressable>
       )}
     </>
   );
