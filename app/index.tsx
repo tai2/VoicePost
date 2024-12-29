@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, Pressable } from "react-native";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
 import Slider from "@react-native-community/slider";
@@ -7,9 +7,10 @@ import * as Clipboard from "expo-clipboard";
 import * as FileSystem from "expo-file-system";
 import { Audio } from "expo-av";
 import uuid from "react-native-uuid";
-import { Link } from "expo-router";
+import { Link, Stack } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DEFAULT_PRESERVE_DURATION } from "@/constants/values";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -224,107 +225,117 @@ export default function Index() {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Link href="/settings" asChild>
-        <Button title="設定" accessibilityLabel="設定画面を開く" />
-      </Link>
-
-      {isRecording ? (
-        <Button
-          title="停止"
-          accessibilityLabel="録音を停止する"
-          onPress={stopRecording}
-        />
-      ) : (
-        <Button
-          title="録音"
-          accessibilityLabel="録音を開始する"
-          onPress={async () => {
-            await startRecording();
-            setIsRecording(true);
-            recordingStartedAt.current = performance.now();
-            setRecordedDuration(0);
-            setRecordedAudio(null);
-            setUploadedFileUrl(null);
-            setIsUploading(false);
-            setUploadProgress(0);
-          }}
-        />
-      )}
-
-      {isRecording || recordedFile ? (
-        <Text>{formatDuration(recordedDuration)}</Text>
-      ) : null}
-
-      {recordedFile ? (
-        <>
-          <Slider
-            style={{ width: 200, height: 40 }}
-            value={soundPosition}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
-            onValueChange={changePosition}
-          />
+    <>
+      <Stack.Screen
+        options={{
+          title: "声のポスト",
+          headerRight: () => (
+            <Link href="/settings" asChild>
+              <Pressable accessibilityLabel="設定画面を開く">
+                <AntDesign name="setting" size={24} color="black" />
+              </Pressable>
+            </Link>
+          ),
+        }}
+      />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {isRecording ? (
           <Button
-            title="戻す"
-            accessibilityLabel="5秒前に戻す"
-            onPress={rewind}
+            title="停止"
+            accessibilityLabel="録音を停止する"
+            onPress={stopRecording}
           />
-          {isPlaying ? (
-            <Button
-              title="停止"
-              accessibilityLabel="再生中の音源を停止する"
-              onPress={async () => {
-                await pauseSound();
-                setIsPlaying(false);
-              }}
-            />
-          ) : (
-            <Button
-              title="再生"
-              accessibilityLabel="録音した音源を再生する"
-              onPress={async () => {
-                setIsPlaying(true);
-                await playSound();
-              }}
-            />
-          )}
+        ) : (
           <Button
-            title="進める"
-            accessibilityLabel="5秒先に進める"
-            onPress={forward}
-          />
-          <Button
-            title="アップロード"
-            accessibilityLabel="録音した音源をアップロードする"
-            disabled={uploadedFileUrl !== null}
-            onPress={() => {
-              uploadToGigafile(recordedFile);
+            title="録音"
+            accessibilityLabel="録音を開始する"
+            onPress={async () => {
+              await startRecording();
+              setIsRecording(true);
+              recordingStartedAt.current = performance.now();
+              setRecordedDuration(0);
+              setRecordedAudio(null);
+              setUploadedFileUrl(null);
+              setIsUploading(false);
+              setUploadProgress(0);
             }}
           />
-        </>
-      ) : null}
+        )}
 
-      {isUploading ? (
-        <Progress.Circle size={30} progress={uploadProgress} />
-      ) : null}
+        {isRecording || recordedFile ? (
+          <Text>{formatDuration(recordedDuration)}</Text>
+        ) : null}
 
-      {uploadedFileUrl ? (
-        <Button
-          title="コピー"
-          accessibilityLabel="アップロードした音源をURLをコピーする"
-          onPress={() => {
-            copyToClipboard(uploadedFileUrl);
-          }}
-        />
-      ) : null}
-    </View>
+        {recordedFile ? (
+          <>
+            <Slider
+              style={{ width: 200, height: 40 }}
+              value={soundPosition}
+              minimumTrackTintColor="#FFFFFF"
+              maximumTrackTintColor="#000000"
+              onValueChange={changePosition}
+            />
+            <Button
+              title="戻す"
+              accessibilityLabel="5秒前に戻す"
+              onPress={rewind}
+            />
+            {isPlaying ? (
+              <Button
+                title="停止"
+                accessibilityLabel="再生中の音源を停止する"
+                onPress={async () => {
+                  await pauseSound();
+                  setIsPlaying(false);
+                }}
+              />
+            ) : (
+              <Button
+                title="再生"
+                accessibilityLabel="録音した音源を再生する"
+                onPress={async () => {
+                  setIsPlaying(true);
+                  await playSound();
+                }}
+              />
+            )}
+            <Button
+              title="進める"
+              accessibilityLabel="5秒先に進める"
+              onPress={forward}
+            />
+            <Button
+              title="アップロード"
+              accessibilityLabel="録音した音源をアップロードする"
+              disabled={uploadedFileUrl !== null}
+              onPress={() => {
+                uploadToGigafile(recordedFile);
+              }}
+            />
+          </>
+        ) : null}
+
+        {isUploading ? (
+          <Progress.Circle size={30} progress={uploadProgress} />
+        ) : null}
+
+        {uploadedFileUrl ? (
+          <Button
+            title="コピー"
+            accessibilityLabel="アップロードした音源をURLをコピーする"
+            onPress={() => {
+              copyToClipboard(uploadedFileUrl);
+            }}
+          />
+        ) : null}
+      </View>
+    </>
   );
 }
 
