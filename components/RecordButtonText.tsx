@@ -1,6 +1,6 @@
 import React from "react";
-import { DimensionValue, Text, TextStyle } from "react-native";
-import { Pressable, StyleProp, View, ViewStyle } from "react-native";
+import { Text, TextStyle } from "react-native";
+import { Pressable, StyleProp, ViewStyle } from "react-native";
 
 type Props = {
   isRecording: boolean;
