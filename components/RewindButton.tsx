@@ -21,7 +21,7 @@ export const RewindButton = ({ onPress }: Props) => {
       onPress={onPress}
       accessibilityLabel="15秒戻す"
     >
-      <Feather name="rotate-ccw" size={20} color="rgb(9, 9, 11)" />;
+      <Feather name="rotate-ccw" size={20} color="rgb(9, 9, 11)" />
     </Pressable>
   );
 };

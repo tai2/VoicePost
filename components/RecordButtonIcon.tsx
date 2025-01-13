@@ -1,24 +1,38 @@
-import React from "react";
-import { Pressable, View } from "react-native";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { DimensionValue, Pressable, View } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 
 type Props = {
+  height: DimensionValue;
   isRecording: boolean;
   onStop: () => void;
   onStart: () => void;
 };
 
-export const RecordButtonIcon = ({ isRecording, onStop, onStart }: Props) => {
-  const size = 220;
+export const RecordButtonIcon = ({
+  height,
+  isRecording,
+  onStop,
+  onStart,
+}: Props) => {
+  const rootRef = useRef<View>(null);
+  const [size, setSize] = useState<number>(0);
   const innerCircleSize = size * 0.7;
   const innerSquareSize = size * 0.5;
   const iconSize = size * 0.4;
 
+  useLayoutEffect(() => {
+    rootRef.current?.measure((x_, y_, width_, height) => {
+      setSize(height);
+    });
+  }, [setSize]);
+
   return (
     <View
+      ref={rootRef}
       style={{
         width: size,
-        height: size,
+        height: height,
         borderRadius: "50%",
         justifyContent: "center",
         alignItems: "center",

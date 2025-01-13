@@ -21,7 +21,7 @@ export const FastForwardButton = ({ onPress }: Props) => {
       onPress={onPress}
       accessibilityLabel="15秒進める"
     >
-      <Feather name="rotate-cw" size={20} color="rgb(9, 9, 11)" />;
+      <Feather name="rotate-cw" size={20} color="rgb(9, 9, 11)" />
     </Pressable>
   );
 };

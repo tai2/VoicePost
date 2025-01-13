@@ -263,11 +263,14 @@ export default function Index() {
           backgroundColor: "white",
         }}
       >
-        <RecordButtonIcon
-          isRecording={isRecording}
-          onStop={stopRecording}
-          onStart={startRecording}
-        />
+        <View style={{ flex: 1 }}>
+          <RecordButtonIcon
+            height="100%"
+            isRecording={isRecording}
+            onStop={stopRecording}
+            onStart={startRecording}
+          />
+        </View>
 
         <Time time={recordedDuration} />
 
