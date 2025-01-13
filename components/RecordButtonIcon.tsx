@@ -21,15 +21,12 @@ export const RecordButtonIcon = ({
   const innerSquareSize = size * 0.5;
   const iconSize = size * 0.4;
 
-  useLayoutEffect(() => {
-    rootRef.current?.measure((x_, y_, width_, height) => {
-      setSize(height);
-    });
-  }, [setSize]);
-
   return (
     <View
       ref={rootRef}
+      onLayout={(event) => {
+        setSize(event.nativeEvent.layout.height);
+      }}
       style={{
         width: size,
         height: height,

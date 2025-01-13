@@ -280,60 +280,59 @@ export default function Index() {
           onStart={startRecording}
         />
 
-        {recordedFile ? (
-          <>
-            <Slider
-              style={{ width: 200, height: 40 }}
-              value={soundPosition}
-              minimumTrackTintColor="#FFFFFF"
-              maximumTrackTintColor="#000000"
-              onValueChange={changePosition}
-            />
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <RewindButton onPress={rewind} />
-              {isPlaying ? (
-                <PauseButton
-                  onPress={async () => {
-                    await pauseSound();
-                    setIsPlaying(false);
-                  }}
-                />
-              ) : (
-                <PlayButton
-                  onPress={async () => {
-                    setIsPlaying(true);
-                    await playSound();
-                  }}
-                />
-              )}
-              <FastForwardButton onPress={forward} />
-            </View>
-          </>
-        ) : null}
-
-        <View style={{ flexDirection: "row" }}>
-          {recordedFile ? (
+        <View style={{ opacity: recordedFile ? 1 : 0 }}>
+          <Slider
+            style={{ width: 200, height: 40 }}
+            value={soundPosition}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
+            onValueChange={changePosition}
+          />
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            <RewindButton onPress={rewind} />
+            {isPlaying ? (
+              <PauseButton
+                onPress={async () => {
+                  await pauseSound();
+                  setIsPlaying(false);
+                }}
+              />
+            ) : (
+              <PlayButton
+                onPress={async () => {
+                  setIsPlaying(true);
+                  await playSound();
+                }}
+              />
+            )}
+            <FastForwardButton onPress={forward} />
+          </View>
+          <View style={{ flexDirection: "row" }}>
             <Button
               title="アップロード"
               accessibilityLabel="録音した音源をアップロードする"
               disabled={uploadedFileUrl !== null}
               onPress={() => {
+                if (!recordedFile) {
+                  console.error("No recorded file");
+                  return;
+                }
                 uploadToGigafile(recordedFile);
               }}
             />
-          ) : null}
-          {isUploading ? (
-            <Progress.Circle size={30} progress={uploadProgress} />
-          ) : null}
-          {uploadedFileUrl ? (
-            <Button
-              title="コピー"
-              accessibilityLabel="アップロードした音源をURLをコピーする"
-              onPress={() => {
-                copyToClipboard(uploadedFileUrl);
-              }}
-            />
-          ) : null}
+            {isUploading ? (
+              <Progress.Circle size={30} progress={uploadProgress} />
+            ) : null}
+            {uploadedFileUrl ? (
+              <Button
+                title="コピー"
+                accessibilityLabel="アップロードした音源をURLをコピーする"
+                onPress={() => {
+                  copyToClipboard(uploadedFileUrl);
+                }}
+              />
+            ) : null}
+          </View>
         </View>
       </View>
     </>
