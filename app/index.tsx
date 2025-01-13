@@ -14,6 +14,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import React from "react";
 import { RecordButtonIcon } from "@/components/RecordButtonIcon";
 import { RecordButtonText } from "@/components/RecordButtonText";
+import { Time } from "@/components/Time";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -263,9 +264,7 @@ export default function Index() {
           onStart={startRecording}
         />
 
-        {isRecording || recordedFile ? (
-          <Text>{formatDuration(recordedDuration)}</Text>
-        ) : null}
+        <Time time={recordedDuration} />
 
         <RecordButtonText
           isRecording={isRecording}
@@ -339,13 +338,3 @@ export default function Index() {
     </>
   );
 }
-
-const formatDuration = (duration: number): string => {
-  const durationSeconds = duration / 1000;
-  const minutes = Math.floor(durationSeconds / 60);
-  const seconds = Math.floor(durationSeconds % 60);
-  const belowSeconds = Math.floor((duration % 1000) / 10);
-  return `${pad2(minutes)}:${pad2(seconds)}.${pad2(belowSeconds)}`;
-};
-
-const pad2 = (n: number): string => n.toString().padStart(2, "0");

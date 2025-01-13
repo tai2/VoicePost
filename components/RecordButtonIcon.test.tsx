@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react-native";
 import { RecordButtonIcon } from "./RecordButtonIcon";
 
-describe("<RecordButton />", () => {
+describe("<RecordButtonIcon />", () => {
   const onStart = jest.fn();
   const onStop = jest.fn();
 
