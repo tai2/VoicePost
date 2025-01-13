@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TextStyle } from "react-native";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
-import Foundation from "@expo/vector-icons/Foundation";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 type Props = {
   isRecording: boolean;
@@ -10,6 +10,7 @@ type Props = {
 };
 
 export const RecordButtonText = ({ isRecording, onStop, onStart }: Props) => {
+  const iconSize = 24;
   const pressableStyle: StyleProp<ViewStyle> = {
     width: 160,
     flexDirection: "row",
@@ -18,6 +19,7 @@ export const RecordButtonText = ({ isRecording, onStop, onStart }: Props) => {
     gap: 5,
     padding: 15,
     borderRadius: 10,
+    backgroundColor: "hsl(240, 5.9%, 10%)",
   };
   const textStyle: StyleProp<TextStyle> = {
     fontSize: 20,
@@ -28,20 +30,25 @@ export const RecordButtonText = ({ isRecording, onStop, onStart }: Props) => {
     <>
       {isRecording ? (
         <Pressable
-          style={{ ...pressableStyle, backgroundColor: "hsl(240, 5.9%, 10%)" }}
+          style={pressableStyle}
           accessibilityLabel="録音を停止する"
           onPress={onStop}
         >
-          <Foundation name="stop" size={24} color="white" />
+          <MaterialIcons name="stop" size={iconSize} color="white" />
+
           <Text style={textStyle}>録音停止</Text>
         </Pressable>
       ) : (
         <Pressable
-          style={{ ...pressableStyle, backgroundColor: "hsl(0, 84.2%, 60.2%)" }}
+          style={pressableStyle}
           accessibilityLabel="録音を開始する"
           onPress={onStart}
         >
-          <Foundation name="record" size={24} color="white" />
+          <MaterialIcons
+            name="fiber-manual-record"
+            size={iconSize}
+            color="hsl(0, 84.2%, 60.2%)"
+          />
           <Text style={textStyle}>録音開始</Text>
         </Pressable>
       )}
