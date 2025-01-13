@@ -9,7 +9,7 @@ describe("<RecordButtonText />", () => {
     const isRecording = true;
 
     describe("When rendered", () => {
-      it("should render accessibility label", () => {
+      it("should render label", async () => {
         render(
           <RecordButtonText
             isRecording={isRecording}
@@ -18,12 +18,24 @@ describe("<RecordButtonText />", () => {
           />
         );
 
-        screen.getByLabelText("録音を停止する");
+        await screen.findByText("録音停止");
+      });
+
+      it("should render accessibility label", async () => {
+        render(
+          <RecordButtonText
+            isRecording={isRecording}
+            onStart={onStart}
+            onStop={onStop}
+          />
+        );
+
+        await screen.findByLabelText("録音を停止する");
       });
     });
 
     describe("When clicked", () => {
-      it("should call only onStop handler", () => {
+      it("should call only onStop handler", async () => {
         render(
           <RecordButtonText
             isRecording={isRecording}
@@ -32,7 +44,7 @@ describe("<RecordButtonText />", () => {
           />
         );
 
-        fireEvent.press(screen.getByLabelText("録音を停止する"));
+        fireEvent.press(await screen.findByText("録音停止"));
         expect(onStart).not.toHaveBeenCalled();
         expect(onStop).toHaveBeenCalled();
       });
@@ -43,6 +55,18 @@ describe("<RecordButtonText />", () => {
     const isRecording = false;
 
     describe("When rendered", () => {
+      it("should render label", () => {
+        render(
+          <RecordButtonText
+            isRecording={isRecording}
+            onStart={onStart}
+            onStop={onStop}
+          />
+        );
+
+        screen.getByText("録音開始");
+      });
+
       it("should render accessibility label", () => {
         render(
           <RecordButtonText
@@ -68,7 +92,7 @@ describe("<RecordButtonText />", () => {
           />
         );
 
-        fireEvent.press(screen.getByLabelText("録音を開始する"));
+        fireEvent.press(screen.getByText("録音開始"));
         expect(onStart).toHaveBeenCalled();
         expect(onStop).not.toHaveBeenCalled();
       });
