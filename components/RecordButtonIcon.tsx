@@ -10,16 +10,10 @@ type Props = {
 
 export const RecordButtonIcon = ({ isRecording, onStop, onStart }: Props) => {
   const size = 220;
-  const innerSize = size * 0.7;
+  const innerCircleSize = size * 0.7;
+  const innerSquareSize = size * 0.5;
   const iconSize = size * 0.4;
 
-  const pressableStyle: StyleProp<ViewStyle> = {
-    width: innerSize,
-    height: innerSize,
-    borderRadius: "50%",
-    justifyContent: "center",
-    alignItems: "center",
-  };
   return (
     <View
       style={{
@@ -33,7 +27,14 @@ export const RecordButtonIcon = ({ isRecording, onStop, onStart }: Props) => {
     >
       {isRecording ? (
         <Pressable
-          style={{ ...pressableStyle, backgroundColor: "hsl(240, 5.9%, 10%)" }}
+          style={{
+            width: innerSquareSize,
+            height: innerSquareSize,
+            borderRadius: "5%",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "hsl(240, 5.9%, 10%)",
+          }}
           accessibilityLabel="録音を停止する"
           onPress={onStop}
         >
@@ -41,7 +42,14 @@ export const RecordButtonIcon = ({ isRecording, onStop, onStart }: Props) => {
         </Pressable>
       ) : (
         <Pressable
-          style={{ ...pressableStyle, backgroundColor: "hsl(0, 84.2%, 60.2%)" }}
+          style={{
+            width: innerCircleSize,
+            height: innerCircleSize,
+            borderRadius: "50%",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "hsl(0, 84.2%, 60.2%)",
+          }}
           accessibilityLabel="録音を開始する"
           onPress={onStart}
         >
