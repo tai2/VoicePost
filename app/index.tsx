@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
-import { View, Pressable } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
 import Slider from "@react-native-community/slider";
@@ -119,8 +119,11 @@ export default function Index() {
           return;
         }
 
-        if (status.isPlaying && status.durationMillis) {
-          setSoundPosition(status.positionMillis / status.durationMillis);
+        if (status.durationMillis) {
+          setRecordedDuration(status.durationMillis);
+          if (status.isPlaying) {
+            setSoundPosition(status.positionMillis);
+          }
         }
       }
     );
@@ -169,7 +172,7 @@ export default function Index() {
     sound.setStatusAsync({
       positionMillis,
     });
-    setSoundPosition(Math.min(1, positionMillis / status.durationMillis));
+    setSoundPosition(Math.min(status.durationMillis, positionMillis));
   }
 
   async function rewind() {
@@ -189,7 +192,7 @@ export default function Index() {
     sound.setStatusAsync({
       positionMillis,
     });
-    setSoundPosition(Math.max(0, positionMillis / status.durationMillis));
+    setSoundPosition(Math.max(0, positionMillis));
   }
 
   async function changePosition(position: number) {
@@ -284,7 +287,23 @@ export default function Index() {
           />
         </View>
 
-        <Time time={recordedDuration} />
+        {recordedFile ? (
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Time time={soundPosition} />
+            <Text
+              style={{
+                color: "hsl(240, 5.9%, 10%)",
+                fontSize: 28,
+                fontWeight: 600,
+              }}
+            >
+              /
+            </Text>
+            <Time time={recordedDuration} />
+          </View>
+        ) : (
+          <Time time={recordedDuration} />
+        )}
 
         <RecordButtonText
           isRecording={isRecording}
@@ -301,7 +320,7 @@ export default function Index() {
         >
           <Slider
             style={{ width: rootWidth - 20, height: 40 }}
-            value={soundPosition}
+            value={soundPosition / recordedDuration}
             minimumTrackTintColor="#FFFFFF"
             maximumTrackTintColor="#000000"
             onValueChange={changePosition}
