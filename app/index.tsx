@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { View, Pressable } from "react-native";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
@@ -31,11 +31,27 @@ export default function Index() {
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [rootWidth, setRootWidth] = useState<number>(0);
 
+  const rootRef = useRef<View>(null);
   const recordingRef = useRef<Audio.Recording | null>(null);
   const soundRef = useRef<Audio.Sound | null>(null);
   const [soundPosition, setSoundPosition] = useState<number>(0);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
+
+  useLayoutEffect(() => {
+    rootRef.current?.measure((x_, y_, width, height_) => {
+      setRootWidth(width);
+    });
+  }, [setRootWidth]);
+
+  useEffect(() => {
+    if (isRecording) {
+      requestAnimationFrame((t) => {
+        setRecordedDuration(t - recordingStartedAt.current);
+      });
+    }
+  }, [isRecording, recordedDuration]);
 
   async function startRecording() {
     try {
@@ -194,14 +210,6 @@ export default function Index() {
     });
   }
 
-  useEffect(() => {
-    if (isRecording) {
-      requestAnimationFrame((t) => {
-        setRecordedDuration(t - recordingStartedAt.current);
-      });
-    }
-  }, [isRecording, recordedDuration]);
-
   const copyToClipboard = async (url: string) => {
     await Clipboard.setStringAsync(url);
     Toast.show("URLをクリップボードにコピーしました", {
@@ -257,6 +265,7 @@ export default function Index() {
         }}
       />
       <View
+        ref={rootRef}
         style={{
           flex: 1,
           paddingTop: 30,
@@ -291,7 +300,7 @@ export default function Index() {
           }}
         >
           <Slider
-            style={{ width: 200, height: 40 }}
+            style={{ width: rootWidth - 20, height: 40 }}
             value={soundPosition}
             minimumTrackTintColor="#FFFFFF"
             maximumTrackTintColor="#000000"
