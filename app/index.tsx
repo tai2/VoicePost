@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Text, View, Button, Pressable } from "react-native";
+import { View, Button, Pressable } from "react-native";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
 import Slider from "@react-native-community/slider";
@@ -15,6 +15,10 @@ import React from "react";
 import { RecordButtonIcon } from "@/components/RecordButtonIcon";
 import { RecordButtonText } from "@/components/RecordButtonText";
 import { Time } from "@/components/Time";
+import { RewindButton } from "@/components/RewindButton";
+import { FastForwardButton } from "@/components/FastForwardButton";
+import { PlayButton } from "@/components/PlayButton";
+import { PauseButton } from "@/components/PauseButton";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -282,35 +286,30 @@ export default function Index() {
               maximumTrackTintColor="#000000"
               onValueChange={changePosition}
             />
-            <Button
-              title="戻す"
-              accessibilityLabel="5秒前に戻す"
-              onPress={rewind}
-            />
-            {isPlaying ? (
-              <Button
-                title="停止"
-                accessibilityLabel="再生中の音源を停止する"
-                onPress={async () => {
-                  await pauseSound();
-                  setIsPlaying(false);
-                }}
-              />
-            ) : (
-              <Button
-                title="再生"
-                accessibilityLabel="録音した音源を再生する"
-                onPress={async () => {
-                  setIsPlaying(true);
-                  await playSound();
-                }}
-              />
-            )}
-            <Button
-              title="進める"
-              accessibilityLabel="5秒先に進める"
-              onPress={forward}
-            />
+            <View style={{ flexDirection: "row", gap: 10 }}>
+              <RewindButton onPress={rewind} />
+              {isPlaying ? (
+                <PauseButton
+                  onPress={async () => {
+                    await pauseSound();
+                    setIsPlaying(false);
+                  }}
+                />
+              ) : (
+                <PlayButton
+                  onPress={async () => {
+                    setIsPlaying(true);
+                    await playSound();
+                  }}
+                />
+              )}
+              <FastForwardButton onPress={forward} />
+            </View>
+          </>
+        ) : null}
+
+        <View style={{ flexDirection: "row" }}>
+          {recordedFile ? (
             <Button
               title="アップロード"
               accessibilityLabel="録音した音源をアップロードする"
@@ -319,22 +318,20 @@ export default function Index() {
                 uploadToGigafile(recordedFile);
               }}
             />
-          </>
-        ) : null}
-
-        {isUploading ? (
-          <Progress.Circle size={30} progress={uploadProgress} />
-        ) : null}
-
-        {uploadedFileUrl ? (
-          <Button
-            title="コピー"
-            accessibilityLabel="アップロードした音源をURLをコピーする"
-            onPress={() => {
-              copyToClipboard(uploadedFileUrl);
-            }}
-          />
-        ) : null}
+          ) : null}
+          {isUploading ? (
+            <Progress.Circle size={30} progress={uploadProgress} />
+          ) : null}
+          {uploadedFileUrl ? (
+            <Button
+              title="コピー"
+              accessibilityLabel="アップロードした音源をURLをコピーする"
+              onPress={() => {
+                copyToClipboard(uploadedFileUrl);
+              }}
+            />
+          ) : null}
+        </View>
       </View>
     </>
   );
