@@ -33,7 +33,7 @@ export const RecordButtonIcon = ({ isRecording, onStop, onStart }: Props) => {
     >
       {isRecording ? (
         <Pressable
-          style={{ ...pressableStyle, backgroundColor: "hsl(0, 84.2%, 60.2%)" }}
+          style={{ ...pressableStyle, backgroundColor: "hsl(240, 5.9%, 10%)" }}
           accessibilityLabel="録音を停止する"
           onPress={onStop}
         >
@@ -41,7 +41,7 @@ export const RecordButtonIcon = ({ isRecording, onStop, onStart }: Props) => {
         </Pressable>
       ) : (
         <Pressable
-          style={{ ...pressableStyle, backgroundColor: "hsl(240, 5.9%, 10%)" }}
+          style={{ ...pressableStyle, backgroundColor: "hsl(0, 84.2%, 60.2%)" }}
           accessibilityLabel="録音を開始する"
           onPress={onStart}
         >
