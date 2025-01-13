@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { View, Button, Pressable } from "react-native";
+import { View, Pressable } from "react-native";
 import Toast from "react-native-root-toast";
 import * as Progress from "react-native-progress";
 import Slider from "@react-native-community/slider";
@@ -19,6 +19,8 @@ import { RewindButton } from "@/components/RewindButton";
 import { FastForwardButton } from "@/components/FastForwardButton";
 import { PlayButton } from "@/components/PlayButton";
 import { PauseButton } from "@/components/PauseButton";
+import { UploadButton } from "@/components/UploadButton";
+import { CopyButton } from "@/components/CopyButton";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -258,6 +260,7 @@ export default function Index() {
         style={{
           flex: 1,
           paddingTop: 30,
+          paddingBottom: 30,
           gap: 30,
           alignItems: "center",
           backgroundColor: "white",
@@ -280,7 +283,13 @@ export default function Index() {
           onStart={startRecording}
         />
 
-        <View style={{ opacity: recordedFile ? 1 : 0 }}>
+        <View
+          style={{
+            opacity: recordedFile ? 1 : 0,
+            gap: 20,
+            alignItems: "center",
+          }}
+        >
           <Slider
             style={{ width: 200, height: 40 }}
             value={soundPosition}
@@ -307,10 +316,8 @@ export default function Index() {
             )}
             <FastForwardButton onPress={forward} />
           </View>
-          <View style={{ flexDirection: "row" }}>
-            <Button
-              title="アップロード"
-              accessibilityLabel="録音した音源をアップロードする"
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            <UploadButton
               disabled={uploadedFileUrl !== null}
               onPress={() => {
                 if (!recordedFile) {
@@ -323,15 +330,16 @@ export default function Index() {
             {isUploading ? (
               <Progress.Circle size={30} progress={uploadProgress} />
             ) : null}
-            {uploadedFileUrl ? (
-              <Button
-                title="コピー"
-                accessibilityLabel="アップロードした音源をURLをコピーする"
-                onPress={() => {
-                  copyToClipboard(uploadedFileUrl);
-                }}
-              />
-            ) : null}
+            <CopyButton
+              disabled={uploadedFileUrl === null}
+              onPress={() => {
+                if (!uploadedFileUrl) {
+                  console.error("No uploaded file URL");
+                  return;
+                }
+                copyToClipboard(uploadedFileUrl);
+              }}
+            />
           </View>
         </View>
       </View>

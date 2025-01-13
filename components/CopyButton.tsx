@@ -1,14 +1,16 @@
 import React from "react";
-import { Pressable, Text, TextStyle } from "react-native";
+import { Pressable, Text } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 
 type Props = {
+  disabled?: boolean;
   onPress: () => void;
 };
 
-export const PlayButton = ({ onPress }: Props) => {
+export const CopyButton = ({ disabled, onPress }: Props) => {
   return (
     <Pressable
+      disabled={disabled}
       style={{
         height: 50,
         flexDirection: "row",
@@ -21,10 +23,10 @@ export const PlayButton = ({ onPress }: Props) => {
         paddingLeft: 20,
       }}
       onPress={onPress}
-      accessibilityLabel="録音した音源を再生する"
+      accessibilityLabel="アップロードした音源をURLをコピーする"
     >
-      <Feather name="play" size={24} color="rgb(9, 9, 11)" />
-      <Text style={{ fontSize: 20, color: "rgb(9, 9, 11)" }}>再生</Text>
+      <Feather name="copy" size={24} color="rgb(9, 9, 11)" />
+      <Text style={{ fontSize: 20, color: "rgb(9, 9, 11)" }}>コピー</Text>
     </Pressable>
   );
 };
