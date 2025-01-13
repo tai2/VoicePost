@@ -12,7 +12,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DEFAULT_PRESERVE_DURATION } from "@/constants/values";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import React from "react";
-import { RecordButton } from "@/components/RecordButton";
+import { RecordButtonIcon } from "@/components/RecordButtonIcon";
+import { RecordButtonText } from "@/components/RecordButtonText";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -50,6 +51,14 @@ export default function Index() {
       );
       console.log("Recording started");
       recordingRef.current = recording;
+
+      setIsRecording(true);
+      recordingStartedAt.current = performance.now();
+      setRecordedDuration(0);
+      setRecordedAudio(null);
+      setUploadedFileUrl(null);
+      setIsUploading(false);
+      setUploadProgress(0);
     } catch (err) {
       console.error("Failed to start recording", err);
     }
@@ -248,24 +257,21 @@ export default function Index() {
           backgroundColor: "white",
         }}
       >
-        <RecordButton
+        <RecordButtonIcon
           isRecording={isRecording}
           onStop={stopRecording}
-          onStart={async () => {
-            await startRecording();
-            setIsRecording(true);
-            recordingStartedAt.current = performance.now();
-            setRecordedDuration(0);
-            setRecordedAudio(null);
-            setUploadedFileUrl(null);
-            setIsUploading(false);
-            setUploadProgress(0);
-          }}
+          onStart={startRecording}
         />
 
         {isRecording || recordedFile ? (
           <Text>{formatDuration(recordedDuration)}</Text>
         ) : null}
+
+        <RecordButtonText
+          isRecording={isRecording}
+          onStop={stopRecording}
+          onStart={startRecording}
+        />
 
         {recordedFile ? (
           <>

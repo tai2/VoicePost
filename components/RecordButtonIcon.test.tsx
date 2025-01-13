@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react-native";
-import { RecordButton } from "./RecordButton";
+import { RecordButtonIcon } from "./RecordButtonIcon";
 
 describe("<RecordButton />", () => {
   const onStart = jest.fn();
@@ -11,7 +11,7 @@ describe("<RecordButton />", () => {
     describe("When rendered", () => {
       it("should render accessibility label", () => {
         render(
-          <RecordButton
+          <RecordButtonIcon
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
@@ -25,7 +25,7 @@ describe("<RecordButton />", () => {
     describe("When clicked", () => {
       it("should call only onStop handler", () => {
         render(
-          <RecordButton
+          <RecordButtonIcon
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
@@ -45,7 +45,7 @@ describe("<RecordButton />", () => {
     describe("When rendered", () => {
       it("should render accessibility label", () => {
         render(
-          <RecordButton
+          <RecordButtonIcon
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
@@ -61,7 +61,7 @@ describe("<RecordButton />", () => {
         const onStart = jest.fn();
         const onStop = jest.fn();
         render(
-          <RecordButton
+          <RecordButtonIcon
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}

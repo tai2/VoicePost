@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  DimensionValue,
-  Pressable,
-  StyleProp,
-  View,
-  ViewStyle,
-} from "react-native";
+import { Pressable, StyleProp, View, ViewStyle } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 
 type Props = {
@@ -14,8 +8,8 @@ type Props = {
   onStart: () => void;
 };
 
-export const RecordButton = ({ isRecording, onStop, onStart }: Props) => {
-  const size = 200;
+export const RecordButtonIcon = ({ isRecording, onStop, onStart }: Props) => {
+  const size = 220;
   const innerSize = size * 0.7;
   const iconSize = size * 0.4;
 
