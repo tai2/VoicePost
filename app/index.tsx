@@ -362,6 +362,8 @@ export default function Index() {
           >
             <UploadButton
               disabled={uploadedFileUrl !== null}
+              isUploading={isUploading}
+              progress={uploadProgress}
               onPress={() => {
                 if (!recordedFile) {
                   console.error("No recorded file");
@@ -370,9 +372,6 @@ export default function Index() {
                 uploadToGigafile(recordedFile);
               }}
             />
-            {isUploading ? (
-              <Progress.Circle size={30} progress={uploadProgress} />
-            ) : null}
             <CopyButton
               disabled={uploadedFileUrl === null}
               onPress={() => {

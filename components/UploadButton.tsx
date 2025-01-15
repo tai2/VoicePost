@@ -1,13 +1,21 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import * as Progress from "react-native-progress";
 
 type Props = {
   disabled: boolean;
+  isUploading: boolean;
+  progress: number;
   onPress: () => void;
 };
 
-export const UploadButton = ({ disabled, onPress }: Props) => {
+export const UploadButton = ({
+  disabled,
+  isUploading,
+  progress,
+  onPress,
+}: Props) => {
   return (
     <Pressable
       disabled={disabled}
@@ -27,6 +35,11 @@ export const UploadButton = ({ disabled, onPress }: Props) => {
     >
       <AntDesign name="upload" size={24} color="rgb(9, 9, 11)" />
       <Text style={{ fontSize: 20, color: "rgb(9, 9, 11)" }}>アップロード</Text>
+      <Progress.Circle
+        style={{ opacity: isUploading ? 1 : 0 }}
+        size={30}
+        progress={progress}
+      />
     </Pressable>
   );
 };
