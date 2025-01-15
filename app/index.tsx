@@ -2,7 +2,6 @@ import React from "react";
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { View, Text, Pressable } from "react-native";
 import Toast from "react-native-root-toast";
-import * as Progress from "react-native-progress";
 import Slider from "@react-native-community/slider";
 import * as Clipboard from "expo-clipboard";
 import * as FileSystem from "expo-file-system";
@@ -13,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-import { DEFAULT_PRESERVE_DURATION } from "@/constants/values";
+import { Config } from "@/constants/Config";
 import { RecordButtonIcon } from "@/components/RecordButtonIcon";
 import { RecordButtonText } from "@/components/RecordButtonText";
 import { Time } from "@/components/Time";
@@ -231,7 +230,7 @@ export default function Index() {
 
     const preserveDuration =
       (await AsyncStorage.getItem("preserveDuration")) ||
-      DEFAULT_PRESERVE_DURATION;
+      Config.defaultPreserveDuration;
 
     const task = FileSystem.createUploadTask(
       "https://46.gigafile.nu/upload_chunk.php",

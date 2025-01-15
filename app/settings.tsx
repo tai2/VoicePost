@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { DEFAULT_PRESERVE_DURATION } from "@/constants/values";
 
 export default function Settings() {
   const [preserveDuration, setPreserveDuration] = useState<string | undefined>(
