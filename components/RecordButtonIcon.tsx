@@ -1,5 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { DimensionValue, Pressable, View } from "react-native";
+import {
+  DimensionValue,
+  Pressable,
+  StyleProp,
+  View,
+  ViewStyle,
+} from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 
 type Props = {
@@ -18,9 +24,16 @@ export const RecordButtonIcon = ({
   const rootRef = useRef<View>(null);
   const [size, setSize] = useState<number>(0);
   const innerCircleSize = size * 0.7;
-  const innerSquareSize = size * 0.5;
   const iconSize = size * 0.4;
 
+  const circleStyle: StyleProp<ViewStyle> = {
+    width: innerCircleSize,
+    height: innerCircleSize,
+    borderRadius: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "hsl(0, 84.2%, 60.2%)",
+  };
   return (
     <View
       ref={rootRef}
@@ -38,14 +51,7 @@ export const RecordButtonIcon = ({
     >
       {isRecording ? (
         <Pressable
-          style={{
-            width: innerSquareSize,
-            height: innerSquareSize,
-            borderRadius: "5%",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "hsl(240, 5.9%, 10%)",
-          }}
+          style={circleStyle}
           accessibilityLabel="録音を停止する"
           onPress={onStop}
         >
@@ -53,14 +59,7 @@ export const RecordButtonIcon = ({
         </Pressable>
       ) : (
         <Pressable
-          style={{
-            width: innerCircleSize,
-            height: innerCircleSize,
-            borderRadius: "50%",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "hsl(0, 84.2%, 60.2%)",
-          }}
+          style={circleStyle}
           accessibilityLabel="録音を開始する"
           onPress={onStart}
         >
