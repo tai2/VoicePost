@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { View, Text, Pressable } from "react-native";
 import Toast from "react-native-root-toast";
@@ -9,9 +10,10 @@ import { Audio } from "expo-av";
 import uuid from "react-native-uuid";
 import { Link, Stack } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { DEFAULT_PRESERVE_DURATION } from "@/constants/values";
+import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import React from "react";
+
+import { DEFAULT_PRESERVE_DURATION } from "@/constants/values";
 import { RecordButtonIcon } from "@/components/RecordButtonIcon";
 import { RecordButtonText } from "@/components/RecordButtonText";
 import { Time } from "@/components/Time";
@@ -215,6 +217,7 @@ export default function Index() {
 
   const copyToClipboard = async (url: string) => {
     await Clipboard.setStringAsync(url);
+
     Toast.show("URLをクリップボードにコピーしました", {
       duration: Toast.durations.SHORT,
     });
@@ -249,12 +252,13 @@ export default function Index() {
     if (result) {
       const body = JSON.parse(result.body);
       setUploadedFileUrl(body.url);
-      copyToClipboard(body.url);
+      await copyToClipboard(body.url);
     }
   };
 
+  // react-native-root-toast requires the RootSiblingParent
   return (
-    <>
+    <RootSiblingParent>
       <Stack.Screen
         options={{
           title: "こえのポスト",
@@ -371,6 +375,6 @@ export default function Index() {
           </View>
         </View>
       </View>
-    </>
+    </RootSiblingParent>
   );
 }
