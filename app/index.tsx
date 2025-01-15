@@ -329,7 +329,7 @@ export default function Index() {
             ファイル名: {recordedFilename}
           </Text>
           <Slider
-            style={{ width: rootWidth - 20, height: 40 }}
+            style={{ width: rootWidth - 40, height: 40 }}
             value={soundPosition / recordedDuration}
             minimumTrackTintColor="#FFFFFF"
             maximumTrackTintColor="#000000"
@@ -354,7 +354,12 @@ export default function Index() {
             )}
             <FastForwardButton onPress={forward} />
           </View>
-          <View style={{ flexDirection: "row", gap: 10 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+            }}
+          >
             <UploadButton
               disabled={uploadedFileUrl !== null}
               onPress={() => {
