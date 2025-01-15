@@ -12,6 +12,7 @@ describe("<RecordButtonIcon />", () => {
       it("should render accessibility label", () => {
         render(
           <RecordButtonIcon
+            height={100}
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
@@ -26,6 +27,7 @@ describe("<RecordButtonIcon />", () => {
       it("should call only onStop handler", () => {
         render(
           <RecordButtonIcon
+            height={100}
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
@@ -46,6 +48,7 @@ describe("<RecordButtonIcon />", () => {
       it("should render accessibility label", () => {
         render(
           <RecordButtonIcon
+            height={100}
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
@@ -62,6 +65,7 @@ describe("<RecordButtonIcon />", () => {
         const onStop = jest.fn();
         render(
           <RecordButtonIcon
+            height={100}
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
