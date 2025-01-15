@@ -23,13 +23,15 @@ import { PlayButton } from "@/components/PlayButton";
 import { PauseButton } from "@/components/PauseButton";
 import { UploadButton } from "@/components/UploadButton";
 import { CopyButton } from "@/components/CopyButton";
+import { getRecordedFilename } from "@/lib/getRecordedFilename";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const recordingStartedAt = useRef<number>(0);
   const [recordedDuration, setRecordedDuration] = useState<number>(0);
-  const [recordedFile, setRecordedAudio] = useState<string | null>(null);
+  const [recordedFile, setRecordedFile] = useState<string | null>(null);
+  const [recordedFilename, setRecordedFilename] = useState<string>("");
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -80,7 +82,7 @@ export default function Index() {
       setIsRecording(true);
       recordingStartedAt.current = performance.now();
       setRecordedDuration(0);
-      setRecordedAudio(null);
+      setRecordedFile(null);
       setUploadedFileUrl(null);
       setIsUploading(false);
       setUploadProgress(0);
@@ -133,7 +135,8 @@ export default function Index() {
 
     setIsRecording(false);
     setSoundPosition(0);
-    setRecordedAudio(uri);
+    setRecordedFile(uri);
+    setRecordedFilename(getRecordedFilename());
   }
 
   async function playSound() {
@@ -322,6 +325,9 @@ export default function Index() {
             alignItems: "center",
           }}
         >
+          <Text style={{ color: "hsl(240, 3.8%, 46.1%)" }}>
+            ファイル名: {recordedFilename}
+          </Text>
           <Slider
             style={{ width: rootWidth - 20, height: 40 }}
             value={soundPosition / recordedDuration}
