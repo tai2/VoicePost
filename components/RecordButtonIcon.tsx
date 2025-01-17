@@ -7,6 +7,7 @@ import {
   ViewStyle,
 } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
+import { Colors } from "@/constants/Colors";
 
 type Props = {
   height: DimensionValue;
@@ -32,7 +33,7 @@ export const RecordButtonIcon = ({
     borderRadius: "50%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "hsl(0, 84.2%, 60.2%)",
+    backgroundColor: Colors.red500,
   };
   return (
     <View
@@ -46,7 +47,7 @@ export const RecordButtonIcon = ({
         borderRadius: "50%",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "hsl(240, 4.8%, 95.9%)",
+        backgroundColor: Colors.zinc100,
       }}
     >
       {isRecording ? (

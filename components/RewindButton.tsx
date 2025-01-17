@@ -1,6 +1,7 @@
 import React from "react";
 import Feather from "@expo/vector-icons/Feather";
 import { Pressable } from "react-native";
+import { Colors } from "@/constants/Colors";
 
 type Props = {
   onPress: () => void;
@@ -13,7 +14,7 @@ export const RewindButton = ({ onPress }: Props) => {
         width: 50,
         height: 50,
         borderWidth: 1,
-        borderColor: "rgb(228, 228, 231)",
+        borderColor: Colors.zinc200,
         borderRadius: 5,
         justifyContent: "center",
         alignItems: "center",
@@ -21,7 +22,7 @@ export const RewindButton = ({ onPress }: Props) => {
       onPress={onPress}
       accessibilityLabel="15秒戻す"
     >
-      <Feather name="rotate-ccw" size={20} color="rgb(9, 9, 11)" />
+      <Feather name="rotate-ccw" size={20} color={Colors.zinc950} />
     </Pressable>
   );
 };

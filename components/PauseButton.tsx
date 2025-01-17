@@ -1,6 +1,7 @@
 import React from "react";
 import { Pressable, Text, TextStyle } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
+import { Colors } from "@/constants/Colors";
 
 type Props = {
   onPress: () => void;
@@ -13,7 +14,7 @@ export const PauseButton = ({ onPress }: Props) => {
         height: 50,
         flexDirection: "row",
         borderWidth: 1,
-        borderColor: "rgb(228, 228, 231)",
+        borderColor: Colors.zinc200,
         borderRadius: 5,
         alignItems: "center",
         gap: 10,
@@ -23,8 +24,8 @@ export const PauseButton = ({ onPress }: Props) => {
       onPress={onPress}
       accessibilityLabel="再生中の音源を停止する"
     >
-      <Feather name="pause" size={24} color="rgb(9, 9, 11)" />
-      <Text style={{ fontSize: 20, color: "rgb(9, 9, 11)" }}>一時停止</Text>
+      <Feather name="pause" size={24} color={Colors.zinc950} />
+      <Text style={{ fontSize: 20, color: Colors.zinc950 }}>一時停止</Text>
     </Pressable>
   );
 };

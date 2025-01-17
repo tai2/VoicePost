@@ -23,6 +23,7 @@ import { PauseButton } from "@/components/PauseButton";
 import { UploadButton } from "@/components/UploadButton";
 import { CopyButton } from "@/components/CopyButton";
 import { getRecordedFilename } from "@/lib/getRecordedFilename";
+import { Colors } from "@/constants/Colors";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -267,7 +268,7 @@ export default function Index() {
           headerRight: () => (
             <Link href="/settings" asChild>
               <Pressable accessibilityLabel="設定画面を開く">
-                <AntDesign name="setting" size={24} color="black" />
+                <AntDesign name="setting" size={24} color={Colors.zinc950} />
               </Pressable>
             </Link>
           ),
@@ -281,7 +282,7 @@ export default function Index() {
           paddingBottom: 30,
           gap: 30,
           alignItems: "center",
-          backgroundColor: "white",
+          backgroundColor: Colors.zinc50,
         }}
       >
         <View style={{ flex: 1 }}>
@@ -298,7 +299,7 @@ export default function Index() {
             <Time time={soundPosition} />
             <Text
               style={{
-                color: "hsl(240, 5.9%, 10%)",
+                color: Colors.zinc900,
                 fontSize: 28,
                 fontWeight: 600,
               }}
@@ -324,14 +325,14 @@ export default function Index() {
             alignItems: "center",
           }}
         >
-          <Text style={{ color: "hsl(240, 3.8%, 46.1%)" }}>
+          <Text style={{ color: Colors.zinc500 }}>
             ファイル名: {recordedFilename}
           </Text>
           <Slider
             style={{ width: rootWidth - 40, height: 40 }}
             value={soundPosition / recordedDuration}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
+            minimumTrackTintColor={Colors.zinc50}
+            maximumTrackTintColor={Colors.zinc950}
             onValueChange={changePosition}
           />
           <View style={{ flexDirection: "row", gap: 10 }}>
