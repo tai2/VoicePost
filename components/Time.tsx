@@ -1,6 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { Colors } from "@/constants/Colors";
+import { Typography } from "@/constants/Typography";
 
 type Props = {
   time: number;
@@ -8,7 +9,13 @@ type Props = {
 
 export const Time = ({ time }: Props) => {
   return (
-    <Text style={{ color: Colors.zinc900, fontSize: 28, fontWeight: 600 }}>
+    <Text
+      style={{
+        color: Colors.zinc900,
+        ...Typography.text3Xl,
+        ...Typography.fontSemibold,
+      }}
+    >
       {formatTime(time)}
     </Text>
   );

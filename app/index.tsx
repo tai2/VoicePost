@@ -24,6 +24,7 @@ import { UploadButton } from "@/components/UploadButton";
 import { CopyButton } from "@/components/CopyButton";
 import { getRecordedFilename } from "@/lib/getRecordedFilename";
 import { Colors } from "@/constants/Colors";
+import { Typography } from "@/constants/Typography";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -300,8 +301,8 @@ export default function Index() {
             <Text
               style={{
                 color: Colors.zinc900,
-                fontSize: 28,
-                fontWeight: 600,
+                ...Typography.text3Xl,
+                ...Typography.fontSemibold,
               }}
             >
               /

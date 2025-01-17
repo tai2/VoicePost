@@ -3,6 +3,7 @@ import { Text, TextStyle } from "react-native";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Colors } from "@/constants/Colors";
+import { Typography } from "@/constants/Typography";
 
 type Props = {
   isRecording: boolean;
@@ -23,7 +24,7 @@ export const RecordButtonText = ({ isRecording, onStop, onStart }: Props) => {
     backgroundColor: Colors.zinc900,
   };
   const textStyle: StyleProp<TextStyle> = {
-    fontSize: 20,
+    ...Typography.textXl,
     color: Colors.neutral50,
   };
 

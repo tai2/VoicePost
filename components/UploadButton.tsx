@@ -3,6 +3,7 @@ import { Pressable, Text } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as Progress from "react-native-progress";
 import { Colors } from "@/constants/Colors";
+import { Typography } from "@/constants/Typography";
 
 type Props = {
   disabled: boolean;
@@ -35,7 +36,9 @@ export const UploadButton = ({
       accessibilityLabel="録音した音源をアップロードする"
     >
       <AntDesign name="upload" size={24} color={Colors.zinc950} />
-      <Text style={{ fontSize: 20, color: Colors.zinc950 }}>アップロード</Text>
+      <Text style={{ ...Typography.textXl, color: Colors.zinc950 }}>
+        アップロード
+      </Text>
       <Progress.Circle
         style={{ opacity: isUploading ? 1 : 0 }}
         size={30}
