@@ -4,6 +4,7 @@ import { Pressable, StyleProp, ViewStyle } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
+import { Spacing } from "@/constants/Spacing";
 
 type Props = {
   isRecording: boolean;
@@ -12,14 +13,14 @@ type Props = {
 };
 
 export const RecordButtonText = ({ isRecording, onStop, onStart }: Props) => {
-  const iconSize = 24;
+  const iconSize = Spacing[6];
   const pressableStyle: StyleProp<ViewStyle> = {
-    width: 160,
+    width: Spacing[40],
+    gap: Spacing[1.5],
+    padding: Spacing[4],
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 5,
-    padding: 15,
     borderRadius: 10,
     backgroundColor: Colors.zinc900,
   };

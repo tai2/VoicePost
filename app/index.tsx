@@ -25,6 +25,7 @@ import { CopyButton } from "@/components/CopyButton";
 import { getRecordedFilename } from "@/lib/getRecordedFilename";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
+import { Spacing } from "@/constants/Spacing";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -269,7 +270,11 @@ export default function Index() {
           headerRight: () => (
             <Link href="/settings" asChild>
               <Pressable accessibilityLabel="設定画面を開く">
-                <AntDesign name="setting" size={24} color={Colors.zinc950} />
+                <AntDesign
+                  name="setting"
+                  size={Spacing[6]}
+                  color={Colors.zinc950}
+                />
               </Pressable>
             </Link>
           ),
@@ -279,9 +284,9 @@ export default function Index() {
         ref={rootRef}
         style={{
           flex: 1,
-          paddingTop: 30,
-          paddingBottom: 30,
-          gap: 30,
+          paddingTop: Spacing[8],
+          paddingBottom: Spacing[8],
+          gap: Spacing[8],
           alignItems: "center",
           backgroundColor: Colors.zinc50,
         }}
@@ -296,7 +301,7 @@ export default function Index() {
         </View>
 
         {recordedFile ? (
-          <View style={{ flexDirection: "row", gap: 5 }}>
+          <View style={{ flexDirection: "row", gap: Spacing[1.5] }}>
             <Time time={soundPosition} />
             <Text
               style={{
@@ -322,7 +327,7 @@ export default function Index() {
         <View
           style={{
             opacity: recordedFile ? 1 : 0,
-            gap: 20,
+            gap: Spacing[5],
             alignItems: "center",
           }}
         >
@@ -330,13 +335,13 @@ export default function Index() {
             ファイル名: {recordedFilename}
           </Text>
           <Slider
-            style={{ width: rootWidth - 40, height: 40 }}
+            style={{ width: rootWidth - Spacing[10], height: Spacing[10] }}
             value={soundPosition / recordedDuration}
             minimumTrackTintColor={Colors.zinc50}
             maximumTrackTintColor={Colors.zinc950}
             onValueChange={changePosition}
           />
-          <View style={{ flexDirection: "row", gap: 10 }}>
+          <View style={{ flexDirection: "row", gap: Spacing[2.5] }}>
             <RewindButton onPress={rewind} />
             {isPlaying ? (
               <PauseButton
@@ -358,7 +363,7 @@ export default function Index() {
           <View
             style={{
               flexDirection: "row",
-              gap: 10,
+              gap: Spacing[2.5],
             }}
           >
             <UploadButton

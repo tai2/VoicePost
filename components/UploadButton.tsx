@@ -4,6 +4,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import * as Progress from "react-native-progress";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
+import { Spacing } from "@/constants/Spacing";
 
 type Props = {
   disabled: boolean;
@@ -22,15 +23,15 @@ export const UploadButton = ({
     <Pressable
       disabled={disabled}
       style={{
-        height: 50,
+        height: Spacing[12],
+        gap: Spacing[2.5],
+        paddingRight: Spacing[5],
+        paddingLeft: Spacing[5],
         flexDirection: "row",
         borderWidth: 1,
         borderColor: Colors.zinc200,
         borderRadius: 5,
         alignItems: "center",
-        gap: 10,
-        paddingRight: 20,
-        paddingLeft: 20,
       }}
       onPress={onPress}
       accessibilityLabel="録音した音源をアップロードする"

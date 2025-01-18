@@ -2,6 +2,7 @@ import React from "react";
 import Feather from "@expo/vector-icons/Feather";
 import { Pressable } from "react-native";
 import { Colors } from "@/constants/Colors";
+import { Spacing } from "@/constants/Spacing";
 
 type Props = {
   onPress: () => void;
@@ -11,8 +12,8 @@ export const RewindButton = ({ onPress }: Props) => {
   return (
     <Pressable
       style={{
-        width: 50,
-        height: 50,
+        width: Spacing[12],
+        height: Spacing[12],
         borderWidth: 1,
         borderColor: Colors.zinc200,
         borderRadius: 5,
