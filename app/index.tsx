@@ -26,6 +26,7 @@ import { getRecordedFilename } from "@/lib/getRecordedFilename";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
+import { TimeText } from "@/components/TimeText";
 
 export default function Index() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -284,9 +285,9 @@ export default function Index() {
         ref={rootRef}
         style={{
           flex: 1,
-          paddingTop: Spacing[8],
-          paddingBottom: Spacing[8],
-          gap: Spacing[8],
+          paddingTop: Spacing[7],
+          paddingBottom: Spacing[7],
+          gap: Spacing[6],
           alignItems: "center",
           backgroundColor: Colors.zinc50,
         }}
@@ -303,15 +304,7 @@ export default function Index() {
         {recordedFile ? (
           <View style={{ flexDirection: "row", gap: Spacing[1.5] }}>
             <Time time={soundPosition} />
-            <Text
-              style={{
-                color: Colors.zinc900,
-                ...Typography.text3Xl,
-                ...Typography.fontSemibold,
-              }}
-            >
-              /
-            </Text>
+            <TimeText>/</TimeText>
             <Time time={recordedDuration} />
           </View>
         ) : (

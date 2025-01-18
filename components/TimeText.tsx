@@ -5,9 +5,15 @@ import { Typography } from "@/constants/Typography";
 
 type Props = PropsWithChildren<{}>;
 
-export const ButtonText = ({ children }: Props) => {
+export const TimeText = ({ children }: Props) => {
   return (
-    <Text style={{ ...Typography.textLg, color: Colors.zinc950 }}>
+    <Text
+      style={{
+        color: Colors.zinc900,
+        ...Typography.text2Xl,
+        ...Typography.fontSemibold,
+      }}
+    >
       {children}
     </Text>
   );

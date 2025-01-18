@@ -1,8 +1,8 @@
+import React, { PropsWithChildren } from "react";
+import { Pressable } from "react-native";
 import { Borders } from "@/constants/Borders";
 import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
-import React, { PropsWithChildren } from "react";
-import { Pressable } from "react-native";
 
 type Props = PropsWithChildren<{
   disabled?: boolean;
