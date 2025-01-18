@@ -5,30 +5,22 @@ import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
 import { Borders } from "@/constants/Borders";
 import { ButtonText } from "./ButtonText";
+import { ButtonPressable } from "./ButtonPressable";
 
 type Props = {
+  disabled?: boolean;
   onPress: () => void;
 };
 
-export const PlayButton = ({ onPress }: Props) => {
+export const PlayButton = ({ disabled, onPress }: Props) => {
   return (
-    <Pressable
-      style={{
-        height: Spacing[12],
-        gap: Spacing[2.5],
-        paddingRight: Spacing[5],
-        paddingLeft: Spacing[5],
-        ...Borders.border,
-        ...Borders.rounded,
-        borderColor: Colors.zinc200,
-        flexDirection: "row",
-        alignItems: "center",
-      }}
-      onPress={onPress}
+    <ButtonPressable
+      disabled={disabled}
       accessibilityLabel="録音した音源を再生する"
+      onPress={onPress}
     >
       <Feather name="play" size={Spacing[5]} color={Colors.zinc950} />
       <ButtonText>再生</ButtonText>
-    </Pressable>
+    </ButtonPressable>
   );
 };
