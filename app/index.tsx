@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { View, Text, Pressable } from "react-native";
 import Toast from "react-native-root-toast";
 import Slider from "@react-native-community/slider";
@@ -26,24 +26,19 @@ import { getRecordedFilename } from "@/lib/getRecordedFilename";
 import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
 import { TimeText } from "@/components/TimeText";
+import { useRecorder } from "@/hooks/useRecorder";
 
 export default function Index() {
-  const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const recordingStartedAt = useRef<number>(0);
-  const [recordedDuration, setRecordedDuration] = useState<number>(0);
-  const [recordedFile, setRecordedFile] = useState<string | null>(null);
-  const [recordedFilename, setRecordedFilename] = useState<string>("");
+  const [uploadFilename, setUploadFilename] = useState<string>("");
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [rootWidth, setRootWidth] = useState<number>(0);
 
   const rootRef = useRef<View>(null);
-  const recordingRef = useRef<Audio.Recording | null>(null);
   const soundRef = useRef<Audio.Sound | null>(null);
   const [soundPosition, setSoundPosition] = useState<number>(0);
-  const [permissionResponse, requestPermission] = Audio.usePermissions();
 
   useLayoutEffect(() => {
     rootRef.current?.measure((x_, y_, width, height_) => {
@@ -51,65 +46,24 @@ export default function Index() {
     });
   }, [setRootWidth]);
 
-  useEffect(() => {
-    if (isRecording) {
-      requestAnimationFrame((t) => {
-        setRecordedDuration(t - recordingStartedAt.current);
-      });
-    }
-  }, [isRecording, recordedDuration]);
+  const {
+    isRecording,
+    recordedDuration,
+    recordedFile,
+    startRecording,
+    stopRecording,
+  } = useRecorder();
 
-  async function startRecording() {
-    try {
-      if (!permissionResponse) {
-        throw new Error("Permission response is not ready");
-      }
+  const handleOnStart = async () => {
+    await startRecording();
 
-      if (permissionResponse.status !== "granted") {
-        console.log("Requesting permission..");
-        await requestPermission();
-      }
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
+    setUploadedFileUrl(null);
+    setIsUploading(false);
+    setUploadProgress(0);
+  };
 
-      console.log("Starting recording..");
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY
-      );
-      console.log("Recording started");
-      recordingRef.current = recording;
-
-      setIsRecording(true);
-      recordingStartedAt.current = performance.now();
-      setRecordedDuration(0);
-      setRecordedFile(null);
-      setUploadedFileUrl(null);
-      setIsUploading(false);
-      setUploadProgress(0);
-    } catch (err) {
-      console.error("Failed to start recording", err);
-    }
-  }
-
-  async function stopRecording() {
-    if (!recordingRef.current) {
-      console.error("Recording is not started");
-      return;
-    }
-
-    await recordingRef.current.stopAndUnloadAsync();
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-    });
-    const uri = recordingRef.current.getURI();
-    if (!uri) {
-      console.error("Recording is not stored");
-      return;
-    }
-
-    console.log("Recording stopped and stored at", uri);
+  const handleOnStop = async () => {
+    const uri = await stopRecording();
 
     const { sound } = await Audio.Sound.createAsync(
       { uri },
@@ -126,7 +80,6 @@ export default function Index() {
         }
 
         if (status.durationMillis) {
-          setRecordedDuration(status.durationMillis);
           if (status.isPlaying) {
             setSoundPosition(status.positionMillis);
           }
@@ -135,11 +88,9 @@ export default function Index() {
     );
     soundRef.current = sound;
 
-    setIsRecording(false);
     setSoundPosition(0);
-    setRecordedFile(uri);
-    setRecordedFilename(getRecordedFilename());
-  }
+    setUploadFilename(getRecordedFilename());
+  };
 
   async function playSound() {
     const sound = soundRef.current;
@@ -295,8 +246,8 @@ export default function Index() {
           <IconRecordButton
             height="100%"
             isRecording={isRecording}
-            onStop={stopRecording}
-            onStart={startRecording}
+            onStop={handleOnStop}
+            onStart={handleOnStart}
           />
         </View>
 
@@ -312,8 +263,8 @@ export default function Index() {
 
         <TextRecordButton
           isRecording={isRecording}
-          onStop={stopRecording}
-          onStart={startRecording}
+          onStop={handleOnStop}
+          onStart={handleOnStart}
         />
 
         <View
@@ -324,7 +275,7 @@ export default function Index() {
           }}
         >
           <Text style={{ color: Colors.zinc500 }}>
-            ファイル名: {recordedFilename}
+            ファイル名: {uploadFilename}
           </Text>
           <Slider
             style={{ width: rootWidth - Spacing[10], height: Spacing[10] }}
