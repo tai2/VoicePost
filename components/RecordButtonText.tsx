@@ -5,6 +5,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
+import { Borders } from "@/constants/Borders";
 
 type Props = {
   isRecording: boolean;
@@ -18,11 +19,11 @@ export const RecordButtonText = ({ isRecording, onStop, onStart }: Props) => {
     width: Spacing[40],
     gap: Spacing[1.5],
     padding: Spacing[4],
+    ...Borders.roundedLg,
+    backgroundColor: Colors.zinc900,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 10,
-    backgroundColor: Colors.zinc900,
   };
   const textStyle: StyleProp<TextStyle> = {
     ...Typography.textXl,

@@ -4,6 +4,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
+import { Borders } from "@/constants/Borders";
 
 type Props = {
   onPress: () => void;
@@ -17,10 +18,10 @@ export const PlayButton = ({ onPress }: Props) => {
         gap: Spacing[2.5],
         paddingRight: Spacing[5],
         paddingLeft: Spacing[5],
-        flexDirection: "row",
-        borderWidth: 1,
+        ...Borders.border,
+        ...Borders.rounded,
         borderColor: Colors.zinc200,
-        borderRadius: 5,
+        flexDirection: "row",
         alignItems: "center",
       }}
       onPress={onPress}
