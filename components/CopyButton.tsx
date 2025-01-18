@@ -1,10 +1,10 @@
 import React from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constants/Colors";
-import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
 import { Borders } from "@/constants/Borders";
+import { ButtonText } from "./ButtonText";
 
 type Props = {
   disabled?: boolean;
@@ -29,10 +29,8 @@ export const CopyButton = ({ disabled, onPress }: Props) => {
       onPress={onPress}
       accessibilityLabel="アップロードした音源をURLをコピーする"
     >
-      <Feather name="copy" size={24} color={Colors.zinc950} />
-      <Text style={{ ...Typography.textXl, color: Colors.zinc950 }}>
-        コピー
-      </Text>
+      <Feather name="copy" size={Spacing[5]} color={Colors.zinc950} />
+      <ButtonText>コピー</ButtonText>
     </Pressable>
   );
 };

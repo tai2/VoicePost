@@ -6,6 +6,7 @@ import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
 import { Borders } from "@/constants/Borders";
+import { ButtonText } from "./ButtonText";
 
 type Props = {
   disabled: boolean;
@@ -37,10 +38,8 @@ export const UploadButton = ({
       onPress={onPress}
       accessibilityLabel="録音した音源をアップロードする"
     >
-      <AntDesign name="upload" size={24} color={Colors.zinc950} />
-      <Text style={{ ...Typography.textXl, color: Colors.zinc950 }}>
-        アップロード
-      </Text>
+      <AntDesign name="upload" size={Spacing[5]} color={Colors.zinc950} />
+      <ButtonText>アップロード</ButtonText>
       <Progress.Circle
         style={{ opacity: isUploading ? 1 : 0 }}
         size={30}
