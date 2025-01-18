@@ -16,7 +16,7 @@ type Props = {
   onStart: () => void;
 };
 
-export const RecordButtonIcon = ({
+export const IconRecordButton = ({
   height,
   isRecording,
   onStop,

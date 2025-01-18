@@ -13,7 +13,7 @@ type Props = {
   onStart: () => void;
 };
 
-export const RecordButtonText = ({ isRecording, onStop, onStart }: Props) => {
+export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
   const iconSize = Spacing[6];
   const pressableStyle: StyleProp<ViewStyle> = {
     width: Spacing[40],

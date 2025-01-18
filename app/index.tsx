@@ -13,8 +13,8 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { Config } from "@/constants/Config";
-import { RecordButtonIcon } from "@/components/RecordButtonIcon";
-import { RecordButtonText } from "@/components/RecordButtonText";
+import { IconRecordButton } from "@/components/IconRecordButton";
+import { TextRecordButton } from "@/components/TextRecordButton";
 import { Time } from "@/components/Time";
 import { RewindButton } from "@/components/RewindButton";
 import { FastForwardButton } from "@/components/FastForwardButton";
@@ -293,7 +293,7 @@ export default function Index() {
         }}
       >
         <View style={{ flex: 1 }}>
-          <RecordButtonIcon
+          <IconRecordButton
             height="100%"
             isRecording={isRecording}
             onStop={stopRecording}
@@ -311,7 +311,7 @@ export default function Index() {
           <Time time={recordedDuration} />
         )}
 
-        <RecordButtonText
+        <TextRecordButton
           isRecording={isRecording}
           onStop={stopRecording}
           onStart={startRecording}

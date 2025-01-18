@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react-native";
-import { RecordButtonIcon } from "./RecordButtonIcon";
+import { TextRecordButton } from "./TextRecordButton";
 
-describe("<RecordButtonIcon />", () => {
+describe("<TextRecordButton />", () => {
   const onStart = jest.fn();
   const onStop = jest.fn();
 
@@ -9,32 +9,42 @@ describe("<RecordButtonIcon />", () => {
     const isRecording = true;
 
     describe("When rendered", () => {
-      it("should render accessibility label", () => {
+      it("should render label", async () => {
         render(
-          <RecordButtonIcon
-            height={100}
+          <TextRecordButton
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
           />
         );
 
-        screen.getByLabelText("録音を停止する");
+        await screen.findByText("録音停止");
+      });
+
+      it("should render accessibility label", async () => {
+        render(
+          <TextRecordButton
+            isRecording={isRecording}
+            onStart={onStart}
+            onStop={onStop}
+          />
+        );
+
+        await screen.findByLabelText("録音を停止する");
       });
     });
 
     describe("When clicked", () => {
-      it("should call only onStop handler", () => {
+      it("should call only onStop handler", async () => {
         render(
-          <RecordButtonIcon
-            height={100}
+          <TextRecordButton
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
           />
         );
 
-        fireEvent.press(screen.getByLabelText("録音を停止する"));
+        fireEvent.press(await screen.findByText("録音停止"));
         expect(onStart).not.toHaveBeenCalled();
         expect(onStop).toHaveBeenCalled();
       });
@@ -45,10 +55,21 @@ describe("<RecordButtonIcon />", () => {
     const isRecording = false;
 
     describe("When rendered", () => {
+      it("should render label", () => {
+        render(
+          <TextRecordButton
+            isRecording={isRecording}
+            onStart={onStart}
+            onStop={onStop}
+          />
+        );
+
+        screen.getByText("録音開始");
+      });
+
       it("should render accessibility label", () => {
         render(
-          <RecordButtonIcon
-            height={100}
+          <TextRecordButton
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
@@ -64,15 +85,14 @@ describe("<RecordButtonIcon />", () => {
         const onStart = jest.fn();
         const onStop = jest.fn();
         render(
-          <RecordButtonIcon
-            height={100}
+          <TextRecordButton
             isRecording={isRecording}
             onStart={onStart}
             onStop={onStop}
           />
         );
 
-        fireEvent.press(screen.getByLabelText("録音を開始する"));
+        fireEvent.press(screen.getByText("録音開始"));
         expect(onStart).toHaveBeenCalled();
         expect(onStop).not.toHaveBeenCalled();
       });
