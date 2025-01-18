@@ -27,9 +27,9 @@ import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
 import { TimeText } from "@/components/TimeText";
 import { useRecorder } from "@/hooks/useRecorder";
+import { usePlayer } from "@/hooks/usePlayer";
 
 export default function Index() {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [uploadFilename, setUploadFilename] = useState<string>("");
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -37,8 +37,6 @@ export default function Index() {
   const [rootWidth, setRootWidth] = useState<number>(0);
 
   const rootRef = useRef<View>(null);
-  const soundRef = useRef<Audio.Sound | null>(null);
-  const [soundPosition, setSoundPosition] = useState<number>(0);
 
   useLayoutEffect(() => {
     rootRef.current?.measure((x_, y_, width, height_) => {
@@ -54,6 +52,17 @@ export default function Index() {
     stopRecording,
   } = useRecorder();
 
+  const {
+    isPlaying,
+    soundPosition,
+    load,
+    play,
+    pause,
+    forward,
+    rewind,
+    changePosition,
+  } = usePlayer();
+
   const handleOnStart = async () => {
     await startRecording();
 
@@ -64,112 +73,9 @@ export default function Index() {
 
   const handleOnStop = async () => {
     const uri = await stopRecording();
-
-    const { sound } = await Audio.Sound.createAsync(
-      { uri },
-      undefined,
-      (status) => {
-        if (!status.isLoaded) {
-          return;
-        }
-
-        if (status.didJustFinish) {
-          setIsPlaying(false);
-          setSoundPosition(0);
-          return;
-        }
-
-        if (status.durationMillis) {
-          if (status.isPlaying) {
-            setSoundPosition(status.positionMillis);
-          }
-        }
-      }
-    );
-    soundRef.current = sound;
-
-    setSoundPosition(0);
+    await load(uri);
     setUploadFilename(getRecordedFilename());
   };
-
-  async function playSound() {
-    const sound = soundRef.current;
-    if (!sound) {
-      console.error("Sound is not loaded");
-      return;
-    }
-
-    console.log("Playing Sound");
-    await sound.playAsync();
-  }
-
-  async function pauseSound() {
-    const sound = soundRef.current;
-    if (!sound) {
-      console.error("Sound is not loaded");
-      return;
-    }
-
-    await sound.pauseAsync();
-  }
-
-  async function forward() {
-    const sound = soundRef.current;
-    if (!sound) {
-      console.error("Sound is not loaded");
-      return;
-    }
-
-    const status = await sound.getStatusAsync();
-    if (!status.isLoaded || !status.durationMillis) {
-      console.error("Sound is not loaded");
-      return;
-    }
-
-    const positionMillis = status.positionMillis + Config.skipDuration;
-    sound.setStatusAsync({
-      positionMillis,
-    });
-    setSoundPosition(Math.min(status.durationMillis, positionMillis));
-  }
-
-  async function rewind() {
-    const sound = soundRef.current;
-    if (!sound) {
-      console.error("Sound is not loaded");
-      return;
-    }
-
-    const status = await sound.getStatusAsync();
-    if (!status.isLoaded || !status.durationMillis) {
-      console.error("Sound is not loaded");
-      return;
-    }
-
-    const positionMillis = status.positionMillis - Config.skipDuration;
-    sound.setStatusAsync({
-      positionMillis,
-    });
-    setSoundPosition(Math.max(0, positionMillis));
-  }
-
-  async function changePosition(position: number) {
-    const sound = soundRef.current;
-    if (!sound) {
-      console.error("Sound is not loaded");
-      return;
-    }
-
-    const status = await sound.getStatusAsync();
-    if (!status.isLoaded || !status.durationMillis) {
-      console.error("Sound is not loaded");
-      return;
-    }
-
-    sound.setStatusAsync({
-      positionMillis: status.durationMillis * position,
-    });
-  }
 
   const copyToClipboard = async (url: string) => {
     await Clipboard.setStringAsync(url);
@@ -287,19 +193,9 @@ export default function Index() {
           <View style={{ flexDirection: "row", gap: Spacing[2.5] }}>
             <RewindButton onPress={rewind} />
             {isPlaying ? (
-              <PauseButton
-                onPress={async () => {
-                  await pauseSound();
-                  setIsPlaying(false);
-                }}
-              />
+              <PauseButton onPress={pause} />
             ) : (
-              <PlayButton
-                onPress={async () => {
-                  setIsPlaying(true);
-                  await playSound();
-                }}
-              />
+              <PlayButton onPress={play} />
             )}
             <FastForwardButton onPress={forward} />
           </View>
