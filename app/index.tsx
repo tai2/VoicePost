@@ -24,7 +24,6 @@ import { UploadButton } from "@/components/UploadButton";
 import { CopyButton } from "@/components/CopyButton";
 import { getRecordedFilename } from "@/lib/getRecordedFilename";
 import { Colors } from "@/constants/Colors";
-import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
 import { TimeText } from "@/components/TimeText";
 
