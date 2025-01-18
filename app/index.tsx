@@ -175,7 +175,7 @@ export default function Index() {
       return;
     }
 
-    const positionMillis = status.positionMillis + 5000;
+    const positionMillis = status.positionMillis + Config.skipDuration;
     sound.setStatusAsync({
       positionMillis,
     });
@@ -195,7 +195,7 @@ export default function Index() {
       return;
     }
 
-    const positionMillis = status.positionMillis - 5000;
+    const positionMillis = status.positionMillis - Config.skipDuration;
     sound.setStatusAsync({
       positionMillis,
     });
