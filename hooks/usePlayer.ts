@@ -50,7 +50,6 @@ export const usePlayer = () => {
       return;
     }
 
-    console.log("Playing Sound");
     await sound.playAsync();
   };
 
