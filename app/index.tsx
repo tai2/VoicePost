@@ -27,15 +27,15 @@ import { useUploader } from "@/hooks/useUploader";
 
 export default function Index() {
   const [uploadFilename, setUploadFilename] = useState<string>("");
-  const [rootWidth, setRootWidth] = useState<number>(0);
+  const [uploaderViewWidth, setUploaderViewWidth] = useState<number>(0);
 
-  const rootRef = useRef<View>(null);
+  const uploaderViewRef = useRef<View>(null);
 
   useLayoutEffect(() => {
-    rootRef.current?.measure((x_, y_, width, height_) => {
-      setRootWidth(width);
+    uploaderViewRef.current?.measure((x_, y_, width, height_) => {
+      setUploaderViewWidth(width);
     });
-  }, [setRootWidth]);
+  }, [setUploaderViewWidth]);
 
   const {
     isRecording,
@@ -100,7 +100,6 @@ export default function Index() {
         }}
       />
       <View
-        ref={rootRef}
         style={{
           flex: 1,
           paddingTop: Spacing[7],
@@ -136,6 +135,7 @@ export default function Index() {
         />
 
         <View
+          ref={uploaderViewRef}
           style={{
             opacity: recordedFile ? 1 : 0,
             gap: Spacing[5],
@@ -146,7 +146,7 @@ export default function Index() {
             ファイル名: {uploadFilename}
           </Text>
           <Slider
-            style={{ width: rootWidth - Spacing[10], height: Spacing[10] }}
+            style={{ width: uploaderViewWidth, height: Spacing[10] }}
             value={soundPosition / recordedDuration}
             minimumTrackTintColor={Colors.zinc50}
             maximumTrackTintColor={Colors.zinc950}
