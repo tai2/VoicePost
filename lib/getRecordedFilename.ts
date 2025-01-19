@@ -9,5 +9,5 @@ export const getRecordedFilename = (now?: Date) => {
   const minutes = now.getMinutes().toString().padStart(2, "0");
   const seconds = now.getSeconds().toString().padStart(2, "0");
 
-  return `recording_${year}${month}${date}_${hours}${minutes}${seconds}.mp3`;
+  return `recording_${year}${month}${date}_${hours}${minutes}${seconds}.m4a`;
 };
