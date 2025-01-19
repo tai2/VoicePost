@@ -29,16 +29,16 @@ export const usePlayer = () => {
           return;
         }
 
-        if (status.durationMillis) {
-          if (status.isPlaying) {
-            setSoundPosition(status.positionMillis);
-          }
+        if (status.isPlaying) {
+          setSoundPosition(status.positionMillis);
         }
       }
     );
     soundRef.current = sound;
 
-    setSoundPosition(0);
+    // Due to the bug in slider, setting the position to zero doesn't reset the position when the thumb is manually
+    // moved by user. So, we need to set it to value other than zero.
+    setSoundPosition(1);
   };
 
   const play = async () => {

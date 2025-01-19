@@ -33,11 +33,9 @@ export const useRecorder = () => {
       playsInSilentModeIOS: true,
     });
 
-    console.log("Starting recording..");
     const { recording } = await Audio.Recording.createAsync(
       Audio.RecordingOptionsPresets.HIGH_QUALITY
     );
-    console.log("Recording started");
     recordingRef.current = recording;
 
     setIsRecording(true);
