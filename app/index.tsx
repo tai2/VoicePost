@@ -148,8 +148,8 @@ export default function Index() {
           <Slider
             style={{ width: uploaderViewWidth, height: Spacing[10] }}
             value={soundPosition / recordedDuration}
-            minimumTrackTintColor={Colors.zinc50}
-            maximumTrackTintColor={Colors.zinc950}
+            minimumTrackTintColor={Colors.zinc950}
+            maximumTrackTintColor={Colors.zinc300}
             onValueChange={changePosition}
           />
           <View style={{ flexDirection: "row", gap: Spacing[2.5] }}>
