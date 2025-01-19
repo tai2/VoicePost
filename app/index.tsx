@@ -4,15 +4,10 @@ import { View, Text, Pressable } from "react-native";
 import Toast from "react-native-root-toast";
 import Slider from "@react-native-community/slider";
 import * as Clipboard from "expo-clipboard";
-import * as FileSystem from "expo-file-system";
-import { Audio } from "expo-av";
-import uuid from "react-native-uuid";
 import { Link, Stack } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-import { Config } from "@/constants/Config";
 import { IconRecordButton } from "@/components/IconRecordButton";
 import { TextRecordButton } from "@/components/TextRecordButton";
 import { Time } from "@/components/Time";
@@ -28,12 +23,10 @@ import { Spacing } from "@/constants/Spacing";
 import { TimeText } from "@/components/TimeText";
 import { useRecorder } from "@/hooks/useRecorder";
 import { usePlayer } from "@/hooks/usePlayer";
+import { useUploader } from "@/hooks/useUploader";
 
 export default function Index() {
   const [uploadFilename, setUploadFilename] = useState<string>("");
-  const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [rootWidth, setRootWidth] = useState<number>(0);
 
   const rootRef = useRef<View>(null);
@@ -63,12 +56,13 @@ export default function Index() {
     changePosition,
   } = usePlayer();
 
-  const handleOnStart = async () => {
-    await startRecording();
+  const { isUploading, uploadProgress, uploadedFileUrl, reset, upload } =
+    useUploader();
 
-    setUploadedFileUrl(null);
-    setIsUploading(false);
-    setUploadProgress(0);
+  const handleOnStart = async () => {
+    reset();
+
+    await startRecording();
   };
 
   const handleOnStop = async () => {
@@ -85,37 +79,13 @@ export default function Index() {
     });
   };
 
-  const uploadToGigafile = async (file: string) => {
-    setIsUploading(true);
-
-    const preserveDuration =
-      (await AsyncStorage.getItem("preserveDuration")) ||
-      Config.defaultPreserveDuration;
-
-    const task = FileSystem.createUploadTask(
-      "https://46.gigafile.nu/upload_chunk.php",
-      file,
-      {
-        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-        fieldName: "file",
-        parameters: {
-          id: uuid.v4(),
-          name: "audio.mp3",
-          chunk: "0",
-          chunks: "1",
-          lifetime: preserveDuration,
-        },
-      },
-      (data) => {
-        setUploadProgress(data.totalBytesSent / data.totalBytesExpectedToSend);
-      }
-    );
-    const result = await task.uploadAsync();
-    if (result) {
-      const body = JSON.parse(result.body);
-      setUploadedFileUrl(body.url);
-      await copyToClipboard(body.url);
+  const handleUpload = async () => {
+    if (!recordedFile) {
+      console.error("No recorded file");
+      return;
     }
+    const url = await upload(recordedFile, uploadFilename);
+    await copyToClipboard(url);
   };
 
   // react-native-root-toast requires the RootSiblingParent
@@ -209,13 +179,7 @@ export default function Index() {
               disabled={uploadedFileUrl !== null}
               isUploading={isUploading}
               progress={uploadProgress}
-              onPress={() => {
-                if (!recordedFile) {
-                  console.error("No recorded file");
-                  return;
-                }
-                uploadToGigafile(recordedFile);
-              }}
+              onPress={handleUpload}
             />
             <CopyButton
               disabled={uploadedFileUrl === null}
