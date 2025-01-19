@@ -16,6 +16,7 @@ export const PlayButton = ({ disabled, onPress }: Props) => {
   return (
     <ButtonPressable
       disabled={disabled}
+      width={Spacing[32]}
       accessibilityLabel="録音した音源を再生する"
       onPress={onPress}
     >
