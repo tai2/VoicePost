@@ -71,14 +71,6 @@ export default function Index() {
     setUploadFilename(getRecordedFilename());
   };
 
-  const copyToClipboard = async (url: string) => {
-    await Clipboard.setStringAsync(url);
-
-    Toast.show("URLをクリップボードにコピーしました", {
-      duration: Toast.durations.SHORT,
-    });
-  };
-
   const handleUpload = async () => {
     if (!recordedFile) {
       console.error("No recorded file");
@@ -197,3 +189,11 @@ export default function Index() {
     </RootSiblingParent>
   );
 }
+
+const copyToClipboard = async (url: string) => {
+  await Clipboard.setStringAsync(url);
+
+  Toast.show("URLをクリップボードにコピーしました", {
+    duration: Toast.durations.SHORT,
+  });
+};
