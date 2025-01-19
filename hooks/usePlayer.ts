@@ -8,6 +8,10 @@ export const usePlayer = () => {
   const [soundPosition, setSoundPosition] = useState<number>(0);
 
   const load = async (uri: string) => {
+    if (soundRef.current) {
+      await soundRef.current.unloadAsync();
+    }
+
     const { sound } = await Audio.Sound.createAsync(
       { uri },
       undefined,
@@ -19,6 +23,9 @@ export const usePlayer = () => {
         if (status.didJustFinish) {
           setIsPlaying(false);
           setSoundPosition(0);
+          sound.setStatusAsync({
+            positionMillis: 0,
+          });
           return;
         }
 
