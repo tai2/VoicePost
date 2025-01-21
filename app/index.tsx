@@ -85,7 +85,7 @@ export default function Index() {
     <RootSiblingParent>
       <Stack.Screen
         options={{
-          title: "こえのポスト",
+          title: "ボイスポスト",
           headerRight: () => (
             <Link href="/settings" asChild>
               <Pressable accessibilityLabel="設定画面を開く">
