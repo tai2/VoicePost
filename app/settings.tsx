@@ -33,13 +33,15 @@ export default function Settings() {
   return (
     <View style={{ padding: Spacing[6] }}>
       <View
-        style={{
-          padding: Spacing[2],
-          backgroundColor: Colors.zinc50,
-          ...Borders.roundedLg,
-        }}
+        style={[
+          {
+            padding: Spacing[2],
+            backgroundColor: Colors.zinc50,
+          },
+          Borders.roundedLg,
+        ]}
       >
-        <Text style={{ ...Typography.textXl }}>保存期限</Text>
+        <Text style={Typography.textXl}>保存期限</Text>
         <Picker
           selectedValue={preserveDuration}
           onValueChange={handlePreserveDurationChange}

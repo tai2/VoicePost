@@ -8,11 +8,13 @@ type Props = PropsWithChildren<{}>;
 export const TimeText = ({ children }: Props) => {
   return (
     <Text
-      style={{
-        color: Colors.zinc900,
-        ...Typography.text2Xl,
-        ...Typography.fontSemibold,
-      }}
+      style={[
+        {
+          color: Colors.zinc900,
+        },
+        Typography.text2Xl,
+        Typography.fontSemibold,
+      ]}
     >
       {children}
     </Text>

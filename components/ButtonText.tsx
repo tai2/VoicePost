@@ -7,7 +7,7 @@ type Props = PropsWithChildren<{}>;
 
 export const ButtonText = ({ children }: Props) => {
   return (
-    <Text style={{ ...Typography.textLg, color: Colors.zinc950 }}>
+    <Text style={[{ color: Colors.zinc950 }, Typography.textLg]}>
       {children}
     </Text>
   );

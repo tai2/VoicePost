@@ -15,20 +15,24 @@ type Props = {
 
 export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
   const iconSize = Spacing[6];
-  const pressableStyle: StyleProp<ViewStyle> = {
-    width: Spacing[40],
-    gap: Spacing[1.5],
-    padding: Spacing[4],
-    ...Borders.roundedLg,
-    backgroundColor: Colors.zinc900,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  };
-  const textStyle: StyleProp<TextStyle> = {
-    ...Typography.textXl,
-    color: Colors.neutral50,
-  };
+  const pressableStyle: StyleProp<ViewStyle> = [
+    {
+      width: Spacing[40],
+      gap: Spacing[1.5],
+      padding: Spacing[4],
+      backgroundColor: Colors.zinc900,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    Borders.roundedLg,
+  ];
+  const textStyle: StyleProp<TextStyle> = [
+    {
+      color: Colors.neutral50,
+    },
+    Typography.textXl,
+  ];
 
   return (
     <>

@@ -21,19 +21,21 @@ export const ButtonPressable = ({
   return (
     <Pressable
       disabled={disabled}
-      style={{
-        height: Spacing[12],
-        width,
-        gap: Spacing[2],
-        paddingRight: Spacing[4],
-        paddingLeft: Spacing[4],
-        ...Borders.border,
-        ...Borders.rounded,
-        borderColor: Colors.zinc200,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
+      style={[
+        {
+          height: Spacing[12],
+          width,
+          gap: Spacing[2],
+          paddingRight: Spacing[4],
+          paddingLeft: Spacing[4],
+          borderColor: Colors.zinc200,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        },
+        Borders.border,
+        Borders.rounded,
+      ]}
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}
     >
