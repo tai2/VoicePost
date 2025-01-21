@@ -21,7 +21,7 @@ export const ButtonPressable = ({
   return (
     <Pressable
       disabled={disabled}
-      style={[
+      style={({ pressed }) => [
         {
           height: Spacing[12],
           width,
@@ -32,6 +32,7 @@ export const ButtonPressable = ({
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
+          backgroundColor: pressed ? Colors.zinc300 : "transparent",
         },
         Borders.border,
         Borders.rounded,
