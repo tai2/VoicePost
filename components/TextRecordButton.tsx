@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TextStyle } from "react-native";
+import { PressableStateCallbackType, Text, TextStyle } from "react-native";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Colors } from "@/constants/Colors";
@@ -15,7 +15,9 @@ type Props = {
 
 export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
   const iconSize = Spacing[6];
-  const pressableStyle: StyleProp<ViewStyle> = [
+  const pressableStyle: (
+    state: PressableStateCallbackType
+  ) => StyleProp<ViewStyle> = ({ pressed }) => [
     {
       width: Spacing[40],
       gap: Spacing[1.5],
@@ -24,6 +26,7 @@ export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
+      opacity: pressed ? 0.5 : 1,
     },
     Borders.roundedLg,
   ];

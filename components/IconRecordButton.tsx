@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   DimensionValue,
   Pressable,
+  PressableStateCallbackType,
   StyleProp,
   View,
   ViewStyle,
@@ -27,14 +28,17 @@ export const IconRecordButton = ({
   const innerCircleSize = size * 0.7;
   const iconSize = size * 0.4;
 
-  const circleStyle: StyleProp<ViewStyle> = {
+  const circleStyle: (
+    state: PressableStateCallbackType
+  ) => StyleProp<ViewStyle> = ({ pressed }) => ({
     width: innerCircleSize,
     height: innerCircleSize,
     borderRadius: "50%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.red500,
-  };
+    opacity: pressed ? 0.5 : 1,
+  });
   return (
     <View
       ref={rootRef}
