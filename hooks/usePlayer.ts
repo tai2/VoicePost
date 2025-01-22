@@ -121,6 +121,9 @@ export const usePlayer = () => {
     sound.setStatusAsync({
       positionMillis: status.durationMillis * position,
     });
+    if (!isPlaying) {
+      setSoundPosition(status.durationMillis * position);
+    }
   };
 
   return {
