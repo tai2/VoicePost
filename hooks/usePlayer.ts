@@ -6,8 +6,11 @@ export const usePlayer = () => {
   const soundRef = useRef<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [soundPosition, setSoundPosition] = useState<number>(0);
+  const [soundDuration, setSoundDuration] = useState<number>(0);
 
-  const load = async (uri: string) => {
+  const load = async (uri: string, initialDuration: number) => {
+    setSoundDuration(initialDuration);
+
     if (soundRef.current) {
       await soundRef.current.unloadAsync();
     }
@@ -34,6 +37,13 @@ export const usePlayer = () => {
         }
       }
     );
+
+    const status = await sound.getStatusAsync();
+    if (!status.isLoaded || !status.durationMillis) {
+      console.error("Sound is not loaded");
+      return;
+    }
+    setSoundDuration(status.durationMillis);
     soundRef.current = sound;
 
     // Due to the bug in slider, setting the position to zero doesn't reset the position when the thumb is manually
@@ -129,6 +139,7 @@ export const usePlayer = () => {
   return {
     isPlaying,
     soundPosition,
+    soundDuration,
     load,
     play,
     pause,

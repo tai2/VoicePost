@@ -52,6 +52,7 @@ export default function Index() {
   const {
     isPlaying,
     soundPosition,
+    soundDuration,
     load,
     play,
     pause,
@@ -77,7 +78,7 @@ export default function Index() {
       duration: Config.fadeDuration,
     });
     const uri = await stopRecording();
-    await load(uri);
+    await load(uri, recordedDuration);
     setUploadFilename(getRecordedFilename());
   };
 
@@ -132,7 +133,7 @@ export default function Index() {
           <View style={{ flexDirection: "row", gap: Spacing[1.5] }}>
             <Time time={soundPosition} />
             <TimeText>/</TimeText>
-            <Time time={recordedDuration} />
+            <Time time={soundDuration} />
           </View>
         ) : (
           <Time time={recordedDuration} />
