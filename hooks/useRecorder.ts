@@ -11,6 +11,9 @@ export const useRecorder = () => {
   useEffect(() => {
     if (isRecording) {
       requestAnimationFrame((t) => {
+        if (!isRecording) {
+          return;
+        }
         setRecordedDuration(t - recordingStartedAt.current);
       });
     }
@@ -24,7 +27,6 @@ export const useRecorder = () => {
     }
 
     if (permissionResponse.status !== "granted") {
-      console.log("Requesting permission..");
       // TODO: Handle permission request
       await requestPermission();
     }
@@ -57,8 +59,6 @@ export const useRecorder = () => {
     if (!uri) {
       throw "Recording is not stored";
     }
-
-    console.log("Recording stopped and stored at", uri);
 
     setIsRecording(false);
     setRecordedFile(uri);

@@ -1,12 +1,7 @@
 import React from "react";
 import { useState, useRef, useLayoutEffect } from "react";
 import { View, Text, Pressable } from "react-native";
-import Animated, {
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-  Easing,
-} from "react-native-reanimated";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import Toast from "react-native-root-toast";
 import Slider from "@react-native-community/slider";
 import * as Clipboard from "expo-clipboard";
