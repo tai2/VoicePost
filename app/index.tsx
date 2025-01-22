@@ -1,6 +1,12 @@
 import React from "react";
 import { useState, useRef, useLayoutEffect } from "react";
 import { View, Text, Pressable } from "react-native";
+import Animated, {
+  useSharedValue,
+  withTiming,
+  useAnimatedStyle,
+  Easing,
+} from "react-native-reanimated";
 import Toast from "react-native-root-toast";
 import Slider from "@react-native-community/slider";
 import * as Clipboard from "expo-clipboard";
@@ -24,12 +30,15 @@ import { TimeText } from "@/components/TimeText";
 import { useRecorder } from "@/hooks/useRecorder";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useUploader } from "@/hooks/useUploader";
+import { Config } from "@/constants/Config";
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function Index() {
   const [uploadFilename, setUploadFilename] = useState<string>("");
   const [uploaderViewWidth, setUploaderViewWidth] = useState<number>(0);
-
   const uploaderViewRef = useRef<View>(null);
+  const uploaderViewOpacity = useSharedValue(0);
 
   useLayoutEffect(() => {
     uploaderViewRef.current?.measure((x_, y_, width, height_) => {
@@ -60,12 +69,18 @@ export default function Index() {
     useUploader();
 
   const handleOnStart = async () => {
+    uploaderViewOpacity.value = withTiming(0, {
+      duration: Config.fadeDuration,
+    });
+    await delay(Config.fadeDuration);
     reset();
-
     await startRecording();
   };
 
   const handleOnStop = async () => {
+    uploaderViewOpacity.value = withTiming(1, {
+      duration: Config.fadeDuration,
+    });
     const uri = await stopRecording();
     await load(uri);
     setUploadFilename(getRecordedFilename());
@@ -134,10 +149,10 @@ export default function Index() {
           onStart={handleOnStart}
         />
 
-        <View
+        <Animated.View
           ref={uploaderViewRef}
           style={{
-            opacity: recordedFile ? 1 : 0,
+            opacity: uploaderViewOpacity,
             gap: Spacing[5],
             alignItems: "center",
           }}
@@ -184,7 +199,7 @@ export default function Index() {
               }}
             />
           </View>
-        </View>
+        </Animated.View>
       </View>
     </RootSiblingParent>
   );
