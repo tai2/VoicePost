@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   DimensionValue,
   Pressable,
@@ -7,6 +7,11 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constants/Colors";
 
@@ -27,6 +32,13 @@ export const IconRecordButton = ({
   const [size, setSize] = useState<number>(0);
   const innerCircleSize = size * 0.7;
   const iconSize = size * 0.4;
+  const opacity = useSharedValue(1.0);
+
+  useEffect(() => {
+    opacity.value = isRecording
+      ? withRepeat(withTiming(0.5, { duration: 1000 }), 0, true)
+      : withTiming(1);
+  }, [isRecording]);
 
   const circleStyle: (
     state: PressableStateCallbackType
@@ -40,7 +52,7 @@ export const IconRecordButton = ({
     opacity: pressed ? 0.5 : 1,
   });
   return (
-    <View
+    <Animated.View
       ref={rootRef}
       onLayout={(event) => {
         setSize(event.nativeEvent.layout.height);
@@ -52,6 +64,7 @@ export const IconRecordButton = ({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: Colors.zinc100,
+        opacity,
       }}
     >
       {isRecording ? (
@@ -71,6 +84,6 @@ export const IconRecordButton = ({
           <Feather name="mic" size={iconSize} color="white" />
         </Pressable>
       )}
-    </View>
+    </Animated.View>
   );
 };
