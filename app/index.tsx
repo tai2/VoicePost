@@ -1,7 +1,11 @@
 import React from "react";
 import { useState, useRef, useLayoutEffect } from "react";
 import { View, Text, Pressable } from "react-native";
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import Toast from "react-native-root-toast";
 import Slider from "@react-native-community/slider";
 import * as Clipboard from "expo-clipboard";
@@ -19,27 +23,32 @@ import { PauseButton } from "@/components/PauseButton";
 import { UploadButton } from "@/components/UploadButton";
 import { CopyButton } from "@/components/CopyButton";
 import { getRecordedFilename } from "@/lib/getRecordedFilename";
-import { Colors } from "@/constants/Colors";
-import { Spacing } from "@/constants/Spacing";
-import { TimeText } from "@/components/TimeText";
 import { useRecorder } from "@/hooks/useRecorder";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useUploader } from "@/hooks/useUploader";
+import { Colors } from "@/constants/Colors";
+import { Spacing } from "@/constants/Spacing";
+import { TimeText } from "@/components/TimeText";
 import { Config } from "@/constants/Config";
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { Borders } from "@/constants/Borders";
 
 export default function Index() {
+  const uploarderViewHeightRatio = 0.95;
+
   const [uploadFilename, setUploadFilename] = useState<string>("");
-  const [uploaderViewWidth, setUploaderViewWidth] = useState<number>(0);
+  const [uploaderViewSize, setUploaderViewSize] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
   const uploaderViewRef = useRef<View>(null);
-  const uploaderViewOpacity = useSharedValue(0);
+  const uploaderViewPosition = useSharedValue(0);
 
   useLayoutEffect(() => {
-    uploaderViewRef.current?.measure((x_, y_, width, height_) => {
-      setUploaderViewWidth(width);
+    uploaderViewRef.current?.measure((x_, y_, width, height) => {
+      setUploaderViewSize({ width, height: height });
+      uploaderViewPosition.value = height * uploarderViewHeightRatio;
     });
-  }, [setUploaderViewWidth]);
+  }, [setUploaderViewSize]);
 
   const {
     isRecording,
@@ -64,19 +73,21 @@ export default function Index() {
   const { isUploading, uploadProgress, uploadedFileUrl, reset, upload } =
     useUploader();
 
+  const springConfig = {
+    mass: 0.9,
+    stiffness: 150,
+  };
   const handleOnStart = async () => {
-    uploaderViewOpacity.value = withTiming(0, {
-      duration: Config.fadeDuration,
-    });
-    await delay(Config.fadeDuration);
+    uploaderViewPosition.value = withSpring(
+      uploaderViewSize.height * uploarderViewHeightRatio,
+      springConfig
+    );
     reset();
     await startRecording();
   };
 
   const handleOnStop = async () => {
-    uploaderViewOpacity.value = withTiming(1, {
-      duration: Config.fadeDuration,
-    });
+    uploaderViewPosition.value = withSpring(0, springConfig);
     const uri = await stopRecording();
     await load(uri, recordedDuration);
     setUploadFilename(getRecordedFilename());
@@ -113,9 +124,8 @@ export default function Index() {
       <View
         style={{
           flex: 1,
-          paddingTop: Spacing[7],
-          paddingBottom: Spacing[7],
-          gap: Spacing[6],
+          paddingTop: Spacing[5],
+          gap: Spacing[5],
           alignItems: "center",
           backgroundColor: Colors.zinc50,
         }}
@@ -147,17 +157,29 @@ export default function Index() {
 
         <Animated.View
           ref={uploaderViewRef}
-          style={{
-            opacity: uploaderViewOpacity,
-            gap: Spacing[5],
-            alignItems: "center",
-          }}
+          style={[
+            {
+              gap: Spacing[5],
+              width: "100%",
+              padding: Spacing[6],
+              backgroundColor: Colors.zinc100,
+              alignItems: "center",
+              shadowRadius: 10,
+              shadowColor: "black",
+              shadowOpacity: 0.2,
+              transform: [{ translateY: uploaderViewPosition }],
+            },
+            Borders.roundedLg,
+          ]}
         >
           <Text style={{ color: Colors.zinc500 }}>
             ファイル名: {uploadFilename}
           </Text>
           <Slider
-            style={{ width: uploaderViewWidth, height: Spacing[10] }}
+            style={{
+              width: uploaderViewSize.width - Spacing[6] * 2,
+              height: Spacing[10],
+            }}
             value={soundPosition / recordedDuration}
             minimumTrackTintColor={Colors.zinc950}
             maximumTrackTintColor={Colors.zinc300}

@@ -35,7 +35,7 @@ export const ButtonPressable = ({
           backgroundColor: disabled || pressed ? Colors.zinc300 : "transparent",
         },
         Borders.border,
-        Borders.rounded,
+        Borders.roundedSm,
       ]}
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}

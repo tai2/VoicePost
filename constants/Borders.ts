@@ -2,10 +2,10 @@ export const Borders = {
   roundedNone: {
     borderRadius: 0,
   },
-  roundedSm: {
+  roundedXs: {
     borderRadius: 2,
   },
-  rounded: {
+  roundedSm: {
     borderRadius: 4,
   },
   roundedMd: {
@@ -22,6 +22,38 @@ export const Borders = {
   },
   rounded3Xl: {
     borderRadius: 24,
+  },
+  roundedTNone: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+  },
+  roundedTXs: {
+    borderTopLeftRadius: 2,
+    borderTopRightRadius: 2,
+  },
+  roundedTSm: {
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+  },
+  roundedTMd: {
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 6,
+  },
+  roundedTLg: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+  },
+  roundedTXl: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  roundedT2Xl: {
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  roundedT3Xl: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
   },
   roundedFull: {
     borderRadius: 9999,
