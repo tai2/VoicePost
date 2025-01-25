@@ -31,6 +31,7 @@ import { Spacing } from "@/constants/Spacing";
 import { TimeText } from "@/components/TimeText";
 import { Config } from "@/constants/Config";
 import { Borders } from "@/constants/Borders";
+import { BoxShadow } from "@/constants/BoxShadow";
 
 export default function Index() {
   const uploarderViewHeightRatio = 0.95;
@@ -164,11 +165,9 @@ export default function Index() {
               padding: Spacing[6],
               backgroundColor: Colors.zinc100,
               alignItems: "center",
-              shadowRadius: 10,
-              shadowColor: "black",
-              shadowOpacity: 0.2,
               transform: [{ translateY: uploaderViewPosition }],
             },
+            BoxShadow.shadow2Xl,
             Borders.roundedLg,
           ]}
         >
