@@ -10,6 +10,7 @@ export const usePlayer = () => {
 
   const load = async (uri: string, initialDuration: number) => {
     setSoundDuration(initialDuration);
+    setIsPlaying(false);
 
     if (soundRef.current) {
       await soundRef.current.unloadAsync();
