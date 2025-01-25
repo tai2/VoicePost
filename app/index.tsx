@@ -31,6 +31,7 @@ import { Spacing } from "@/constants/Spacing";
 import { TimeText } from "@/components/TimeText";
 import { Borders } from "@/constants/Borders";
 import { BoxShadow } from "@/constants/BoxShadow";
+import { PlayTime } from "@/components/PlayTime";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -162,15 +163,17 @@ export default function Index() {
           />
         </View>
 
-        {recordedFile ? (
-          <View style={{ flexDirection: "row", gap: Spacing[1.5] }}>
-            <Time time={soundPosition} />
-            <TimeText>/</TimeText>
-            <Time time={soundDuration} />
-          </View>
-        ) : (
-          <Time time={recordedDuration} />
-        )}
+        <PlayTime
+          time={
+            recordedFile
+              ? {
+                  mode: "player",
+                  position: soundPosition,
+                  duration: soundDuration,
+                }
+              : { mode: "recorder", duration: recordedDuration }
+          }
+        />
 
         <TextRecordButton
           isRecording={isRecording}
