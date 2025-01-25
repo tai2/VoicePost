@@ -1,4 +1,5 @@
 import React from "react";
+import { View } from "react-native";
 import { TimeText } from "./TimeText";
 
 type Props = {
@@ -6,7 +7,17 @@ type Props = {
 };
 
 export const Time = ({ time }: Props) => {
-  return <TimeText>{formatTime(time)}</TimeText>;
+  return (
+    <View
+      style={{
+        // To make the position stable, we need to specify just enough size for 4 ditis and a colon.
+        alignItems: "flex-start",
+        width: 72,
+      }}
+    >
+      <TimeText>{formatTime(time)}</TimeText>
+    </View>
+  );
 };
 
 const formatTime = (duration: number): string => {

@@ -15,7 +15,6 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { IconRecordButton } from "@/components/IconRecordButton";
 import { TextRecordButton } from "@/components/TextRecordButton";
-import { Time } from "@/components/Time";
 import { RewindButton } from "@/components/RewindButton";
 import { FastForwardButton } from "@/components/FastForwardButton";
 import { PlayButton } from "@/components/PlayButton";
@@ -28,7 +27,6 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { useUploader } from "@/hooks/useUploader";
 import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
-import { TimeText } from "@/components/TimeText";
 import { Borders } from "@/constants/Borders";
 import { BoxShadow } from "@/constants/BoxShadow";
 import { PlayTime } from "@/components/PlayTime";

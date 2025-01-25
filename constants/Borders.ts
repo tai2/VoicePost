@@ -61,6 +61,9 @@ export const Borders = {
   border0: {
     borderWidth: 0,
   },
+  border: {
+    borderWidth: 1,
+  },
   border2: {
     borderWidth: 2,
   },
@@ -69,8 +72,5 @@ export const Borders = {
   },
   border8: {
     borderWidth: 8,
-  },
-  border: {
-    borderWidth: 1,
   },
 } as const;
