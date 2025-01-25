@@ -185,13 +185,21 @@ export default function Index() {
             maximumTrackTintColor={Colors.zinc300}
             onValueChange={changePosition}
           />
-          <View style={{ flexDirection: "row", gap: Spacing[2.5] }}>
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              gap: Spacing[2.5],
+            }}
+          >
             <RewindButton onPress={rewind} />
-            {isPlaying ? (
-              <PauseButton onPress={pause} />
-            ) : (
-              <PlayButton onPress={play} />
-            )}
+            <View style={{ flexGrow: 1 }}>
+              {isPlaying ? (
+                <PauseButton onPress={pause} />
+              ) : (
+                <PlayButton onPress={play} />
+              )}
+            </View>
             <FastForwardButton onPress={forward} />
           </View>
           <View

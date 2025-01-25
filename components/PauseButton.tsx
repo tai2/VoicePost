@@ -14,7 +14,6 @@ export const PauseButton = ({ disabled, onPress }: Props) => {
   return (
     <ButtonPressable
       disabled={disabled}
-      width={Spacing[32]}
       accessibilityLabel="再生中の音源を停止する"
       onPress={onPress}
     >
