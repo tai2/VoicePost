@@ -1,7 +1,11 @@
 import React from "react";
-import { PressableStateCallbackType, Text, TextStyle } from "react-native";
+import {
+  PressableStateCallbackType,
+  Text,
+  TextStyle,
+  View,
+} from "react-native";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
@@ -14,13 +18,13 @@ type Props = {
 };
 
 export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
-  const iconSize = Spacing[6];
+  const iconSize = Spacing[5];
   const pressableStyle: (
     state: PressableStateCallbackType
   ) => StyleProp<ViewStyle> = ({ pressed }) => [
     {
       width: Spacing[40],
-      gap: Spacing[1.5],
+      gap: Spacing[2],
       padding: Spacing[4],
       backgroundColor: Colors.zinc900,
       flexDirection: "row",
@@ -45,8 +49,14 @@ export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
           accessibilityLabel="録音を停止する"
           onPress={onStop}
         >
-          <MaterialIcons name="stop" size={iconSize} color={Colors.neutral50} />
-
+          <View
+            style={{
+              width: iconSize,
+              height: iconSize,
+              backgroundColor: Colors.neutral50,
+              borderRadius: 0,
+            }}
+          />
           <Text style={textStyle}>録音停止</Text>
         </Pressable>
       ) : (
@@ -55,10 +65,13 @@ export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
           accessibilityLabel="録音を開始する"
           onPress={onStart}
         >
-          <MaterialIcons
-            name="fiber-manual-record"
-            size={iconSize}
-            color={Colors.red500}
+          <View
+            style={{
+              width: iconSize,
+              height: iconSize,
+              backgroundColor: Colors.red500,
+              borderRadius: iconSize / 2,
+            }}
           />
           <Text style={textStyle}>録音開始</Text>
         </Pressable>
