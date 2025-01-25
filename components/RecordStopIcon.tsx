@@ -1,5 +1,11 @@
 import { Colors } from "@/constants/Colors";
-import { View } from "react-native";
+import { useEffect } from "react";
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 type Props = {
   size: number;
@@ -7,22 +13,29 @@ type Props = {
 };
 
 export const RecordStopIcon = ({ size, isRecording }: Props) => {
+  const progress = useSharedValue(0);
+
+  useEffect(() => {
+    progress.value = isRecording ? 1 : 0;
+  }, [isRecording]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    borderRadius: withTiming((progress.value * size) / 2),
+    backgroundColor: interpolateColor(
+      progress.value,
+      [0, 1],
+      [Colors.red500, Colors.neutral50]
+    ),
+  }));
+
   return (
-    <View
+    <Animated.View
       style={[
         {
           width: size,
           height: size,
         },
-        isRecording
-          ? {
-              backgroundColor: Colors.neutral50,
-              borderRadius: 0,
-            }
-          : {
-              backgroundColor: Colors.red500,
-              borderRadius: size / 2,
-            },
+        animatedStyle,
       ]}
     />
   );
