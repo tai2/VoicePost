@@ -111,6 +111,7 @@ export default function Index() {
       return;
     }
     const url = await upload(recordedFile, uploadFilename);
+    await delay(200);
     uploaderButtonPosition.value = -uploaderViewSize.width;
     await delay(400);
     await copyToClipboard(url);

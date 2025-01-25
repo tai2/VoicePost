@@ -32,7 +32,7 @@ export const ButtonPressable = ({
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: disabled || pressed ? Colors.zinc300 : "transparent",
+          backgroundColor: pressed ? Colors.zinc300 : "transparent",
         },
         Borders.border,
         Borders.roundedSm,

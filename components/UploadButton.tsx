@@ -32,7 +32,6 @@ export const UploadButton = ({
         style={{ opacity: isUploading ? 1 : 0 }}
         size={Spacing[7]}
         progress={progress}
-        color={disabled ? Colors.zinc500 : undefined}
       />
     </ButtonPressable>
   );
