@@ -2,9 +2,9 @@ import React from "react";
 import { useState, useRef, useLayoutEffect } from "react";
 import { View, Text, Pressable } from "react-native";
 import Animated, {
+  useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
 import Toast from "react-native-root-toast";
 import Slider from "@react-native-community/slider";
@@ -29,9 +29,10 @@ import { useUploader } from "@/hooks/useUploader";
 import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
 import { TimeText } from "@/components/TimeText";
-import { Config } from "@/constants/Config";
 import { Borders } from "@/constants/Borders";
 import { BoxShadow } from "@/constants/BoxShadow";
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function Index() {
   const uploarderViewHeightRatio = 0.95;
@@ -43,11 +44,13 @@ export default function Index() {
   }>({ width: 0, height: 0 });
   const uploaderViewRef = useRef<View>(null);
   const uploaderViewPosition = useSharedValue(0);
+  const uploaderButtonPosition = useSharedValue(0);
 
   useLayoutEffect(() => {
     uploaderViewRef.current?.measure((x_, y_, width, height) => {
       setUploaderViewSize({ width, height: height });
       uploaderViewPosition.value = height * uploarderViewHeightRatio;
+      uploaderButtonPosition.value = 0;
     });
   }, [setUploaderViewSize]);
 
@@ -74,6 +77,14 @@ export default function Index() {
   const { isUploading, uploadProgress, uploadedFileUrl, reset, upload } =
     useUploader();
 
+  const uploadButtonAnimation = useAnimatedStyle(() => ({
+    left: withSpring(uploaderButtonPosition.value),
+  }));
+
+  const copyButtonAnimattion = useAnimatedStyle(() => ({
+    left: withSpring(uploaderViewSize.width + uploaderButtonPosition.value),
+  }));
+
   const springConfig = {
     mass: 0.9,
     stiffness: 150,
@@ -83,6 +94,7 @@ export default function Index() {
       uploaderViewSize.height * uploarderViewHeightRatio,
       springConfig
     );
+    uploaderButtonPosition.value = 0;
     reset();
     await startRecording();
   };
@@ -100,7 +112,17 @@ export default function Index() {
       return;
     }
     const url = await upload(recordedFile, uploadFilename);
+    uploaderButtonPosition.value = -uploaderViewSize.width;
+    await delay(400);
     await copyToClipboard(url);
+  };
+
+  const handleCopy = async () => {
+    if (!uploadedFileUrl) {
+      console.error("No uploaded file URL");
+      return;
+    }
+    await copyToClipboard(uploadedFileUrl);
   };
 
   // react-native-root-toast requires the RootSiblingParent
@@ -203,26 +225,37 @@ export default function Index() {
           </View>
           <View
             style={{
-              flexDirection: "row",
-              gap: Spacing[2.5],
+              width: "100%",
+              height: Spacing[12],
             }}
           >
-            <UploadButton
-              disabled={uploadedFileUrl !== null}
-              isUploading={isUploading}
-              progress={uploadProgress}
-              onPress={handleUpload}
-            />
-            <CopyButton
-              disabled={uploadedFileUrl === null}
-              onPress={() => {
-                if (!uploadedFileUrl) {
-                  console.error("No uploaded file URL");
-                  return;
-                }
-                copyToClipboard(uploadedFileUrl);
-              }}
-            />
+            <Animated.View
+              style={[
+                {
+                  position: "absolute",
+                  width: "100%",
+                },
+                uploadButtonAnimation,
+              ]}
+            >
+              <UploadButton
+                disabled={uploadedFileUrl !== null}
+                isUploading={isUploading}
+                progress={uploadProgress}
+                onPress={handleUpload}
+              />
+            </Animated.View>
+            <Animated.View
+              style={[
+                { position: "absolute", width: "100%" },
+                copyButtonAnimattion,
+              ]}
+            >
+              <CopyButton
+                disabled={uploadedFileUrl === null}
+                onPress={handleCopy}
+              />
+            </Animated.View>
           </View>
         </Animated.View>
       </View>

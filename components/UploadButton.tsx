@@ -22,6 +22,7 @@ export const UploadButton = ({
   return (
     <ButtonPressable
       disabled={disabled}
+      width="100%"
       accessibilityLabel="録音した音源をアップロードする"
       onPress={onPress}
     >

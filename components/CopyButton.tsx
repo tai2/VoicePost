@@ -14,6 +14,7 @@ export const CopyButton = ({ disabled, onPress }: Props) => {
   return (
     <ButtonPressable
       disabled={disabled}
+      width="100%"
       accessibilityLabel="アップロードした音源をURLをコピーする"
       onPress={onPress}
     >
