@@ -14,16 +14,22 @@ You also need to set up [Xcode](https://docs.expo.dev/workflow/ios-simulator/) a
 
 ## Start development server
 
-You can start the development server and run the app on [Expo Go](https://expo.dev/go).
+You can start development server and run the app on [Expo Go](https://expo.dev/go).
 
    ```bash
    npx expo start
    ```
 
-Open iOS app on Simulator
+This command opens iOS app inside Expo Go on Simulator
 
    ```bash
    npx expo start --ios
+   ```
+
+This command starts development server, builds iOS app, and runs it to Simulator
+
+   ```bash
+   npx expo run:ios
    ```
 
 ## Unit testing
