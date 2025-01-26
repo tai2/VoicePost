@@ -26,10 +26,16 @@ This command opens iOS app inside Expo Go on Simulator
    npx expo start --ios
    ```
 
-This command starts development server, builds iOS app, and runs it to Simulator
+This command starts development server, builds iOS app, and runs it on Simulator
 
    ```bash
    npx expo run:ios
+   ```
+
+This command starts development server, builds iOS app, and runs it on a device
+
+   ```bash
+   npx expo run:ios --device
    ```
 
 ## Unit testing
