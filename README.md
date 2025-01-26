@@ -20,6 +20,12 @@ You can start the development server and run the app on [Expo Go](https://expo.d
    npx expo start
    ```
 
+Open iOS app on Simulator
+
+   ```bash
+   npx expo start --ios
+   ```
+
 ## Unit testing
 
    ```bash
