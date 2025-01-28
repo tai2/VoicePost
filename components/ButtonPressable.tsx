@@ -28,14 +28,14 @@ export const ButtonPressable = ({
           gap: Spacing[2],
           paddingRight: Spacing[4],
           paddingLeft: Spacing[4],
-          borderColor: Colors.zinc200,
+          borderColor: "rgba(228, 228, 231, 0.5)",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: pressed ? Colors.zinc300 : "transparent",
         },
         Borders.border,
-        Borders.roundedSm,
+        Borders.roundedFull,
       ]}
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}

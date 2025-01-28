@@ -1,5 +1,5 @@
 import React from "react";
-import Feather from "@expo/vector-icons/Feather";
+import Icon from "@expo/vector-icons/FontAwesome6";
 import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
 import { ButtonText } from "./ButtonText";
@@ -17,7 +17,7 @@ export const PauseButton = ({ disabled, onPress }: Props) => {
       accessibilityLabel="再生中の音源を停止する"
       onPress={onPress}
     >
-      <Feather name="pause" size={Spacing[5]} color={Colors.zinc950} />
+      <Icon name="pause" size={Spacing[5]} color={Colors.zinc50} />
       <ButtonText>一時停止</ButtonText>
     </ButtonPressable>
   );

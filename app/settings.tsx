@@ -31,7 +31,13 @@ export default function Settings() {
   };
 
   return (
-    <View style={{ padding: Spacing[6] }}>
+    <View
+      style={{
+        padding: Spacing[6],
+        backgroundColor: Colors.blue1InIcon,
+        height: "100%",
+      }}
+    >
       <View
         style={[
           {
@@ -41,9 +47,12 @@ export default function Settings() {
           Borders.roundedLg,
         ]}
       >
-        <Text style={Typography.textXl}>保存期限</Text>
+        <Text style={[{ color: Colors.blue1InIcon }, Typography.textXl]}>
+          保存期限
+        </Text>
         <Picker
           testID="duration_picker"
+          itemStyle={{ color: Colors.blue1InIcon }}
           selectedValue={preserveDuration}
           onValueChange={handlePreserveDurationChange}
         >

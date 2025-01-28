@@ -22,13 +22,13 @@ export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
           width: Spacing[40],
           gap: Spacing[3],
           padding: Spacing[4],
-          backgroundColor: Colors.zinc900,
+          backgroundColor: Colors.zinc50,
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
           opacity: pressed ? 0.5 : 1,
         },
-        Borders.roundedLg,
+        Borders.roundedFull,
       ]}
       accessibilityLabel={isRecording ? "録音を停止する" : "録音を開始する"}
       onPress={isRecording ? onStop : onStart}
@@ -37,7 +37,7 @@ export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
       <Text
         style={[
           {
-            color: Colors.neutral50,
+            color: Colors.blue1InIcon,
           },
           Typography.textXl,
         ]}

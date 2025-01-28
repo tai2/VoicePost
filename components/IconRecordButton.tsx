@@ -48,7 +48,7 @@ export const IconRecordButton = ({
     borderRadius: "50%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.red500,
+    backgroundColor: Colors.orangeInIcon,
     opacity: pressed ? 0.5 : 1,
   });
   return (

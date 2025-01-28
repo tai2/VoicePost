@@ -246,4 +246,7 @@ export const Colors = {
   rose800: "#9f1239",
   rose900: "#881337",
   rose950: "#4c0519",
+  blue1InIcon: "#003c5a",
+  blue2InIcon: "#00bdb2",
+  orangeInIcon: "#ffac99",
 } as const;

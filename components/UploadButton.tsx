@@ -26,9 +26,10 @@ export const UploadButton = ({
       accessibilityLabel="録音した音源をアップロードする"
       onPress={onPress}
     >
-      <AntDesign name="upload" size={Spacing[5]} color={Colors.zinc950} />
+      <AntDesign name="upload" size={Spacing[5]} color={Colors.zinc50} />
       <ButtonText>アップロード</ButtonText>
       <Progress.Circle
+        color={Colors.orangeInIcon}
         style={{ opacity: isUploading ? 1 : 0 }}
         size={Spacing[7]}
         progress={progress}

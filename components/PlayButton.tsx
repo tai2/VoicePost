@@ -1,9 +1,7 @@
 import React from "react";
-import { Pressable } from "react-native";
-import Feather from "@expo/vector-icons/Feather";
+import Icon from "@expo/vector-icons/FontAwesome6";
 import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
-import { Borders } from "@/constants/Borders";
 import { ButtonText } from "./ButtonText";
 import { ButtonPressable } from "./ButtonPressable";
 
@@ -19,7 +17,7 @@ export const PlayButton = ({ disabled, onPress }: Props) => {
       accessibilityLabel="録音した音源を再生する"
       onPress={onPress}
     >
-      <Feather name="play" size={Spacing[5]} color={Colors.zinc950} />
+      <Icon name="play" size={Spacing[5]} color={Colors.zinc50} />
       <ButtonText>再生</ButtonText>
     </ButtonPressable>
   );

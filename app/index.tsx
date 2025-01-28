@@ -137,7 +137,7 @@ export default function Index() {
                 <AntDesign
                   name="setting"
                   size={Spacing[6]}
-                  color={Colors.zinc950}
+                  color={Colors.zinc50}
                 />
               </Pressable>
             </Link>
@@ -150,7 +150,7 @@ export default function Index() {
           paddingTop: Spacing[5],
           gap: Spacing[5],
           alignItems: "center",
-          backgroundColor: Colors.zinc50,
+          backgroundColor: Colors.blue1InIcon,
         }}
       >
         <View style={{ flex: 1 }}>
@@ -185,17 +185,19 @@ export default function Index() {
           style={[
             {
               gap: Spacing[5],
-              width: "100%",
+              width: "102%",
               padding: Spacing[6],
-              backgroundColor: Colors.zinc100,
+              backgroundColor: Colors.blue1InIcon,
               alignItems: "center",
               transform: [{ translateY: uploaderViewPosition }],
+              borderColor: "rgba(0, 0, 0, 0.5)",
             },
             BoxShadow.shadow2Xl,
-            Borders.roundedLg,
+            Borders.roundedT3Xl,
+            Borders.border,
           ]}
         >
-          <Text testID="upload_file_name" style={{ color: Colors.zinc500 }}>
+          <Text testID="upload_file_name" style={{ color: Colors.zinc50 }}>
             ファイル名: {uploadFilename}
           </Text>
           <Slider
@@ -204,7 +206,7 @@ export default function Index() {
               height: Spacing[10],
             }}
             value={soundPosition / recordedDuration}
-            minimumTrackTintColor={Colors.zinc950}
+            minimumTrackTintColor={Colors.orangeInIcon}
             maximumTrackTintColor={Colors.zinc300}
             onValueChange={changePosition}
           />

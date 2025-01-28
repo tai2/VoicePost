@@ -13,7 +13,7 @@ export const TimeText = ({ testID, children }: Props) => {
       testID={testID}
       style={[
         {
-          color: Colors.zinc900,
+          color: Colors.zinc50,
         },
         Typography.text2Xl,
         Typography.fontSemibold,

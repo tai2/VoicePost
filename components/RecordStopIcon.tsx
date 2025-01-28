@@ -24,7 +24,7 @@ export const RecordStopIcon = ({ size, isRecording }: Props) => {
     backgroundColor: interpolateColor(
       progress.value,
       [0, 1],
-      [Colors.red500, Colors.neutral50]
+      [Colors.orangeInIcon, Colors.blue1InIcon]
     ),
   }));
 
