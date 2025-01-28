@@ -2,7 +2,7 @@
 
 VoicePost is an audio recording mobile application optimized for easy uploading experience on iOS and Android.
 
-# Evelopment
+# Development
 
 ## Set up
 
