@@ -1,0 +1,18 @@
+appId: net.tai2.voicepost
+---
+- clearState
+- launchApp
+- tapOn: 設定画面を開く
+- assertVisible: 設定
+- assertVisible: 保存期限
+- assertVisible: 3日
+- assertNotVisible: 100日
+- swipe:
+   from:
+     id: "duration_picker"
+   direction: UP
+- tapOn:
+    point: "16%,9%"
+- tapOn: 設定画面を開く
+- assertVisible: 100日
+- assertNotVisible: 3日

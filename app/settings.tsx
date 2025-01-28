@@ -43,6 +43,7 @@ export default function Settings() {
       >
         <Text style={Typography.textXl}>保存期限</Text>
         <Picker
+          testID="duration_picker"
           selectedValue={preserveDuration}
           onValueChange={handlePreserveDurationChange}
         >
