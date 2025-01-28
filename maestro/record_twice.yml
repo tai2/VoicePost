@@ -1,0 +1,19 @@
+appId: net.tai2.voicepost
+---
+- launchApp
+- assertNotVisible: 録音した音源を再生する
+- tapOn: 録音を開始する
+- assertNotVisible: 録音した音源を再生する
+- tapOn: 録音を停止する
+- assertVisible: 録音した音源を再生する
+- copyTextFrom:
+    id: "upload_file_name"
+- evalScript: ${output.upload_file_name1 = maestro.copiedText}
+- tapOn: 録音を開始する
+- assertNotVisible: 録音した音源を再生する
+- tapOn: 録音を停止する
+- assertVisible: 録音した音源を再生する
+- copyTextFrom:
+    id: "upload_file_name"
+- evalScript: ${output.upload_file_name2 = maestro.copiedText}
+- assertTrue: ${output.upload_file_name1 !== output.upload_file_name2}

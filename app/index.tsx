@@ -195,7 +195,7 @@ export default function Index() {
             Borders.roundedLg,
           ]}
         >
-          <Text style={{ color: Colors.zinc500 }}>
+          <Text testID="upload_file_name" style={{ color: Colors.zinc500 }}>
             ファイル名: {uploadFilename}
           </Text>
           <Slider
