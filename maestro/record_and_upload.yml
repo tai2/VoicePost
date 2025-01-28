@@ -6,6 +6,10 @@ appId: net.tai2.voicepost
 - tapOn: 録音を停止する
 - assertNotVisible: 録音を停止する
 - assertVisible: 00:00
+- copyTextFrom:
+    id: "time_duration"
+- runScript: parse_duration.js
+- assertTrue: ${output.duration > 0}
 - tapOn: 録音した音源をアップロードする
 - assertVisible: "ファイル名: recording_[0-9]{8}_[0-9]{6}.m4a"
 - tapOn: アップロードした音源をURLをコピーする

@@ -3,11 +3,14 @@ import { Text } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
 
-type Props = PropsWithChildren<{}>;
+type Props = PropsWithChildren<{
+  testID?: string;
+}>;
 
-export const TimeText = ({ children }: Props) => {
+export const TimeText = ({ testID, children }: Props) => {
   return (
     <Text
+      testID={testID}
       style={[
         {
           color: Colors.zinc900,

@@ -59,7 +59,10 @@ export const PlayTime = ({ time }: Props) => {
         }}
       >
         <View style={{ left: 3 }}>
-          <Time time={time.mode === "player" ? time.position : 0} />
+          <Time
+            testID="time_position"
+            time={time.mode === "player" ? time.position : 0}
+          />
         </View>
         <TimeText>/</TimeText>
       </Animated.View>
@@ -68,7 +71,7 @@ export const PlayTime = ({ time }: Props) => {
           left: durationLeft,
         }}
       >
-        <Time time={time.duration} />
+        <Time testID="time_duration" time={time.duration} />
       </Animated.View>
     </View>
   );

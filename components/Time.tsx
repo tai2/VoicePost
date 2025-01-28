@@ -3,10 +3,11 @@ import { View } from "react-native";
 import { TimeText } from "./TimeText";
 
 type Props = {
+  testID?: string;
   time: number;
 };
 
-export const Time = ({ time }: Props) => {
+export const Time = ({ testID, time }: Props) => {
   return (
     <View
       style={{
@@ -15,7 +16,7 @@ export const Time = ({ time }: Props) => {
         width: 72,
       }}
     >
-      <TimeText>{formatTime(time)}</TimeText>
+      <TimeText testID={testID}>{formatTime(time)}</TimeText>
     </View>
   );
 };
