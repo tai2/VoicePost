@@ -9,6 +9,7 @@ export default function RootLayout() {
           backgroundColor: Colors.blue1InIcon,
         },
         headerTintColor: Colors.zinc50,
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen name="index" />
