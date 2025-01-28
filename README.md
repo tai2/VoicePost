@@ -43,3 +43,11 @@ This command starts development server, builds iOS app, and runs it on a device
    ```bash
    npm test
    ```
+
+## E2E testing
+
+   Prerequisite: [Maestro](https://maestro.mobile.dev/)
+
+   ```bash
+   npm run e2e
+   ```

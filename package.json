@@ -8,6 +8,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
+    "e2e": "maestro test maestro",
     "lint": "expo lint"
   },
   "jest": {
