@@ -9,5 +9,12 @@ module.exports = {
         jest: true,
       },
     },
+    {
+      files: ["maestro/**/*.js"],
+      globals: {
+        maestro: "readonly",
+        output: "readonly",
+      },
+    },
   ],
 };
