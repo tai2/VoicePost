@@ -111,6 +111,10 @@ export default function Index() {
       return;
     }
     const url = await upload(recordedFile, uploadFilename);
+    if (!url) {
+      console.error("Failed to upload");
+      return;
+    }
     await delay(200);
     uploaderButtonPosition.value = -uploaderViewSize.width;
     await delay(400);
