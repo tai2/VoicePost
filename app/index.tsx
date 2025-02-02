@@ -51,7 +51,7 @@ export default function Index() {
       uploaderViewPosition.value = height * uploarderViewHeightRatio;
       uploaderButtonPosition.value = 0;
     });
-  }, [setUploaderViewSize]);
+  }, [setUploaderViewSize, uploaderViewPosition, uploaderButtonPosition]);
 
   const {
     isRecording,
