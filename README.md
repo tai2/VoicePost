@@ -54,6 +54,13 @@ eas build --platform ios
 eas build --platform android
 ```
 
+These command build and submit app on EAS
+
+```bash
+eas build --platform ios --auto-submit
+eas build --platform android --auto-submit
+```
+
 ## Unit testing
 
    ```bash
