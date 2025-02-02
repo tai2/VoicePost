@@ -14,28 +14,21 @@ You also need to set up [Xcode](https://docs.expo.dev/workflow/ios-simulator/) a
 
 ## Local development
 
-You can start development server and run the app on [Expo Go](https://expo.dev/go).
+You can start development server.
 
    ```bash
    npx expo start
-   ```
-
-This command opens iOS app inside Expo Go on Simulator
-
-   ```bash
    npx expo start --ios
+   npx expo start --android
    ```
 
-This command starts development server, builds iOS app, and runs it on Simulator
+These commands build native client and start development server.
 
    ```bash
    npx expo run:ios
-   ```
-
-This command starts development server, builds iOS app, and runs it on a device
-
-   ```bash
-   npx expo run:ios --device
+   npx expo run:andoid
+   npx expo run:ios --device # run app on a device
+   npx expo run:andoid --device # run app on a device
    ```
 
 To create release builds on your local end, you have to generate projects with the `prebuild` and manually run builds according to [the expo guide](https://docs.expo.dev/guides/local-app-production/).
