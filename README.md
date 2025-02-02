@@ -12,7 +12,7 @@ VoicePost is an audio recording mobile application optimized for easy uploading 
 
 You also need to set up [Xcode](https://docs.expo.dev/workflow/ios-simulator/) and [Android Studio](https://docs.expo.dev/workflow/android-studio-emulator/).
 
-## Start development server
+## Local development
 
 You can start development server and run the app on [Expo Go](https://expo.dev/go).
 
@@ -37,6 +37,8 @@ This command starts development server, builds iOS app, and runs it on a device
    ```bash
    npx expo run:ios --device
    ```
+
+To create release builds on your local end, you have to generate projects with the `prebuild` and manually run builds according to [the expo guide](https://docs.expo.dev/guides/local-app-production/).
 
 ## EAS quick reference
 
