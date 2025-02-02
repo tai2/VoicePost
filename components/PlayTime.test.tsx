@@ -1,8 +1,6 @@
 import { render, screen } from "@testing-library/react-native";
 import { PlayTime } from "./PlayTime";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 describe("<PlayTime />", () => {
   describe("Given mode is player", () => {
     describe("When rendered", () => {

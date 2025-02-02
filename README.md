@@ -38,6 +38,29 @@ This command starts development server, builds iOS app, and runs it on a device
    npx expo run:ios --device
    ```
 
+## EAS quick reference
+
+These command build app for preview on EAS
+
+```bash
+eas build --platform ios --profile preview
+eas build --platform android --profile preview
+```
+
+These command build app for submit on EAS
+
+```bash
+eas build --platform ios
+eas build --platform android
+```
+
+These command build and submit app on EAS
+
+```bash
+eas build --platform ios --auto-submit
+eas build --platform android --auto-submit
+```
+
 ## Unit testing
 
    ```bash
