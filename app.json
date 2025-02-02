@@ -14,7 +14,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "net.tai2.voicepost"
+      "bundleIdentifier": "net.tai2.voicepost",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "net.tai2.voicepost"
