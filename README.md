@@ -27,8 +27,8 @@ These commands build native client and start development server.
    ```bash
    npx expo run:ios
    npx expo run:andoid
-   npx expo run:ios --device # run app on a device
-   npx expo run:andoid --device # run app on a device
+   npx expo run:ios --device # select a device
+   npx expo run:andoid --device # select a device
    ```
 
 To create release builds on your local end, you have to generate projects with the `prebuild` and manually run builds according to [the expo guide](https://docs.expo.dev/guides/local-app-production/).
