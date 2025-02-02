@@ -28,6 +28,10 @@
       "ios": {
         "simulator": true,
         "image": "latest"
+      },
+      "android": {
+        "buildType": "apk",
+        "image": "latest"
       }
     }
   },
