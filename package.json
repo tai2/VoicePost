@@ -48,7 +48,8 @@
     "react-native-screens": "~4.4.0",
     "react-native-uuid": "^2.0.3",
     "react-native-web": "~0.19.10",
-    "expo-dev-client": "~5.0.11"
+    "expo-dev-client": "~5.0.11",
+    "react-native-svg": "15.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
