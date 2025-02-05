@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
 import uuid from "react-native-uuid";
 import { Config } from "@/constants/Config";
+import { Alert } from "react-native";
 
 export const useUploader = () => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -15,7 +16,10 @@ export const useUploader = () => {
     setUploadedFileUrl(null);
   };
 
-  const upload = async (file: string, uploadedAs: string): Promise<string> => {
+  const upload = async (
+    file: string,
+    uploadedAs: string
+  ): Promise<string | null> => {
     setIsUploading(true);
 
     const preserveDuration =
@@ -42,7 +46,8 @@ export const useUploader = () => {
     );
     const result = await task.uploadAsync();
     if (!result) {
-      throw new Error("Failed to upload");
+      Alert.alert("エラー", "アップロードに失敗しました");
+      return null;
     }
 
     const url = JSON.parse(result.body).url;

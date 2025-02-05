@@ -17,7 +17,7 @@ export const RecordStopIcon = ({ size, isRecording }: Props) => {
 
   useEffect(() => {
     progress.value = isRecording ? 1 : 0;
-  }, [isRecording]);
+  }, [isRecording, progress]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     borderRadius: withTiming((progress.value * size) / 2),

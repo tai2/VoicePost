@@ -1,5 +1,7 @@
-import { Audio } from "expo-av";
 import { useEffect, useRef, useState } from "react";
+import { StyleSheet, Button, Alert } from "react-native";
+import { Audio } from "expo-av";
+import * as Linking from "expo-linking";
 
 export const useRecorder = () => {
   const recordingRef = useRef<Audio.Recording | null>(null);
@@ -26,9 +28,17 @@ export const useRecorder = () => {
       throw new Error("Permission response is not ready");
     }
 
-    if (permissionResponse.status !== "granted") {
-      // TODO: Handle permission request
-      await requestPermission();
+    if (!permissionResponse.granted) {
+      if (permissionResponse.canAskAgain) {
+        await requestPermission();
+      } else {
+        Alert.alert("マイク権限", "設定からマイクの使用を許可してください", [
+          {
+            text: "開く",
+            onPress: () => Linking.openSettings(),
+          },
+        ]);
+      }
     }
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
