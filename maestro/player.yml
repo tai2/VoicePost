@@ -5,15 +5,15 @@ appId: net.tai2.voicepost
     text: 録音を開始する
     retryTapIfNoChange: false
 - assertVisible: "00:05"
-- tapOn:
-    text: 録音を停止する
-    retryTapIfNoChange: false
+- tapOn: 録音を停止する
 - assertVisible: 00:00
 - assertVisible: 録音した音源を再生する
 - assertVisible: 15秒戻す
 - assertVisible: 15秒進める
-- tapOn: 録音した音源を再生する
-- tapOn: 再生中の音源を停止する
+- tapOn: 再生
+- tapOn:
+    text: 一時停止
+    waitToSettleTimeoutMs: 100
 - copyTextFrom:
     id: "time_position"
 - runScript: parse_time.js
