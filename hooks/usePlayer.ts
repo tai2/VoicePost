@@ -44,7 +44,7 @@ export const usePlayer = () => {
           // Slider sometimes delays on calling onValueChange with a stale value and brings a big jump. To prevent it,
           // we update the position only when the difference is reasonable.
           Math.abs(status.positionMillis - soundPositionRef.current) <
-            status.progressUpdateIntervalMillis * 1.2
+            status.progressUpdateIntervalMillis * 1.5
         ) {
           setSoundPosition(status.positionMillis);
         }
