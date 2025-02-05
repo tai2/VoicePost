@@ -1,20 +1,9 @@
 import { Spacing } from "@/constants/Spacing";
 import React, { useEffect } from "react";
 import { View } from "react-native";
-import Animated, {
-  FadeIn,
-  FadeOut,
-  LinearTransition,
-  SequencedTransition,
-  JumpingTransition,
-  CurvedTransition,
-  LayoutAnimationConfig,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { Time } from "./Time";
 import { TimeText } from "./TimeText";
-import { Borders } from "@/constants/Borders";
 
 type Props = {
   time:
@@ -42,7 +31,7 @@ export const PlayTime = ({ time }: Props) => {
       durationLeft.value = withTiming(durationOffset);
       positionOpacity.value = withTiming(0);
     }
-  }, [time.mode]);
+  }, [time.mode, durationLeft, durationOffset, positionOpacity]);
 
   return (
     <View
