@@ -7,6 +7,8 @@ export const usePlayer = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [soundPosition, setSoundPosition] = useState<number>(0);
   const [soundDuration, setSoundDuration] = useState<number>(0);
+  const soundPositionRef = useRef<number>(0);
+  soundPositionRef.current = soundPosition;
 
   // According to the doc of Slider, it shouldn't trigger any event by programmatically changing the value. However,
   // it triggers onValueChange on Android probably due to a bug. So, we need to keep track of whether the user is
@@ -41,7 +43,7 @@ export const usePlayer = () => {
           !isSliding &&
           // Slider sometimes delays on calling onValueChange with a stale value and brings a big jump. To prevent it,
           // we update the position only when the difference is reasonable.
-          Math.abs(status.positionMillis - soundPosition) <
+          Math.abs(status.positionMillis - soundPositionRef.current) <
             status.progressUpdateIntervalMillis * 1.2
         ) {
           setSoundPosition(status.positionMillis);
