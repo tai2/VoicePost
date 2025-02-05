@@ -70,7 +70,10 @@ export default function Index() {
     pause,
     forward,
     rewind,
-    changePosition,
+    isSliding,
+    onSlidingStart,
+    onSliding,
+    onSlidingStop,
   } = usePlayer();
 
   const { isUploading, uploadProgress, uploadedFileUrl, reset, upload } =
@@ -209,10 +212,12 @@ export default function Index() {
               width: uploaderViewSize.width - Spacing[6] * 2,
               height: Spacing[10],
             }}
-            value={soundPosition / recordedDuration}
+            value={isSliding ? undefined : soundPosition / recordedDuration}
             minimumTrackTintColor={Colors.orangeInIcon}
             maximumTrackTintColor={Colors.zinc300}
-            onValueChange={changePosition}
+            onSlidingStart={onSlidingStart}
+            onValueChange={onSliding}
+            onSlidingComplete={onSlidingStop}
           />
           <View
             style={{
