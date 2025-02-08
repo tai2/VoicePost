@@ -15,6 +15,9 @@
         "usesNonExemptEncryption": false
       }
     },
+    "androidStatusBar": {
+      "barStyle": "light-content"
+    },
     "android": {
       "package": "net.tai2.voicepost"
     },
