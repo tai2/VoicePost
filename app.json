@@ -24,7 +24,7 @@
       [
         "expo-av",
         {
-          "microphonePermission": "マイクへのアクセスを許可してください"
+          "microphonePermission": "音声を録音するためにマイクへのアクセスを許可してください"
         }
       ],
       [
