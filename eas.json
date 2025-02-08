@@ -39,6 +39,8 @@
     "production": {
       "ios": {
         "language": "ja",
+        "appleId": "info@tai2.net",
+        "appleTeamId": "2AA2Y8GZTE",
         "ascAppId": "6741378045"
       }
     }
