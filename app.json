@@ -11,9 +11,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
-      "infoPlist": {
-        "CFBundleDisplayName": "ボイスポスト"
-      },
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -27,7 +24,7 @@
       [
         "expo-av",
         {
-          "microphonePermission": "$(PRODUCT_NAME)にマイクへのアクセスを許可してください"
+          "microphonePermission": "マイクへのアクセスを許可してください"
         }
       ],
       [
