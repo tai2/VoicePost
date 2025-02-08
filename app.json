@@ -11,6 +11,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
+      "infoPlist": {
+        "CFBundleDisplayName": "ボイスポスト"
+      },
       "config": {
         "usesNonExemptEncryption": false
       }
