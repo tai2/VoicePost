@@ -7,6 +7,13 @@ export const usePlayer = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [soundPosition, setSoundPosition] = useState<number>(0);
   const [soundDuration, setSoundDuration] = useState<number>(0);
+  const soundPositionRef = useRef<number>(0);
+  soundPositionRef.current = soundPosition;
+
+  // According to the doc of Slider, it shouldn't trigger any event by programmatically changing the value. However,
+  // it triggers onValueChange on Android probably due to a bug. So, we need to keep track of whether the user is
+  // sliding.
+  const [isSliding, setIsSliding] = useState(false);
 
   const load = async (uri: string, initialDuration: number) => {
     setSoundDuration(initialDuration);
@@ -27,13 +34,18 @@ export const usePlayer = () => {
         if (status.didJustFinish) {
           setIsPlaying(false);
           setSoundPosition(0);
-          sound.setStatusAsync({
-            positionMillis: 0,
-          });
+          sound.stopAsync();
           return;
         }
 
-        if (status.isPlaying) {
+        if (
+          status.isPlaying &&
+          !isSliding &&
+          // Slider sometimes delays on calling onValueChange with a stale value and brings a big jump. To prevent it,
+          // we update the position only when the difference is reasonable.
+          Math.abs(status.positionMillis - soundPositionRef.current) <
+            status.progressUpdateIntervalMillis * 1.5
+        ) {
           setSoundPosition(status.positionMillis);
         }
       }
@@ -116,7 +128,20 @@ export const usePlayer = () => {
     setSoundPosition(Math.max(0, positionMillis));
   };
 
-  const changePosition = async (position: number) => {
+  const onSlidingStart = () => {
+    setIsSliding(true);
+  };
+
+  const onSliding = (position: number) => {
+    if (!isSliding) {
+      return;
+    }
+    setSoundPosition(soundDuration * position);
+  };
+
+  const onSlidingStop = async (position: number) => {
+    setIsSliding(false);
+
     const sound = soundRef.current;
     if (!sound) {
       console.error("Sound is not loaded");
@@ -124,17 +149,15 @@ export const usePlayer = () => {
     }
 
     const status = await sound.getStatusAsync();
-    if (!status.isLoaded || !status.durationMillis) {
+    if (!status.isLoaded) {
       console.error("Sound is not loaded");
       return;
     }
 
+    setSoundPosition(soundDuration * position);
     sound.setStatusAsync({
-      positionMillis: status.durationMillis * position,
+      positionMillis: soundDuration * position,
     });
-    if (!isPlaying) {
-      setSoundPosition(status.durationMillis * position);
-    }
   };
 
   return {
@@ -146,6 +169,9 @@ export const usePlayer = () => {
     pause,
     forward,
     rewind,
-    changePosition,
+    isSliding,
+    onSlidingStart,
+    onSlidingStop,
+    onSliding,
   };
 };

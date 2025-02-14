@@ -51,7 +51,7 @@ export default function Index() {
       uploaderViewPosition.value = height * uploarderViewHeightRatio;
       uploaderButtonPosition.value = 0;
     });
-  }, [setUploaderViewSize]);
+  }, [setUploaderViewSize, uploaderViewPosition, uploaderButtonPosition]);
 
   const {
     isRecording,
@@ -70,7 +70,10 @@ export default function Index() {
     pause,
     forward,
     rewind,
-    changePosition,
+    isSliding,
+    onSlidingStart,
+    onSliding,
+    onSlidingStop,
   } = usePlayer();
 
   const { isUploading, uploadProgress, uploadedFileUrl, reset, upload } =
@@ -111,6 +114,10 @@ export default function Index() {
       return;
     }
     const url = await upload(recordedFile, uploadFilename);
+    if (!url) {
+      console.error("Failed to upload");
+      return;
+    }
     await delay(200);
     uploaderButtonPosition.value = -uploaderViewSize.width;
     await delay(400);
@@ -137,6 +144,7 @@ export default function Index() {
                 <AntDesign
                   name="setting"
                   size={Spacing[6]}
+                  hitSlop={Spacing[6]}
                   color={Colors.zinc50}
                 />
               </Pressable>
@@ -205,10 +213,12 @@ export default function Index() {
               width: uploaderViewSize.width - Spacing[6] * 2,
               height: Spacing[10],
             }}
-            value={soundPosition / recordedDuration}
+            value={isSliding ? undefined : soundPosition / recordedDuration}
             minimumTrackTintColor={Colors.orangeInIcon}
             maximumTrackTintColor={Colors.zinc300}
-            onValueChange={changePosition}
+            onSlidingStart={onSlidingStart}
+            onValueChange={onSliding}
+            onSlidingComplete={onSlidingStop}
           />
           <View
             style={{
