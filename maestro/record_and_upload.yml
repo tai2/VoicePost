@@ -1,7 +1,9 @@
 appId: net.tai2.voicepost
 ---
 - launchApp
-- tapOn: 録音を開始する
+- tapOn:
+    text: 録音を開始する
+    retryTapIfNoChange: false
 - assertNotVisible: 録音を開始する
 - tapOn: 録音を停止する
 - assertNotVisible: 録音を停止する
@@ -10,7 +12,8 @@ appId: net.tai2.voicepost
     id: "time_duration"
 - runScript: parse_time.js
 - assertTrue: ${output.time > 0}
-- tapOn: 録音した音源をアップロードする
 - assertVisible: "ファイル名: recording_[0-9]{8}_[0-9]{6}.m4a"
+- tapOn: 録音した音源をアップロードする
+- assertNotVisible: "https://46.gigafile.nu/.*" # for Android
 - tapOn: アップロードした音源をURLをコピーする
 - assertNotVisible: 録音した音源をアップロードする

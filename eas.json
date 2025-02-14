@@ -21,9 +21,32 @@
     },
     "production": {
       "autoIncrement": true
+    },
+    "build-and-maestro-test": {
+      "withoutCredentials": true,
+      "config": "build-and-maestro-test.yml",
+      "ios": {
+        "simulator": true,
+        "image": "latest"
+      },
+      "android": {
+        "buildType": "apk",
+        "image": "latest"
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "language": "ja",
+        "appleId": "info@tai2.net",
+        "appleTeamId": "2AA2Y8GZTE",
+        "ascAppId": "6741378045"
+      },
+      "android": {
+        "serviceAccountKeyPath": "./google-play-service-account.json",
+        "track": "production"
+      }
+    }
   }
 }
