@@ -1,0 +1,13 @@
+appId: net.tai2.voicepost
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn:
+          point: "16%,9%"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - back

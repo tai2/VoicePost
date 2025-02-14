@@ -38,7 +38,7 @@ export const IconRecordButton = ({
     opacity.value = isRecording
       ? withRepeat(withTiming(0.5, { duration: 1000 }), 0, true)
       : withTiming(1);
-  }, [isRecording]);
+  }, [opacity, isRecording]);
 
   const circleStyle: (
     state: PressableStateCallbackType

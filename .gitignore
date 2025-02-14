@@ -11,6 +11,7 @@ npm-debug.*
 web-build/
 ios/
 android/
+google-play-service-account.json
 
 # macOS
 .DS_Store

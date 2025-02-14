@@ -7,12 +7,8 @@ appId: net.tai2.voicepost
 - assertVisible: 保存期限
 - assertVisible: 3日
 - assertNotVisible: 100日
-- swipe:
-   from:
-     id: "duration_picker"
-   direction: UP
-- tapOn:
-    point: "16%,9%"
+- runFlow: select_retention_period.yml
+- runFlow: back.yml
 - tapOn: 設定画面を開く
 - assertVisible: 100日
 - assertNotVisible: 3日
