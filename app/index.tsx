@@ -144,6 +144,7 @@ export default function Index() {
                 <AntDesign
                   name="setting"
                   size={Spacing[6]}
+                  hitSlop={Spacing[6]}
                   color={Colors.zinc50}
                 />
               </Pressable>
