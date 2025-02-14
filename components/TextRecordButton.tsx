@@ -1,11 +1,10 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { Pressable } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
 import { Borders } from "@/constants/Borders";
-import { useSharedValue } from "react-native-reanimated";
 import { RecordStopIcon } from "./RecordStopIcon";
 
 type Props = {
