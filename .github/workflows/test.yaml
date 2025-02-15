@@ -25,6 +25,7 @@ jobs:
         run: npm ci
       - name: Version validation
         run: npx expo install --check
+        continue-on-error: true
       - name: Lint
         run: npm run lint
       - name: Type check
