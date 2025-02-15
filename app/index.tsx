@@ -9,7 +9,7 @@ import Animated, {
 import Toast from "react-native-root-toast";
 import Slider from "@react-native-community/slider";
 import * as Clipboard from "expo-clipboard";
-import { Link, Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
@@ -139,16 +139,21 @@ export default function Index() {
         options={{
           title: "ボイスポスト",
           headerRight: () => (
-            <Link href="/settings" asChild>
-              <Pressable accessibilityLabel="設定画面を開く">
-                <AntDesign
-                  name="setting"
-                  size={Spacing[6]}
-                  hitSlop={Spacing[6]}
-                  color={Colors.zinc50}
-                />
-              </Pressable>
-            </Link>
+            <Pressable
+              accessibilityLabel="設定画面を開く"
+              onPressIn={() => {
+                // Workaround for expo/expo#33093 https://github.com/expo/expo/issues/33093
+                // We should get back to the regular `Link` component when the issue is resolved
+                router.navigate("/settings");
+              }}
+            >
+              <AntDesign
+                name="setting"
+                size={Spacing[6]}
+                hitSlop={Spacing[6]}
+                color={Colors.zinc50}
+              />
+            </Pressable>
           ),
         }}
       />
