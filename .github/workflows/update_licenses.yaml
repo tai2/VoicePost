@@ -1,0 +1,33 @@
+name: Update Licenses
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ["23.x"]
+
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Generate disclaimer
+        run: |
+          mkdir voice-post
+          yarn licenses generate-disclaimer > voice-post/DISCLAIMER.txt
+      - uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: tai2.net
+          source_dir: voice-post
+          destination_dir: voice-post
