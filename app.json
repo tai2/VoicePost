@@ -19,7 +19,11 @@
       }
     },
     "android": {
-      "package": "net.tai2.voicepost"
+      "package": "net.tai2.voicepost",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon_adaptive.png",
+        "backgroundColor": "#003c5a"
+      }
     },
     "plugins": [
       "expo-router",
