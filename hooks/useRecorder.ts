@@ -21,12 +21,10 @@ export const useRecorder = () => {
     }
   }, [isRecording, recordedDuration]);
 
-  const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const [_, requestPermission, getPermission] = Audio.usePermissions();
 
   async function startRecording() {
-    if (!permissionResponse) {
-      throw new Error("Permission response is not ready");
-    }
+    const permissionResponse = await getPermission();
 
     if (!permissionResponse.granted) {
       if (permissionResponse.canAskAgain) {
