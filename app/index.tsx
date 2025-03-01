@@ -30,8 +30,7 @@ import { Spacing } from "@/constants/Spacing";
 import { Borders } from "@/constants/Borders";
 import { BoxShadow } from "@/constants/BoxShadow";
 import { PlayTime } from "@/components/PlayTime";
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { delay } from "@/lib/delay";
 
 export default function Index() {
   const uploarderViewHeightRatio = 0.95;
