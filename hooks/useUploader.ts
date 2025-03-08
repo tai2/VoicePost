@@ -1,7 +1,8 @@
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
-import uuid from "react-native-uuid";
+import * as Crypto from "expo-crypto";
+
 import { Config } from "@/constants/Config";
 import { Alert } from "react-native";
 
@@ -33,7 +34,7 @@ export const useUploader = () => {
         uploadType: FileSystem.FileSystemUploadType.MULTIPART,
         fieldName: "file",
         parameters: {
-          id: uuid.v4(),
+          id: Crypto.randomUUID(),
           name: uploadedAs,
           chunk: "0",
           chunks: "1",

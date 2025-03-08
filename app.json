@@ -2,7 +2,7 @@
   "expo": {
     "name": "ボイスポスト",
     "slug": "voice-post",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "orientation": "portrait",
     "backgroundColor": "#003c5a",
     "icon": "./assets/images/icon.png",
@@ -11,12 +11,19 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      },
       "config": {
         "usesNonExemptEncryption": false
       }
     },
     "android": {
-      "package": "net.tai2.voicepost"
+      "package": "net.tai2.voicepost",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon_adaptive.png",
+        "backgroundColor": "#003c5a"
+      }
     },
     "plugins": [
       "expo-router",

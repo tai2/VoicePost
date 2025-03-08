@@ -9,7 +9,7 @@ import Animated, {
 import Toast from "react-native-root-toast";
 import Slider from "@react-native-community/slider";
 import * as Clipboard from "expo-clipboard";
-import { Link, Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
@@ -30,8 +30,7 @@ import { Spacing } from "@/constants/Spacing";
 import { Borders } from "@/constants/Borders";
 import { BoxShadow } from "@/constants/BoxShadow";
 import { PlayTime } from "@/components/PlayTime";
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { delay } from "@/lib/delay";
 
 export default function Index() {
   const uploarderViewHeightRatio = 0.95;
@@ -139,16 +138,21 @@ export default function Index() {
         options={{
           title: "ボイスポスト",
           headerRight: () => (
-            <Link href="/settings" asChild>
-              <Pressable accessibilityLabel="設定画面を開く">
-                <AntDesign
-                  name="setting"
-                  size={Spacing[6]}
-                  hitSlop={Spacing[6]}
-                  color={Colors.zinc50}
-                />
-              </Pressable>
-            </Link>
+            <Pressable
+              accessibilityLabel="設定画面を開く"
+              onPressIn={() => {
+                // Workaround for expo/expo#33093 https://github.com/expo/expo/issues/33093
+                // We should get back to the regular `Link` component when the issue is resolved
+                router.navigate("/settings");
+              }}
+            >
+              <AntDesign
+                name="setting"
+                size={Spacing[6]}
+                hitSlop={Spacing[6]}
+                color={Colors.zinc50}
+              />
+            </Pressable>
           ),
         }}
       />

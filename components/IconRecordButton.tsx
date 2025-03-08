@@ -73,7 +73,12 @@ export const IconRecordButton = ({
           accessibilityLabel="録音を停止する"
           onPress={onStop}
         >
-          <Feather name="mic" size={iconSize} color="white" />
+          {
+            // rendering icon with size zero causes crash
+            iconSize > 0 ? (
+              <Feather name="mic" size={iconSize} color="white" />
+            ) : null
+          }
         </Pressable>
       ) : (
         <Pressable
@@ -81,7 +86,12 @@ export const IconRecordButton = ({
           accessibilityLabel="録音を開始する"
           onPress={onStart}
         >
-          <Feather name="mic" size={iconSize} color="white" />
+          {
+            // rendering icon with size zero causes crash
+            iconSize > 0 ? (
+              <Feather name="mic" size={iconSize} color="white" />
+            ) : null
+          }
         </Pressable>
       )}
     </Animated.View>

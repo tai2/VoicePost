@@ -10,7 +10,9 @@ appId: net.tai2.voicepost
 - assertVisible: 録音した音源を再生する
 - assertVisible: 15秒戻す
 - assertVisible: 15秒進める
-- tapOn: 再生
+- tapOn:
+    text: 再生
+    waitToSettleTimeoutMs: 100
 - tapOn:
     text: 一時停止
     waitToSettleTimeoutMs: 100

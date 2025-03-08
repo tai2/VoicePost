@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { Audio } from "expo-av";
 import * as Linking from "expo-linking";
+import { delay } from "@/lib/delay";
 
 export const useRecorder = () => {
   const recordingRef = useRef<Audio.Recording | null>(null);
@@ -21,12 +22,14 @@ export const useRecorder = () => {
     }
   }, [isRecording, recordedDuration]);
 
-  const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const [_, requestPermission, getPermission] = Audio.usePermissions();
 
   async function startRecording() {
-    if (!permissionResponse) {
-      throw new Error("Permission response is not ready");
+    if (isRecording || recordingRef.current) {
+      throw "Recording is already started";
     }
+
+    const permissionResponse = await getPermission();
 
     if (!permissionResponse.granted) {
       if (permissionResponse.canAskAgain) {
@@ -43,21 +46,29 @@ export const useRecorder = () => {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
       playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
     });
 
     const { recording } = await Audio.Recording.createAsync(
-      Audio.RecordingOptionsPresets.HIGH_QUALITY
+      Audio.RecordingOptionsPresets.HIGH_QUALITY,
+      (status) => {
+        console.log("Recording status", status);
+      }
     );
-    recordingRef.current = recording;
 
-    setIsRecording(true);
+    // Immediate stop after the start sometimes makes the stopAndUnloadAsync unresponsive. To avoid that issue,
+    // We need a small delay.
+    await delay(100);
+
     recordingStartedAt.current = performance.now();
     setRecordedDuration(0);
     setRecordedFile(null);
+    recordingRef.current = recording;
+    setIsRecording(true);
   }
 
   async function stopRecording(): Promise<string> {
-    if (!recordingRef.current) {
+    if (!isRecording || !recordingRef.current) {
       throw "Recording is not started";
     }
 
@@ -70,8 +81,9 @@ export const useRecorder = () => {
       throw "Recording is not stored";
     }
 
-    setIsRecording(false);
     setRecordedFile(uri);
+    recordingRef.current = null;
+    setIsRecording(false);
 
     return uri;
   }

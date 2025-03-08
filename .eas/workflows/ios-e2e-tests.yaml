@@ -1,0 +1,29 @@
+name: iOS E2E testing
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    type: build
+    params:
+      platform: ios
+      profile: preview
+  step_test:
+    needs: [build]
+    steps:
+      - uses: eas/checkout
+      - uses: eas/install_node_modules
+      - name: Install jq
+        run: sudo apt-get --yes install jq
+      - name: Install Autify CLI
+        run: curl https://autify-cli-assets.s3.amazonaws.com/autify-cli/channels/stable/install-standalone.sh | sh
+      - name: Download Build
+        run: |
+          BUILD_URL=`npx eas-cli build:list --build-profile=preview --platform=ios --status=finished --limit=1 --non-interactive --json | jq --raw-output '.[0].artifacts.applicationArchiveUrl'`
+          echo $BUILD_URL
+          curl $BUILD_URL --location --output VoicePost.ipa
+      - name: Trigger test plan
+        run: autify mobile test run --build-path VoicePost.ipa https://mobile-app.autify.com/projects/n6eFDx/test_plans/Bktok0
