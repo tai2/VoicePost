@@ -1,0 +1,36 @@
+name: Android E2E testing
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    type: build
+    params:
+      platform: android
+      profile: preview
+  maestro:
+    type: maestro
+    needs: [build]
+    params:
+      build_id: ${{ needs.build.outputs.build_id }}
+      flow_path: maestro/
+  trigger_autify::
+    needs: [build]
+    steps:
+      - uses: eas/checkout
+      - uses: eas/install_node_modules
+      - name: Install jq
+        run: sudo apt-get --yes install jq
+      - name: Install Autify CLI
+        run: curl https://autify-cli-assets.s3.amazonaws.com/autify-cli/channels/stable/install-standalone.sh | sh
+      - name: Download Build
+        run: |
+          BUILD_URL=`npx eas-cli build:list --build-profile=preview --platform=android --status=finished --limit=1 --non-interactive --json | jq --raw-output '.[0].artifacts.applicationArchiveUrl'`
+          echo $BUILD_URL
+          curl $BUILD_URL --location --output VoicePost.apk
+      - name: Trigger test plan
+        run: autify mobile test run --build-path VoicePost.apk https://mobile-app.autify.com/projects/n6eFDx/test_plans/Yat2a3
+
