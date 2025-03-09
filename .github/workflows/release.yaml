@@ -23,6 +23,7 @@ jobs:
         shell: bash
         run: |
           git checkout -b release/$RELEASE_DATE
+          git fetch origin main
           git fetch origin develop
           git merge origin/develop
           git push origin release/$RELEASE_DATE
