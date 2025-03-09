@@ -4,7 +4,7 @@ appId: net.tai2.voicepost
 - tapOn:
     text: 録音を開始する
     retryTapIfNoChange: false
-- assertVisible: "00:05"
+- assertVisible: "00:10"
 - tapOn: 録音を停止する
 - assertVisible: 00:00
 - assertVisible: 録音した音源を再生する
