@@ -2,7 +2,7 @@
   "expo": {
     "name": "ボイスポスト",
     "slug": "voice-post",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "backgroundColor": "#003c5a",
     "icon": "./assets/images/icon.png",
