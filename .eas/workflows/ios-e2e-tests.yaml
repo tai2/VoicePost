@@ -11,7 +11,7 @@ jobs:
     params:
       platform: ios
       profile: preview
-  step_test:
+  trigger_autify:
     needs: [build]
     steps:
       - uses: eas/checkout
