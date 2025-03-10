@@ -15,5 +15,5 @@ appId: net.tai2.voicepost
 - assertVisible: "ファイル名: recording_[0-9]{8}_[0-9]{6}.m4a"
 - tapOn: 録音した音源をアップロードする
 - assertNotVisible: "https://46.gigafile.nu/.*" # for Android
-- tapOn: アップロードした音源をURLをコピーする
+- tapOn: アップロードした音源のURLをコピーする
 - assertNotVisible: 録音した音源をアップロードする
