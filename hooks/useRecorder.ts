@@ -22,7 +22,7 @@ export const useRecorder = () => {
     }
   }, [isRecording, recordedDuration]);
 
-  const [_, requestPermission, getPermission] = Audio.usePermissions();
+  const [, requestPermission, getPermission] = Audio.usePermissions();
 
   async function startRecording() {
     if (isRecording || recordingRef.current) {
