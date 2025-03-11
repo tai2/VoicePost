@@ -31,6 +31,7 @@ import { Borders } from "@/constants/Borders";
 import { BoxShadow } from "@/constants/BoxShadow";
 import { PlayTime } from "@/components/PlayTime";
 import { delay } from "@/lib/delay";
+import { catcher } from "@/lib/catcher";
 
 export default function Index() {
   const uploarderViewHeightRatio = 0.95;
@@ -169,8 +170,8 @@ export default function Index() {
           <IconRecordButton
             height="100%"
             isRecording={isRecording}
-            onStop={handleOnStop}
-            onStart={handleOnStart}
+            onStop={catcher(handleOnStop)}
+            onStart={catcher(handleOnStart)}
           />
         </View>
 
@@ -188,8 +189,8 @@ export default function Index() {
 
         <TextRecordButton
           isRecording={isRecording}
-          onStop={handleOnStop}
-          onStart={handleOnStart}
+          onStop={catcher(handleOnStop)}
+          onStart={catcher(handleOnStart)}
         />
 
         <Animated.View
@@ -231,15 +232,15 @@ export default function Index() {
               gap: Spacing[2.5],
             }}
           >
-            <RewindButton onPress={rewind} />
+            <RewindButton onPress={catcher(rewind)} />
             <View style={{ flexGrow: 1 }}>
               {isPlaying ? (
-                <PauseButton onPress={pause} />
+                <PauseButton onPress={catcher(pause)} />
               ) : (
-                <PlayButton onPress={play} />
+                <PlayButton onPress={catcher(play)} />
               )}
             </View>
-            <FastForwardButton onPress={forward} />
+            <FastForwardButton onPress={catcher(forward)} />
           </View>
           <View
             style={{
@@ -260,7 +261,7 @@ export default function Index() {
                 disabled={uploadedFileUrl !== null}
                 isUploading={isUploading}
                 progress={uploadProgress}
-                onPress={handleUpload}
+                onPress={catcher(handleUpload)}
               />
             </Animated.View>
             <Animated.View
@@ -271,7 +272,7 @@ export default function Index() {
             >
               <CopyButton
                 disabled={uploadedFileUrl === null}
-                onPress={handleCopy}
+                onPress={catcher(handleCopy)}
               />
             </Animated.View>
           </View>

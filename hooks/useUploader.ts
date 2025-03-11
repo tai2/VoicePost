@@ -52,6 +52,7 @@ export const useUploader = () => {
     }
 
     const url = JSON.parse(result.body).url;
+
     setUploadedFileUrl(url);
 
     return url;
