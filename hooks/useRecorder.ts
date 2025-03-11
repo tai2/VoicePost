@@ -50,10 +50,7 @@ export const useRecorder = () => {
     });
 
     const { recording } = await Audio.Recording.createAsync(
-      Audio.RecordingOptionsPresets.HIGH_QUALITY,
-      (status) => {
-        console.log("Recording status", status);
-      }
+      Audio.RecordingOptionsPresets.HIGH_QUALITY
     );
 
     // Immediate stop after the start sometimes makes the stopAndUnloadAsync unresponsive. To avoid that issue,
