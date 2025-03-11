@@ -32,6 +32,7 @@ import { BoxShadow } from "@/constants/BoxShadow";
 import { PlayTime } from "@/components/PlayTime";
 import { delay } from "@/lib/delay";
 import { catcher } from "@/lib/catcher";
+import { collectError } from "@/lib/collectError";
 
 export default function Index() {
   const uploarderViewHeightRatio = 0.95;
@@ -110,12 +111,12 @@ export default function Index() {
 
   const handleUpload = async () => {
     if (!recordedFile) {
-      console.error("No recorded file");
+      collectError("No recorded file");
       return;
     }
     const url = await upload(recordedFile, uploadFilename);
     if (!url) {
-      console.error("Failed to upload");
+      collectError("Failed to upload");
       return;
     }
     await delay(200);
@@ -126,7 +127,7 @@ export default function Index() {
 
   const handleCopy = async () => {
     if (!uploadedFileUrl) {
-      console.error("No uploaded file URL");
+      collectError("No uploaded file URL");
       return;
     }
     await copyToClipboard(uploadedFileUrl);

@@ -40,6 +40,14 @@
           "backgroundColor": "#003c5a",
           "image": "./assets/images/icon.png"
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "tai2net",
+          "project": "voice-post",
+          "url": "https://sentry.io/"
+        }
       ]
     ],
     "experiments": {

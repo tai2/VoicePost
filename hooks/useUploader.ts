@@ -5,6 +5,7 @@ import * as Crypto from "expo-crypto";
 
 import { Config } from "@/constants/Config";
 import { Alert } from "react-native";
+import { collectError } from "@/lib/collectError";
 
 export const useUploader = () => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -55,7 +56,7 @@ export const useUploader = () => {
     try {
       url = JSON.parse(result.body).url || null;
     } catch (e) {
-      console.error("Failed to parse the response", e);
+      collectError("Failed to parse the response", e);
       Alert.alert("エラー", "アップロードに失敗しました");
       return null;
     }

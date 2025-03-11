@@ -6,6 +6,7 @@ import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
 import { Colors } from "@/constants/Colors";
 import { Borders } from "@/constants/Borders";
+import { collectError } from "@/lib/collectError";
 
 export default function Settings() {
   const [preserveDuration, setPreserveDuration] = useState<string | undefined>(
@@ -26,7 +27,7 @@ export default function Settings() {
     try {
       await AsyncStorage.setItem("preserveDuration", value);
     } catch (e) {
-      console.error("Failed to save preserve duration", e);
+      collectError("Failed to save preserve duration", e);
     }
   };
 
