@@ -51,7 +51,14 @@ export const useUploader = () => {
       return null;
     }
 
-    const url = JSON.parse(result.body).url;
+    let url: string;
+    try {
+      url = JSON.parse(result.body).url || null;
+    } catch (e) {
+      console.error("Failed to parse the response", e);
+      Alert.alert("エラー", "アップロードに失敗しました");
+      return null;
+    }
 
     setUploadedFileUrl(url);
 
