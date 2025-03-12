@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
 import * as Crypto from "expo-crypto";
+import * as Sentry from "@sentry/react-native";
 
 import { Config } from "@/constants/Config";
-import { Alert } from "react-native";
 import { collectError } from "@/lib/collectError";
 
 export const useUploader = () => {
@@ -56,7 +57,8 @@ export const useUploader = () => {
     try {
       url = JSON.parse(result.body).url || null;
     } catch (e) {
-      collectError("Failed to parse the response", e);
+      Sentry.captureMessage(`Response from gigafile.nu: ${result.body}`);
+      collectError(`Failed to parse the response`, e);
       Alert.alert("エラー", "アップロードに失敗しました");
       return null;
     }
