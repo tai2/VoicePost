@@ -18,6 +18,7 @@ import { Colors } from "@/constants/Colors";
 type Props = {
   height: DimensionValue;
   isRecording: boolean;
+  isProcessing: boolean;
   onStop: () => void;
   onStart: () => void;
 };
@@ -25,6 +26,7 @@ type Props = {
 export const IconRecordButton = ({
   height,
   isRecording,
+  isProcessing,
   onStop,
   onStart,
 }: Props) => {
@@ -71,6 +73,7 @@ export const IconRecordButton = ({
         <Pressable
           style={circleStyle}
           accessibilityLabel="録音を停止する"
+          disabled={isProcessing}
           onPress={onStop}
         >
           {
@@ -84,6 +87,7 @@ export const IconRecordButton = ({
         <Pressable
           style={circleStyle}
           accessibilityLabel="録音を開始する"
+          disabled={isProcessing}
           onPress={onStart}
         >
           {

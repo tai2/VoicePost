@@ -8,6 +8,7 @@ export const useRecorder = () => {
   const recordingRef = useRef<Audio.Recording | null>(null);
   const recordingStartedAt = useRef<number>(0);
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [recordedDuration, setRecordedDuration] = useState<number>(0);
   const [recordedFile, setRecordedFile] = useState<string | null>(null);
 
@@ -24,71 +25,84 @@ export const useRecorder = () => {
 
   const [, requestPermission, getPermission] = Audio.usePermissions();
 
-  async function startRecording() {
+  const startRecording = async () => {
     if (isRecording || recordingRef.current) {
       throw "Recording is already started";
     }
 
-    const permissionResponse = await getPermission();
+    try {
+      setIsProcessing(true);
 
-    if (!permissionResponse.granted) {
-      if (permissionResponse.canAskAgain) {
-        await requestPermission();
-      } else {
-        Alert.alert("マイク権限", "設定からマイクの使用を許可してください", [
-          {
-            text: "開く",
-            onPress: () => Linking.openSettings(),
-          },
-        ]);
-        return;
+      const permissionResponse = await getPermission();
+
+      if (!permissionResponse.granted) {
+        if (permissionResponse.canAskAgain) {
+          await requestPermission();
+        } else {
+          Alert.alert("マイク権限", "設定からマイクの使用を許可してください", [
+            {
+              text: "開く",
+              onPress: () => Linking.openSettings(),
+            },
+          ]);
+          return;
+        }
       }
+
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: true,
+      });
+
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+
+      recordingStartedAt.current = performance.now();
+      setRecordedDuration(0);
+      setRecordedFile(null);
+      recordingRef.current = recording;
+      setIsRecording(true);
+    } finally {
+      setIsProcessing(false);
     }
+  };
 
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: true,
-      playsInSilentModeIOS: true,
-      staysActiveInBackground: true,
-    });
-
-    const { recording } = await Audio.Recording.createAsync(
-      Audio.RecordingOptionsPresets.HIGH_QUALITY
-    );
-
-    // Immediate stop after the start sometimes makes the stopAndUnloadAsync unresponsive. To avoid that issue,
-    // We need a small delay.
-    await delay(100);
-
-    recordingStartedAt.current = performance.now();
-    setRecordedDuration(0);
-    setRecordedFile(null);
-    recordingRef.current = recording;
-    setIsRecording(true);
-  }
-
-  async function stopRecording(): Promise<string> {
+  const stopRecording = async (): Promise<string> => {
     if (!isRecording || !recordingRef.current) {
       throw "Recording is not started";
     }
 
-    await recordingRef.current.stopAndUnloadAsync();
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-    });
-    const uri = recordingRef.current.getURI();
-    if (!uri) {
-      throw "Recording is not stored";
+    try {
+      setIsProcessing(true);
+
+      // Immediate stop after the start sometimes makes the stopAndUnloadAsync unresponsive. To avoid that issue, we need
+      // a small delay.
+      await delay(100);
+
+      await recordingRef.current.stopAndUnloadAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+      });
+      const uri = recordingRef.current.getURI();
+      if (!uri) {
+        throw "Recording is not stored";
+      }
+
+      setRecordedFile(uri);
+      recordingRef.current = null;
+      setIsRecording(false);
+
+      return uri;
+    } finally {
+      setIsProcessing(false);
     }
-
-    setRecordedFile(uri);
-    recordingRef.current = null;
-    setIsRecording(false);
-
-    return uri;
-  }
+  };
 
   return {
     isRecording,
+    isProcessing,
     recordedDuration,
     recordedFile,
     startRecording,

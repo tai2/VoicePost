@@ -9,11 +9,17 @@ import { RecordStopIcon } from "./RecordStopIcon";
 
 type Props = {
   isRecording: boolean;
+  isProcessing: boolean;
   onStop: () => void;
   onStart: () => void;
 };
 
-export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
+export const TextRecordButton = ({
+  isRecording,
+  isProcessing,
+  onStop,
+  onStart,
+}: Props) => {
   return (
     <Pressable
       style={({ pressed }) => [
@@ -30,6 +36,7 @@ export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
         Borders.roundedFull,
       ]}
       accessibilityLabel={isRecording ? "録音を停止する" : "録音を開始する"}
+      disabled={isProcessing}
       onPress={isRecording ? onStop : onStart}
     >
       <RecordStopIcon size={Spacing[4]} isRecording={isRecording} />

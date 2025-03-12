@@ -56,6 +56,7 @@ export default function Index() {
 
   const {
     isRecording,
+    isProcessing,
     recordedDuration,
     recordedFile,
     startRecording,
@@ -171,6 +172,7 @@ export default function Index() {
           <IconRecordButton
             height="100%"
             isRecording={isRecording}
+            isProcessing={isProcessing}
             onStop={catcher(handleOnStop)}
             onStart={catcher(handleOnStart)}
           />
@@ -190,6 +192,7 @@ export default function Index() {
 
         <TextRecordButton
           isRecording={isRecording}
+          isProcessing={isProcessing}
           onStop={catcher(handleOnStop)}
           onStart={catcher(handleOnStart)}
         />
