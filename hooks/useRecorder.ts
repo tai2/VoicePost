@@ -41,8 +41,10 @@ export const useRecorder = () => {
             onPress: () => Linking.openSettings(),
           },
         ]);
+        return;
       }
     }
+
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
       playsInSilentModeIOS: true,
