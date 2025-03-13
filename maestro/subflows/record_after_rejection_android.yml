@@ -1,0 +1,18 @@
+appId: net.tai2.voicepost
+---
+- clearState
+- launchApp:
+    permissions:
+      microphone: deny
+- tapOn: 録音を開始する
+- tapOn: "Don’t allow"
+- tapOn: 録音を開始する
+- tapOn: "Don’t allow"
+- tapOn: 録音を開始する
+- tapOn: 開く
+- tapOn: Permissions
+- tapOn: Microphone
+- tapOn: Allow only while using the app
+- launchApp
+- tapOn: 録音を開始する
+- assertVisible: 録音を停止する
