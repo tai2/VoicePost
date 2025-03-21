@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { View, Text, Button } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import RadioGroup from "react-native-radio-buttons-group";
 
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
@@ -11,8 +12,33 @@ import { collectError } from "@/lib/collectError";
 import { useDropboxOAuth } from "@/hooks/useDropboxOAuth";
 import { catcher } from "@/lib/catcher";
 
+const SectionSpacer = () => <View style={{ height: Spacing[5] }} />;
+
+const SectionHeader = ({ children }: { children: React.ReactNode }) => (
+  <Text style={[{ color: Colors.zinc300 }, Typography.textBase]}>
+    {children}
+  </Text>
+);
+
+const Section = ({ children }: { children: React.ReactNode }) => (
+  <View
+    style={[
+      {
+        padding: Spacing[2],
+        backgroundColor: Colors.zinc50,
+      },
+      Borders.roundedLg,
+    ]}
+  >
+    {children}
+  </View>
+);
+
 const Settings = () => {
   const [preserveDuration, setPreserveDuration] = useState<string | undefined>(
+    undefined
+  );
+  const [storage, setStorage] = useState<"gigafile" | "dropbox" | undefined>(
     undefined
   );
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -26,6 +52,12 @@ const Settings = () => {
       }
     });
 
+    AsyncStorage.getItem("storage").then((value) => {
+      if (value === "gigafile" || value === "dropbox") {
+        setStorage(value);
+      }
+    });
+
     getRefreshToken().then((token) => {
       setIsLoggedIn(token !== null);
     });
@@ -34,11 +66,17 @@ const Settings = () => {
   const handlePreserveDurationChange = async (value: string) => {
     setPreserveDuration(value);
 
-    try {
-      await AsyncStorage.setItem("preserveDuration", value);
-    } catch (e) {
-      collectError("Failed to save preserve duration", e);
+    await AsyncStorage.setItem("preserveDuration", value);
+  };
+
+  const handleStorageChange = async (value: string) => {
+    if (value !== "gigafile" && value !== "dropbox") {
+      throw `Invalid storage value: ${value}`;
     }
+
+    setStorage(value);
+
+    await AsyncStorage.setItem("storage", value);
   };
 
   const login = async () => {
@@ -57,26 +95,37 @@ const Settings = () => {
         padding: Spacing[6],
         backgroundColor: Colors.blue1InIcon,
         height: "100%",
-        gap: Spacing[5],
+        gap: Spacing[1],
       }}
     >
-      <Text
-        style={[
-          { color: Colors.zinc50, textAlign: "center" },
-          Typography.textXl,
-        ]}
-      >
-        ギガファイル便
-      </Text>
-      <View
-        style={[
-          {
-            padding: Spacing[2],
-            backgroundColor: Colors.zinc50,
-          },
-          Borders.roundedLg,
-        ]}
-      >
+      <SectionHeader>保存先</SectionHeader>
+      <Section>
+        <RadioGroup
+          labelStyle={[{ color: Colors.blue1InIcon }, Typography.textXl]}
+          containerStyle={{ alignItems: "flex-start" }}
+          radioButtons={[
+            {
+              id: "gigafile",
+              label: "ギガファイル便",
+              value: "gigafile",
+              color: Colors.blue1InIcon,
+            },
+            {
+              id: "dropbox",
+              label: "Dropbox",
+              value: "dropbox",
+              color: Colors.blue1InIcon,
+            },
+          ]}
+          onPress={catcher(handleStorageChange)}
+          selectedId={storage}
+        />
+      </Section>
+
+      <SectionSpacer />
+
+      <SectionHeader>ギガファイル便設定</SectionHeader>
+      <Section>
         <Text style={[{ color: Colors.blue1InIcon }, Typography.textXl]}>
           保存期限
         </Text>
@@ -84,7 +133,7 @@ const Settings = () => {
           testID="duration_picker"
           itemStyle={{ color: Colors.blue1InIcon }}
           selectedValue={preserveDuration}
-          onValueChange={handlePreserveDurationChange}
+          onValueChange={catcher(handlePreserveDurationChange)}
         >
           <Picker.Item label="3日" value="3" />
           <Picker.Item label="5日" value="5" />
@@ -94,30 +143,18 @@ const Settings = () => {
           <Picker.Item label="60日" value="60" />
           <Picker.Item label="100日" value="100" />
         </Picker>
-      </View>
-      <Text
-        style={[
-          { color: Colors.zinc50, textAlign: "center" },
-          Typography.textXl,
-        ]}
-      >
-        Dropbox
-      </Text>
-      <View
-        style={[
-          {
-            padding: Spacing[2],
-            backgroundColor: Colors.zinc50,
-          },
-          Borders.roundedLg,
-        ]}
-      >
+      </Section>
+
+      <SectionSpacer />
+
+      <SectionHeader>Dropbox設定</SectionHeader>
+      <Section>
         {isLoggedIn ? (
           <Button title="ログアウト" onPress={catcher(logout)} />
         ) : (
           <Button title="ログイン" onPress={catcher(login)} />
         )}
-      </View>
+      </Section>
     </View>
   );
 };
