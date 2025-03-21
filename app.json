@@ -6,13 +6,15 @@
     "orientation": "portrait",
     "backgroundColor": "#003c5a",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "net.tai2.voicepost",
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": [
+          "audio"
+        ]
       },
       "config": {
         "usesNonExemptEncryption": false
@@ -48,7 +50,8 @@
           "project": "voice-post",
           "url": "https://sentry.io/"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
 import { Colors } from "@/constants/Colors";
 import { Borders } from "@/constants/Borders";
 import { collectError } from "@/lib/collectError";
+import { useDropboxOAuth } from "@/hooks/useDropboxOAuth";
+import { catcher } from "@/lib/catcher";
 
-export default function Settings() {
+const Settings = () => {
   const [preserveDuration, setPreserveDuration] = useState<string | undefined>(
     undefined
   );
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const { issueAccessToken, getRefreshToken, clearRefreshToken } =
+    useDropboxOAuth("settings");
 
   useEffect(() => {
     AsyncStorage.getItem("preserveDuration").then((value) => {
@@ -19,7 +25,11 @@ export default function Settings() {
         setPreserveDuration(value);
       }
     });
-  }, []);
+
+    getRefreshToken().then((token) => {
+      setIsLoggedIn(token !== null);
+    });
+  }, [getRefreshToken]);
 
   const handlePreserveDurationChange = async (value: string) => {
     setPreserveDuration(value);
@@ -31,14 +41,33 @@ export default function Settings() {
     }
   };
 
+  const login = async () => {
+    await issueAccessToken();
+    setIsLoggedIn((await getRefreshToken()) !== null);
+  };
+
+  const logout = async () => {
+    await clearRefreshToken();
+    setIsLoggedIn(false);
+  };
+
   return (
     <View
       style={{
         padding: Spacing[6],
         backgroundColor: Colors.blue1InIcon,
         height: "100%",
+        gap: Spacing[5],
       }}
     >
+      <Text
+        style={[
+          { color: Colors.zinc50, textAlign: "center" },
+          Typography.textXl,
+        ]}
+      >
+        ギガファイル便
+      </Text>
       <View
         style={[
           {
@@ -66,6 +95,31 @@ export default function Settings() {
           <Picker.Item label="100日" value="100" />
         </Picker>
       </View>
+      <Text
+        style={[
+          { color: Colors.zinc50, textAlign: "center" },
+          Typography.textXl,
+        ]}
+      >
+        Dropbox
+      </Text>
+      <View
+        style={[
+          {
+            padding: Spacing[2],
+            backgroundColor: Colors.zinc50,
+          },
+          Borders.roundedLg,
+        ]}
+      >
+        {isLoggedIn ? (
+          <Button title="ログアウト" onPress={catcher(logout)} />
+        ) : (
+          <Button title="ログイン" onPress={catcher(login)} />
+        )}
+      </View>
     </View>
   );
-}
+};
+
+export default Settings;
