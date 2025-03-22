@@ -79,6 +79,7 @@ const Settings = () => {
   };
 
   const login = async () => {
+    // TODO: error handling
     await issueAccessToken();
     setIsLoggedIn((await getRefreshToken()) !== null);
   };
