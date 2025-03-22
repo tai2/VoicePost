@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useRef, useLayoutEffect } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Alert } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -12,6 +12,7 @@ import * as Clipboard from "expo-clipboard";
 import { router, Stack } from "expo-router";
 import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { IconRecordButton } from "@/components/IconRecordButton";
 import { TextRecordButton } from "@/components/TextRecordButton";
@@ -115,15 +116,28 @@ const Home = () => {
       collectError("No recorded file");
       return;
     }
-    const url = await upload(recordedFile, uploadFilename);
-    if (!url) {
-      collectError("Failed to upload");
+
+    const storage = await AsyncStorage.getItem("storage");
+    // TODO: select storage when not selected yet
+    if (storage !== "gigafile" && storage !== "dropbox") {
+      throw `Invalid storage value: ${storage}`;
+    }
+
+    const result = await upload(recordedFile, uploadFilename, storage);
+    if (result.status === "failed") {
+      collectError("Failed to upload", result.error);
+      Alert.alert("エラー", "アップロードに失敗しました");
       return;
     }
+
+    if (result.status === "canceled") {
+      return;
+    }
+
     await delay(200);
     uploaderButtonPosition.value = -uploaderViewSize.width;
     await delay(400);
-    await copyToClipboard(url);
+    await copyToClipboard(result.url);
   };
 
   const handleCopy = async () => {

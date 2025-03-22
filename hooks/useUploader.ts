@@ -1,16 +1,31 @@
 import { useState } from "react";
-import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Sentry from "@sentry/react-native";
 
 import { Config } from "@/constants/Config";
-import { collectError } from "@/lib/collectError";
 import { upload as uploadToGigafile } from "@/lib/gigafile/upload";
+import { upload as uploadToDropbox } from "@/lib/dropbox/upload";
+import { createSharedLinkWithSettings } from "@/lib/dropbox/createSharedLinkWithSettings";
+
+import { useDropboxOAuth } from "./useDropboxOAuth";
+
+export type UploadResult =
+  | {
+      status: "succeeded";
+      url: string;
+    }
+  | {
+      status: "canceled";
+    }
+  | {
+      status: "failed";
+      error: any;
+    };
 
 export const useUploader = () => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
+  const { issueAccessToken } = useDropboxOAuth("home");
 
   const reset = () => {
     setIsUploading(false);
@@ -18,18 +33,16 @@ export const useUploader = () => {
     setUploadedFileUrl(null);
   };
 
-  const upload = async (
-    file: string,
+  const gigafileUploadFlow = async (
+    fileUri: string,
     uploadedAs: string
-  ): Promise<string | null> => {
-    setIsUploading(true);
-
+  ): Promise<UploadResult> => {
     const preserveDuration =
       (await AsyncStorage.getItem("preserveDuration")) ||
       Config.defaultPreserveDuration;
 
     const result = await uploadToGigafile(
-      file,
+      fileUri,
       uploadedAs,
       preserveDuration,
       (data) => {
@@ -37,23 +50,72 @@ export const useUploader = () => {
       }
     );
     if (!result) {
-      Alert.alert("エラー", "アップロードに失敗しました");
-      return null;
+      return { status: "failed", error: "Failed to upload" };
     }
 
-    let url: string;
+    return {
+      status: "succeeded",
+      url: result.url,
+    };
+  };
+
+  const dropboxUploadFlow = async (
+    fileUri: string,
+    uploadedAs: string
+  ): Promise<UploadResult> => {
     try {
-      url = JSON.parse(result.body).url || null;
-    } catch (e) {
-      Sentry.captureMessage(`Response from gigafile.nu: ${result.body}`);
-      collectError(`Failed to parse the response`, e);
-      Alert.alert("エラー", "アップロードに失敗しました");
-      return null;
+      const tokenResponse = await issueAccessToken();
+      if (!tokenResponse) {
+        return { status: "canceled" };
+      }
+
+      const remotePath = `/${uploadedAs}`;
+
+      const uploadResult = await uploadToDropbox(
+        fileUri,
+        remotePath,
+        tokenResponse.accessToken,
+        (data) => {
+          setUploadProgress(
+            data.totalBytesSent / data.totalBytesExpectedToSend
+          );
+        }
+      );
+      if (!uploadResult) {
+        return { status: "failed", error: "Failed to upload" };
+      }
+
+      const shareResult = await createSharedLinkWithSettings(
+        remotePath,
+        tokenResponse.accessToken
+      );
+
+      return {
+        status: "succeeded",
+        url: shareResult.url,
+      };
+    } catch (error) {
+      return { status: "failed", error };
+    }
+  };
+
+  const upload = async (
+    file: string,
+    uploadedAs: string,
+    storage: "gigafile" | "dropbox"
+  ): Promise<UploadResult> => {
+    setIsUploading(true);
+
+    const result =
+      storage === "gigafile"
+        ? await gigafileUploadFlow(file, uploadedAs)
+        : await dropboxUploadFlow(file, uploadedAs);
+
+    if (result.status === "succeeded") {
+      setUploadedFileUrl(result.url);
     }
 
-    setUploadedFileUrl(url);
-
-    return url;
+    return result;
   };
 
   return {
