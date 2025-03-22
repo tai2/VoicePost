@@ -71,6 +71,8 @@ export const useUploader = () => {
         return { status: "canceled" };
       }
 
+      // TODO: Cache the token
+
       setIsUploading(true);
 
       const remotePath = `/${uploadedAs}`;
