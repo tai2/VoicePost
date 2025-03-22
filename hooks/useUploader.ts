@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as FileSystem from "expo-file-system";
-import * as Crypto from "expo-crypto";
 import * as Sentry from "@sentry/react-native";
 
 import { Config } from "@/constants/Config";
 import { collectError } from "@/lib/collectError";
+import { upload as uploadToGigafile } from "@/lib/gigafile/upload";
 
 export const useUploader = () => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -29,25 +28,14 @@ export const useUploader = () => {
       (await AsyncStorage.getItem("preserveDuration")) ||
       Config.defaultPreserveDuration;
 
-    const task = FileSystem.createUploadTask(
-      "https://46.gigafile.nu/upload_chunk.php",
+    const result = await uploadToGigafile(
       file,
-      {
-        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-        fieldName: "file",
-        parameters: {
-          id: Crypto.randomUUID(),
-          name: uploadedAs,
-          chunk: "0",
-          chunks: "1",
-          lifetime: preserveDuration,
-        },
-      },
+      uploadedAs,
+      preserveDuration,
       (data) => {
         setUploadProgress(data.totalBytesSent / data.totalBytesExpectedToSend);
       }
     );
-    const result = await task.uploadAsync();
     if (!result) {
       Alert.alert("エラー", "アップロードに失敗しました");
       return null;
