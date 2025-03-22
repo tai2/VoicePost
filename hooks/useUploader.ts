@@ -37,6 +37,8 @@ export const useUploader = () => {
     fileUri: string,
     uploadedAs: string
   ): Promise<UploadResult> => {
+    setIsUploading(true);
+
     const preserveDuration =
       (await AsyncStorage.getItem("preserveDuration")) ||
       Config.defaultPreserveDuration;
@@ -68,6 +70,8 @@ export const useUploader = () => {
       if (!tokenResponse) {
         return { status: "canceled" };
       }
+
+      setIsUploading(true);
 
       const remotePath = `/${uploadedAs}`;
 
@@ -104,17 +108,10 @@ export const useUploader = () => {
     uploadedAs: string,
     storage: "gigafile" | "dropbox"
   ): Promise<UploadResult> => {
-    setIsUploading(true);
-
     const result =
       storage === "gigafile"
         ? await gigafileUploadFlow(file, uploadedAs)
         : await dropboxUploadFlow(file, uploadedAs);
-
-    if (result.status === "canceled") {
-      setIsUploading(false);
-      return result;
-    }
 
     if (result.status === "succeeded") {
       setUploadedFileUrl(result.url);
