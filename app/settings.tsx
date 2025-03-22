@@ -8,7 +8,6 @@ import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
 import { Colors } from "@/constants/Colors";
 import { Borders } from "@/constants/Borders";
-import { collectError } from "@/lib/collectError";
 import { useDropboxOAuth } from "@/hooks/useDropboxOAuth";
 import { catcher } from "@/lib/catcher";
 

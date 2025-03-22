@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   AccessTokenRequest,
   exchangeCodeAsync,
@@ -26,7 +25,7 @@ export const useDropboxOAuth = (redirectPath: string) => {
     path: redirectPath,
   });
 
-  const [request, response_, promptAsync] = useAuthRequest(
+  const [request, response, promptAsync] = useAuthRequest(
     {
       clientId,
       scopes: [],
@@ -37,6 +36,7 @@ export const useDropboxOAuth = (redirectPath: string) => {
     },
     discovery
   );
+  void response;
 
   // issueAccessToken returns null when the process is canceled.
   const issueAccessToken = async (): Promise<TokenResponse | null> => {
