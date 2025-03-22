@@ -111,6 +111,11 @@ export const useUploader = () => {
         ? await gigafileUploadFlow(file, uploadedAs)
         : await dropboxUploadFlow(file, uploadedAs);
 
+    if (result.status === "canceled") {
+      setIsUploading(false);
+      return result;
+    }
+
     if (result.status === "succeeded") {
       setUploadedFileUrl(result.url);
     }
