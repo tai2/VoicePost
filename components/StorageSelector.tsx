@@ -10,7 +10,7 @@ type Props = {
 export const StorageSelector = ({ storage, onPress }: Props) => {
   return (
     <RadioGroup
-      labelStyle={[{ color: Colors.blue1InIcon }, Typography.textXl]}
+      labelStyle={[{ color: Colors.blue1InIcon }, Typography.textLg]}
       containerStyle={{ alignItems: "flex-start" }}
       radioButtons={[
         {

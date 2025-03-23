@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useRef, useLayoutEffect } from "react";
-import { View, Text, Pressable, Alert } from "react-native";
+import { View, Text, Pressable, Alert, Modal } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -22,6 +22,7 @@ import { PlayButton } from "@/components/PlayButton";
 import { PauseButton } from "@/components/PauseButton";
 import { UploadButton } from "@/components/UploadButton";
 import { CopyButton } from "@/components/CopyButton";
+import { StorageSelector } from "@/components/StorageSelector";
 import { getRecordedFilename } from "@/lib/getRecordedFilename";
 import { useRecorder } from "@/hooks/useRecorder";
 import { usePlayer } from "@/hooks/usePlayer";
@@ -34,9 +35,15 @@ import { PlayTime } from "@/components/PlayTime";
 import { delay } from "@/lib/delay";
 import { catcher } from "@/lib/catcher";
 import { collectError } from "@/lib/collectError";
+import { Typography } from "@/constants/Typography";
 
 const Home = () => {
   const uploarderViewHeightRatio = 0.95;
+
+  const [showStorageSelector, setShowStorageSelector] = useState(false);
+  const [storage, setStorage] = useState<"gigafile" | "dropbox" | undefined>(
+    undefined
+  );
 
   const [uploadFilename, setUploadFilename] = useState<string>("");
   const [uploaderViewSize, setUploaderViewSize] = useState<{
@@ -118,7 +125,11 @@ const Home = () => {
     }
 
     const storage = await AsyncStorage.getItem("storage");
-    // TODO: select storage when not selected yet
+    if (!storage) {
+      setShowStorageSelector(true);
+      return;
+    }
+
     if (storage !== "gigafile" && storage !== "dropbox") {
       throw `Invalid storage value: ${storage}`;
     }
@@ -148,6 +159,19 @@ const Home = () => {
     await copyToClipboard(uploadedFileUrl);
   };
 
+  const handleStorageChange = async (value: string) => {
+    if (value !== "gigafile" && value !== "dropbox") {
+      throw `Invalid storage value: ${value}`;
+    }
+
+    await AsyncStorage.setItem("storage", value);
+
+    setStorage(value);
+    setShowStorageSelector(false);
+
+    await handleUpload();
+  };
+
   // react-native-root-toast requires the RootSiblingParent
   return (
     <RootSiblingParent>
@@ -173,6 +197,43 @@ const Home = () => {
           ),
         }}
       />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showStorageSelector}
+        onRequestClose={() => {
+          // Alert.alert("Modal has been closed.");
+          // setModalVisible(!modalVisible);
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={[
+              {
+                backgroundColor: Colors.zinc50,
+                padding: Spacing[6],
+                gap: Spacing[3],
+              },
+              Borders.roundedLg,
+              BoxShadow.shadow2Xl,
+            ]}
+          >
+            <Text style={[{ color: Colors.blue1InIcon }, Typography.textBase]}>
+              保存先を選択してください
+            </Text>
+            <StorageSelector
+              storage={storage}
+              onPress={catcher(handleStorageChange)}
+            />
+          </View>
+        </View>
+      </Modal>
       <View
         style={{
           flex: 1,
