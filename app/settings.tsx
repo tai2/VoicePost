@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { View, Text, Button } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import RadioGroup from "react-native-radio-buttons-group";
 
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
@@ -10,6 +9,7 @@ import { Colors } from "@/constants/Colors";
 import { Borders } from "@/constants/Borders";
 import { useDropboxOAuth } from "@/hooks/useDropboxOAuth";
 import { catcher } from "@/lib/catcher";
+import { StorageSelector } from "@/components/StorageSelector";
 
 const SectionSpacer = () => <View style={{ height: Spacing[5] }} />;
 
@@ -100,25 +100,9 @@ const Settings = () => {
     >
       <SectionHeader>保存先</SectionHeader>
       <Section>
-        <RadioGroup
-          labelStyle={[{ color: Colors.blue1InIcon }, Typography.textXl]}
-          containerStyle={{ alignItems: "flex-start" }}
-          radioButtons={[
-            {
-              id: "gigafile",
-              label: "ギガファイル便",
-              value: "gigafile",
-              color: Colors.blue1InIcon,
-            },
-            {
-              id: "dropbox",
-              label: "Dropbox",
-              value: "dropbox",
-              color: Colors.blue1InIcon,
-            },
-          ]}
+        <StorageSelector
+          storage={storage}
           onPress={catcher(handleStorageChange)}
-          selectedId={storage}
         />
       </Section>
 
