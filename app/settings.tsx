@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, Alert } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -79,8 +79,12 @@ const Settings = () => {
   };
 
   const login = async () => {
-    // TODO: error handling
-    await issueAccessToken();
+    try {
+      await issueAccessToken();
+    } catch (e) {
+      Alert.alert("エラー", "ログインできませんでした");
+      throw e;
+    }
     setIsLoggedIn((await getRefreshToken()) !== null);
   };
 
