@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { Config } from "@/constants/Config";
@@ -7,6 +7,7 @@ import { upload as uploadToDropbox } from "@/lib/dropbox/upload";
 import { createSharedLinkWithSettings } from "@/lib/dropbox/createSharedLinkWithSettings";
 
 import { useDropboxOAuth } from "./useDropboxOAuth";
+import { TokenResponse } from "expo-auth-session";
 
 export type UploadResult =
   | {
@@ -26,6 +27,7 @@ export const useUploader = () => {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
   const { issueAccessToken } = useDropboxOAuth("home");
+  const tokenResponse = useRef<TokenResponse | null>(null);
 
   const reset = () => {
     setIsUploading(false);
@@ -66,12 +68,12 @@ export const useUploader = () => {
     uploadedAs: string
   ): Promise<UploadResult> => {
     try {
-      const tokenResponse = await issueAccessToken();
-      if (!tokenResponse) {
-        return { status: "canceled" };
+      if (!tokenResponse.current || tokenResponse.current.shouldRefresh()) {
+        tokenResponse.current = await issueAccessToken();
+        if (!tokenResponse.current) {
+          return { status: "canceled" };
+        }
       }
-
-      // TODO: Cache the token
 
       setIsUploading(true);
 
@@ -80,7 +82,7 @@ export const useUploader = () => {
       const uploadResult = await uploadToDropbox(
         fileUri,
         remotePath,
-        tokenResponse.accessToken,
+        tokenResponse.current.accessToken,
         (data) => {
           setUploadProgress(
             data.totalBytesSent / data.totalBytesExpectedToSend
@@ -93,7 +95,7 @@ export const useUploader = () => {
 
       const shareResult = await createSharedLinkWithSettings(
         remotePath,
-        tokenResponse.accessToken
+        tokenResponse.current.accessToken
       );
 
       return {
