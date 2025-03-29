@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useRef, useLayoutEffect } from "react";
-import { View, Text, Pressable, Alert, Modal } from "react-native";
+import { View, Text, Pressable, Alert } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -22,7 +22,7 @@ import { PlayButton } from "@/components/PlayButton";
 import { PauseButton } from "@/components/PauseButton";
 import { UploadButton } from "@/components/UploadButton";
 import { CopyButton } from "@/components/CopyButton";
-import { StorageSelector } from "@/components/StorageSelector";
+import { StorageSelectorModal } from "@/components/StorageSelectorModal";
 import { getRecordedFilename } from "@/lib/getRecordedFilename";
 import { useRecorder } from "@/hooks/useRecorder";
 import { usePlayer } from "@/hooks/usePlayer";
@@ -35,7 +35,6 @@ import { PlayTime } from "@/components/PlayTime";
 import { delay } from "@/lib/delay";
 import { catcher } from "@/lib/catcher";
 import { collectError } from "@/lib/collectError";
-import { Typography } from "@/constants/Typography";
 
 const Home = () => {
   const uploarderViewHeightRatio = 0.95;
@@ -197,42 +196,14 @@ const Home = () => {
           ),
         }}
       />
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <StorageSelectorModal
         visible={showStorageSelector}
+        storage={storage}
         onRequestClose={() => {
           setShowStorageSelector(false);
         }}
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={[
-              {
-                backgroundColor: Colors.zinc50,
-                padding: Spacing[6],
-                gap: Spacing[3],
-              },
-              Borders.roundedLg,
-              BoxShadow.shadow2Xl,
-            ]}
-          >
-            <Text style={[{ color: Colors.blue1InIcon }, Typography.textBase]}>
-              保存先を選択してください
-            </Text>
-            <StorageSelector
-              storage={storage}
-              onPress={catcher(handleStorageChange)}
-            />
-          </View>
-        </View>
-      </Modal>
+        onPress={catcher(handleStorageChange)}
+      />
       <View
         style={{
           flex: 1,
