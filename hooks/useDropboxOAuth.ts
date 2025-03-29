@@ -45,7 +45,13 @@ export const useDropboxOAuth = (redirectPath: string) => {
     );
 
     if (refreshToken) {
-      return await refreshAsync({ clientId, refreshToken }, discovery);
+      try {
+        return await refreshAsync({ clientId, refreshToken }, discovery);
+      } catch (e) {
+        await SecureStore.deleteItemAsync(DROPBOX_REFRESH_TOKEN_KEY);
+        console.error("Failed to refresh token", e);
+      }
+      // Continue with the authorization flow
     }
 
     // See details on the type: https://github.com/expo/expo/blob/82fc01ea6072cec4892f3bc9cfdf780e593d512f/packages/expo-auth-session/src/AuthRequest.ts#L138-L194
