@@ -49,6 +49,7 @@ export const useDropboxOAuth = (redirectPath: string) => {
     }
 
     // See details on the type: https://github.com/expo/expo/blob/82fc01ea6072cec4892f3bc9cfdf780e593d512f/packages/expo-auth-session/src/AuthRequest.ts#L138-L194
+    // Also, you can refer to the OAuth2 spec for more details on errors: https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2.1
     const result = await promptAsync();
     switch (result.type) {
       case "success":
