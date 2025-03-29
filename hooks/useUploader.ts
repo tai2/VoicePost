@@ -37,7 +37,8 @@ export const useUploader = () => {
 
   const gigafileUploadFlow = async (
     fileUri: string,
-    uploadedAs: string
+    uploadedAs: string,
+    server: string
   ): Promise<UploadResult> => {
     setIsUploading(true);
 
@@ -46,6 +47,7 @@ export const useUploader = () => {
       Config.defaultPreserveDuration;
 
     const result = await uploadToGigafile(
+      server,
       fileUri,
       uploadedAs,
       preserveDuration,
@@ -110,11 +112,18 @@ export const useUploader = () => {
   const upload = async (
     file: string,
     uploadedAs: string,
-    storage: "gigafile" | "dropbox"
+    storage:
+      | {
+          service: "gigafile";
+          server: string;
+        }
+      | {
+          service: "dropbox";
+        }
   ): Promise<UploadResult> => {
     const result =
-      storage === "gigafile"
-        ? await gigafileUploadFlow(file, uploadedAs)
+      storage.service === "gigafile"
+        ? await gigafileUploadFlow(file, uploadedAs, storage.server)
         : await dropboxUploadFlow(file, uploadedAs);
 
     if (result.status === "succeeded") {

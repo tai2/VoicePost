@@ -3,13 +3,14 @@ import * as Crypto from "expo-crypto";
 import * as Sentry from "@sentry/react-native";
 
 export const upload = async (
+  server: string,
   fileUri: string,
   uploadedAs: string,
   lifetime: string,
   callback: (data: FileSystem.UploadProgressData) => void
 ): Promise<{ url: string } | null> => {
   const task = FileSystem.createUploadTask(
-    "https://46.gigafile.nu/upload_chunk.php",
+    `https://${server}/upload_chunk.php`,
     fileUri,
     {
       uploadType: FileSystem.FileSystemUploadType.MULTIPART,

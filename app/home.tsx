@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useRef, useLayoutEffect } from "react";
 import { View, Text, Pressable, Alert } from "react-native";
 import Animated, {
@@ -13,6 +13,7 @@ import { router, Stack } from "expo-router";
 import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { WebView } from "react-native-webview";
 
 import { IconRecordButton } from "@/components/IconRecordButton";
 import { TextRecordButton } from "@/components/TextRecordButton";
@@ -36,6 +37,8 @@ import { delay } from "@/lib/delay";
 import { catcher } from "@/lib/catcher";
 import { collectError } from "@/lib/collectError";
 
+const DEFAULT_GIGAFILE_SERVER = "46.gigafile.nu";
+
 const Home = () => {
   const uploarderViewHeightRatio = 0.95;
 
@@ -43,6 +46,9 @@ const Home = () => {
   const [storage, setStorage] = useState<"gigafile" | "dropbox" | undefined>(
     undefined
   );
+
+  const gigafileServer = useRef<string>(DEFAULT_GIGAFILE_SERVER);
+  const webViewRef = useRef<WebView>(null);
 
   const [uploadFilename, setUploadFilename] = useState<string>("");
   const [uploaderViewSize, setUploaderViewSize] = useState<{
@@ -60,6 +66,14 @@ const Home = () => {
       uploaderButtonPosition.value = 0;
     });
   }, [setUploaderViewSize, uploaderViewPosition, uploaderButtonPosition]);
+
+  useEffect(() => {
+    AsyncStorage.getItem("storage").then((value) => {
+      if (value === "gigafile" || value === "dropbox") {
+        setStorage(value);
+      }
+    });
+  }, []);
 
   const {
     isRecording,
@@ -133,7 +147,25 @@ const Home = () => {
       throw `Invalid storage value: ${storage}`;
     }
 
-    const result = await upload(recordedFile, uploadFilename, storage);
+    if (storage === "gigafile") {
+      if (webViewRef.current) {
+        // Fetch new server URL
+        webViewRef.current.reload();
+      }
+    }
+
+    const result = await upload(
+      recordedFile,
+      uploadFilename,
+      storage === "gigafile"
+        ? {
+            service: storage,
+            server: gigafileServer.current,
+          }
+        : {
+            service: storage,
+          }
+    );
     if (result.status === "failed") {
       collectError("Failed to upload", result.error);
       Alert.alert("エラー", "アップロードに失敗しました");
@@ -204,6 +236,29 @@ const Home = () => {
         }}
         onPress={catcher(handleStorageChange)}
       />
+
+      {storage === "gigafile" ? (
+        <View
+          style={{
+            height: 0,
+          }}
+        >
+          <WebView
+            ref={webViewRef}
+            source={{ uri: "https://gigafile.nu/" }}
+            injectedJavaScript={`(() => {
+          window.ReactNativeWebView.postMessage(JSON.stringify({ serverUrl: server }));
+        })();`}
+            onMessage={(message) => {
+              const serverUrl = JSON.parse(message.nativeEvent.data).serverUrl;
+              if (serverUrl) {
+                gigafileServer.current = serverUrl;
+              }
+            }}
+          />
+        </View>
+      ) : null}
+
       <View
         style={{
           flex: 1,
