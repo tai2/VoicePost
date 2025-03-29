@@ -202,8 +202,7 @@ const Home = () => {
         transparent={true}
         visible={showStorageSelector}
         onRequestClose={() => {
-          // Alert.alert("Modal has been closed.");
-          // setModalVisible(!modalVisible);
+          setShowStorageSelector(false);
         }}
       >
         <View
