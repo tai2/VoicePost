@@ -1,5 +1,6 @@
 appId: net.tai2.voicepost
 ---
+- clearState
 - launchApp
 - tapOn:
     text: 録音を開始する
@@ -14,6 +15,7 @@ appId: net.tai2.voicepost
 - assertTrue: ${output.time > 0}
 - assertVisible: "ファイル名: recording_[0-9]{8}_[0-9]{6}.m4a"
 - tapOn: 録音した音源をアップロードする
+- tapOn: ギガファイル便
 - assertNotVisible: "https://46.gigafile.nu/.*" # for Android
 - tapOn: アップロードした音源のURLをコピーする
 - assertNotVisible: 録音した音源をアップロードする
