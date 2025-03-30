@@ -4,14 +4,5 @@ appId: net.tai2.voicepost
 - launchApp
 - tapOn: 設定画面を開く
 - tapOn: ログイン
-- tapOn: Continue
-- tapOn: メールアドレス
-- inputText: ${DROPBOX_EMAIL}
-- tapOn: return
-- tapOn: パスワード
-- inputText: ${DROPBOX_PASSWORD}
-- tapOn: return
-- tapOn: Not Now
-- tapOn: 続行
-- tapOn: 許可
+- runFlow: subflows/dropbox_oauth.yml
 - assertVisible: ログアウト
