@@ -5,4 +5,5 @@ appId: net.tai2.voicepost
 - tapOn: 設定画面を開く
 - tapOn: ログイン
 - runFlow: subflows/dropbox_oauth.yml
-- assertVisible: ログアウト
+- tapOn: ログアウト
+- assertVisible: ログイン
