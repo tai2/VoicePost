@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, Button, Alert } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -10,6 +10,7 @@ import { Borders } from "@/constants/Borders";
 import { useDropboxOAuth } from "@/hooks/useDropboxOAuth";
 import { catcher } from "@/lib/catcher";
 import { StorageSelector } from "@/components/StorageSelector";
+import { TextButton } from "@/components/TextButton";
 
 const SectionSpacer = () => <View style={{ height: Spacing[5] }} />;
 
@@ -23,7 +24,7 @@ const Section = ({ children }: { children: React.ReactNode }) => (
   <View
     style={[
       {
-        padding: Spacing[2],
+        padding: Spacing[3],
         backgroundColor: Colors.zinc50,
       },
       Borders.roundedLg,
@@ -138,9 +139,13 @@ const Settings = () => {
       <SectionHeader>Dropbox設定</SectionHeader>
       <Section>
         {isLoggedIn ? (
-          <Button title="ログアウト" onPress={catcher(logout)} />
+          <TextButton accessibilityLabel="ログアウト" onPress={catcher(logout)}>
+            ログアウト
+          </TextButton>
         ) : (
-          <Button title="ログイン" onPress={catcher(login)} />
+          <TextButton accessibilityLabel="ログイン" onPress={catcher(login)}>
+            ログイン
+          </TextButton>
         )}
       </Section>
     </View>
