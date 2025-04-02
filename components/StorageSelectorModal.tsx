@@ -21,36 +21,40 @@ export const StorageSelectorModal = ({
   onPress,
 }: Props) => {
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={visible}
-      onRequestClose={onRequestClose}
-    >
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+    // Due to an issue on reanimated, we need to wrap Modal with a View.
+    // https://github.com/software-mansion/react-native-reanimated/issues/6659#issuecomment-2704931585
+    <View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={visible}
+        onRequestClose={onRequestClose}
       >
         <View
-          style={[
-            {
-              backgroundColor: Colors.zinc50,
-              padding: Spacing[6],
-              gap: Spacing[3],
-            },
-            Borders.roundedLg,
-            BoxShadow.shadow2Xl,
-          ]}
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <Text style={[{ color: Colors.blue1InIcon }, Typography.textBase]}>
-            保存先を選択してください
-          </Text>
-          <StorageSelector storage={storage} onPress={onPress} />
+          <View
+            style={[
+              {
+                backgroundColor: Colors.zinc50,
+                padding: Spacing[6],
+                gap: Spacing[3],
+              },
+              Borders.roundedLg,
+              BoxShadow.shadow2Xl,
+            ]}
+          >
+            <Text style={[{ color: Colors.blue1InIcon }, Typography.textBase]}>
+              保存先を選択してください
+            </Text>
+            <StorageSelector storage={storage} onPress={onPress} />
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </View>
   );
 };
