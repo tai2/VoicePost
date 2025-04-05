@@ -4,6 +4,13 @@ appId: net.tai2.voicepost
 - launchApp
 - tapOn: 設定画面を開く
 - tapOn: ログイン
-- runFlow: subflows/dropbox_oauth.yml
+- runFlow:
+    when:
+      platform: Android
+    file: subflows/dropbox_oauth_android.yml
+- runFlow:
+    when:
+      platform: iOS
+    file: subflows/dropbox_oauth_ios.yml
 - tapOn: ログアウト
 - assertVisible: ログイン
