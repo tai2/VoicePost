@@ -6,7 +6,12 @@ import { StatusBar } from "react-native";
 import { isRunningInExpoGo } from "expo";
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
-  enableTimeToInitialDisplay: !isRunningInExpoGo(),
+  // `enableTimeToInitialDisplay` sometimes causes the error below.
+  //
+  //     Sentry Logger [error]: Failed to receive any fallback timestamp.
+  //
+  // It bothers me, so I set it to false.
+  enableTimeToInitialDisplay: false,
 });
 
 Sentry.init({
