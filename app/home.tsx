@@ -167,7 +167,7 @@ const Home = () => {
           }
     );
     if (result.status === "failed") {
-      collectError("Failed to upload", result.error);
+      collectError("Failed to upload:", result.error);
       Alert.alert("エラー", "アップロードに失敗しました");
       return;
     }

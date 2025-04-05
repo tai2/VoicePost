@@ -13,6 +13,7 @@ export const upload = async (
     {
       uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
       headers: {
+        "Content-Type": "application/octet-stream",
         Authorization: `Bearer ${accessToken}`,
         "Dropbox-API-Arg": JSON.stringify({
           autorename: false,
