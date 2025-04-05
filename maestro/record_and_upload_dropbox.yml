@@ -2,6 +2,8 @@ appId: net.tai2.voicepost
 ---
 - clearState
 - launchApp
+- extendedWaitUntil:
+    visible: 録音を開始する
 - tapOn:
     text: 録音を開始する
     retryTapIfNoChange: false
@@ -16,7 +18,14 @@ appId: net.tai2.voicepost
 - assertVisible: "ファイル名: recording_[0-9]{8}_[0-9]{6}.m4a"
 - tapOn: 録音した音源をアップロードする
 - tapOn: Dropbox
-- runFlow: subflows/dropbox_oauth.yml
+- runFlow:
+    when:
+      platform: Android
+    file: subflows/dropbox_oauth_android.yml
+- runFlow:
+    when:
+      platform: iOS
+    file: subflows/dropbox_oauth_ios.yml
 - assertNotVisible: "https://www.dropbox.com.*" # for Android
 - tapOn: アップロードした音源のURLをコピーする
 - assertNotVisible: 録音した音源をアップロードする

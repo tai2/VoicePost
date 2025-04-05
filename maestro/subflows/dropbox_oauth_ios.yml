@@ -1,12 +1,12 @@
 appId: net.tai2.voicepost
 ---
 - tapOn: Continue
-- tapOn: メールアドレス
+- tapOn: Email
 - inputText: ${DROPBOX_EMAIL}
 - tapOn: return
-- tapOn: パスワード
+- tapOn: Password
 - inputText: ${DROPBOX_PASSWORD}
 - tapOn: return
 - tapOn: Not Now
-- tapOn: 続行
-- tapOn: 許可
+- tapOn: Continue
+- tapOn: Allow

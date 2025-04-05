@@ -12,5 +12,5 @@ appId: net.tai2.voicepost
     text: "Back"
     index: 1
 - tapOn: "Log in"
-- tapOn: 続行
-- tapOn: 許可
+- tapOn: Continue
+- tapOn: Allow
