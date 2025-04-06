@@ -1,0 +1,55 @@
+{
+  "CFBundleDisplayName": "VoicePost",
+  "NSMicrophoneUsageDescription ": "Allow VoicePost to access your microphone",
+  "title": {
+    "home": "VoicePost",
+    "settings": "Settings",
+    "micPermission": "Microphone Permission",
+    "error": "Error"
+  },
+  "label": {
+    "copy": "Copy",
+    "play": "Play",
+    "pause": "Pause",
+    "upload": "Upload",
+    "open": "Open",
+    "filename": "File name",
+    "gigafile": "Gigafile",
+    "dropbox": "Dropbox",
+    "startRecording": "Start recording",
+    "stopRecording": "Stop recording",
+    "login": "Login",
+    "logout": "Logout",
+    "retentionPeriod": "Retention period",
+    "3days": "3 days",
+    "5days": "5 days",
+    "7days": "7 days",
+    "14days": "14 days",
+    "30days": "30 days",
+    "60days": "60 days",
+    "100days": "100 days",
+    "storageSettings": "Storage",
+    "gigafileSettings": "Gigafile settings",
+    "dropboxSettings": "Dropboc settings"
+  },
+  "message": {
+    "selectStorage": "Select storage",
+    "micPermission": "Allow microphone access in settings",
+    "uploadingFailed": "Uploading failed",
+    "copiedUrl": "Copied URL to clipboard",
+    "loginFailed": "Login failed"
+  },
+  "accessibilityLabel": {
+    "fastForward": "Advance 15 seconds",
+    "rewind": "Rewind 15 seconds",
+    "copyUrl": "Copy the URL of the uploaded audio",
+    "upload": "Upload the recorded audio",
+    "startRecording": "Start recording",
+    "stopRecording": "Stop recording",
+    "startPlayback": "Play the recorded audio",
+    "stopPlayback": "Stop the playback",
+    "openSettings": "Open settings",
+    "login": "Login",
+    "logout": "Logout"
+  }
+}

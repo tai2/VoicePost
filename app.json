@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ボイスポスト",
+    "name": "VoicePost",
     "slug": "voice-post",
     "version": "1.0.7",
     "orientation": "portrait",
@@ -12,7 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": ["audio"],
+        "CFBundleAllowMixedLocalizations": true
       },
       "config": {
         "usesNonExemptEncryption": false
@@ -25,15 +26,14 @@
         "backgroundColor": "#003c5a"
       }
     },
+    "locales": {
+      "en": "./locales/en.json",
+      "ja": "./locales/ja.json"
+    },
     "plugins": [
       "expo-router",
       "expo-font",
-      [
-        "expo-av",
-        {
-          "microphonePermission": "音声を録音するためにマイクへのアクセスを許可してください"
-        }
-      ],
+      "expo-av",
       [
         "expo-splash-screen",
         {
@@ -49,7 +49,8 @@
           "url": "https://sentry.io/"
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

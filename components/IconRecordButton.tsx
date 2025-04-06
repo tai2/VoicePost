@@ -7,6 +7,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import Animated, {
   useSharedValue,
   withRepeat,
@@ -30,6 +31,7 @@ export const IconRecordButton = ({
   onStop,
   onStart,
 }: Props) => {
+  const { t } = useTranslation();
   const rootRef = useRef<View>(null);
   const [size, setSize] = useState<number>(0);
   const innerCircleSize = size * 0.7;
@@ -72,7 +74,7 @@ export const IconRecordButton = ({
       {isRecording ? (
         <Pressable
           style={circleStyle}
-          accessibilityLabel="録音を停止する"
+          accessibilityLabel={t("accessibilityLabel.stopRecording")}
           disabled={isProcessing}
           onPress={onStop}
         >
@@ -86,7 +88,7 @@ export const IconRecordButton = ({
       ) : (
         <Pressable
           style={circleStyle}
-          accessibilityLabel="録音を開始する"
+          accessibilityLabel={t("accessibilityLabel.startRecording")}
           disabled={isProcessing}
           onPress={onStart}
         >

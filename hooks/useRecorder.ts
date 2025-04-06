@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Audio } from "expo-av";
 import * as Linking from "expo-linking";
 import { delay } from "@/lib/delay";
 
 export const useRecorder = () => {
+  const { t } = useTranslation();
   const recordingRef = useRef<Audio.Recording | null>(null);
   const recordingStartedAt = useRef<number>(0);
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -39,9 +41,9 @@ export const useRecorder = () => {
         if (permissionResponse.canAskAgain) {
           await requestPermission();
         } else {
-          Alert.alert("マイク権限", "設定からマイクの使用を許可してください", [
+          Alert.alert(t("title.micPermission"), t("message.micPermission"), [
             {
-              text: "開く",
+              text: t("label.open"),
               onPress: () => Linking.openSettings(),
             },
           ]);

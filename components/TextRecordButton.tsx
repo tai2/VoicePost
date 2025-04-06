@@ -1,6 +1,6 @@
 import React from "react";
-import { Text } from "react-native";
-import { Pressable } from "react-native";
+import { Text, Pressable } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
@@ -20,6 +20,8 @@ export const TextRecordButton = ({
   onStop,
   onStart,
 }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <Pressable
       style={({ pressed }) => [
@@ -35,7 +37,11 @@ export const TextRecordButton = ({
         },
         Borders.roundedFull,
       ]}
-      accessibilityLabel={isRecording ? "録音を停止する" : "録音を開始する"}
+      accessibilityLabel={
+        isRecording
+          ? t("accessibilityLabel.stopRecording")
+          : t("accessibilityLabel.startRecording")
+      }
       disabled={isProcessing}
       onPress={isRecording ? onStop : onStart}
     >
@@ -48,7 +54,7 @@ export const TextRecordButton = ({
           Typography.textXl,
         ]}
       >
-        {isRecording ? "録音停止" : "録音開始"}
+        {isRecording ? t("label.stopRecording") : t("label.startRecording")}
       </Text>
     </Pressable>
   );

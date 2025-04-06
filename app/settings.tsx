@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, Text, Alert } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -35,6 +36,7 @@ const Section = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Settings = () => {
+  const { t } = useTranslation();
   const [preserveDuration, setPreserveDuration] = useState<string | undefined>(
     undefined
   );
@@ -83,7 +85,7 @@ const Settings = () => {
     try {
       await issueAccessToken();
     } catch (e) {
-      Alert.alert("エラー", "ログインできませんでした");
+      Alert.alert(t("title.error"), t("message.loginFailed"));
       throw e;
     }
     setIsLoggedIn((await getRefreshToken()) !== null);
@@ -103,7 +105,7 @@ const Settings = () => {
         gap: Spacing[1],
       }}
     >
-      <SectionHeader>保存先</SectionHeader>
+      <SectionHeader>{t("title.storageSettings")}</SectionHeader>
       <Section>
         <StorageSelector
           storage={storage}
@@ -113,10 +115,10 @@ const Settings = () => {
 
       <SectionSpacer />
 
-      <SectionHeader>ギガファイル便設定</SectionHeader>
+      <SectionHeader>{t("title.gigafileSettings")}</SectionHeader>
       <Section>
         <Text style={[{ color: Colors.blue1InIcon }, Typography.textXl]}>
-          保存期限
+          {t("title.retentionPeriod")}
         </Text>
         <Picker
           testID="duration_picker"
@@ -124,27 +126,33 @@ const Settings = () => {
           selectedValue={preserveDuration}
           onValueChange={catcher(handlePreserveDurationChange)}
         >
-          <Picker.Item label="3日" value="3" />
-          <Picker.Item label="5日" value="5" />
-          <Picker.Item label="7日" value="7" />
-          <Picker.Item label="14日" value="14" />
-          <Picker.Item label="30日" value="30" />
-          <Picker.Item label="60日" value="60" />
-          <Picker.Item label="100日" value="100" />
+          <Picker.Item label={t("label.3days")} value="3" />
+          <Picker.Item label={t("label.5days")} value="5" />
+          <Picker.Item label={t("label.7days")} value="7" />
+          <Picker.Item label={t("label.14days")} value="14" />
+          <Picker.Item label={t("label.30days")} value="30" />
+          <Picker.Item label={t("label.60days")} value="60" />
+          <Picker.Item label={t("label.100days")} value="100" />
         </Picker>
       </Section>
 
       <SectionSpacer />
 
-      <SectionHeader>Dropbox設定</SectionHeader>
+      <SectionHeader>{t("title.dropboxSettings")}</SectionHeader>
       <Section>
         {isLoggedIn ? (
-          <TextButton accessibilityLabel="ログアウト" onPress={catcher(logout)}>
-            ログアウト
+          <TextButton
+            accessibilityLabel={t("accessibilityLabel.logout")}
+            onPress={catcher(logout)}
+          >
+            {t("label.logout")}
           </TextButton>
         ) : (
-          <TextButton accessibilityLabel="ログイン" onPress={catcher(login)}>
-            ログイン
+          <TextButton
+            accessibilityLabel={t("accessibilityLabel.login")}
+            onPress={catcher(login)}
+          >
+            {t("label.login")}
           </TextButton>
         )}
       </Section>

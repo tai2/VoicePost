@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
+import { StatusBar } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Stack, useNavigationContainerRef } from "expo-router";
 import * as Sentry from "@sentry/react-native";
 import { Colors } from "@/constants/Colors";
-import { StatusBar } from "react-native";
-import { isRunningInExpoGo } from "expo";
+import "@/lib/i18n";
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
   // `enableTimeToInitialDisplay` sometimes causes the error below.
@@ -19,10 +20,11 @@ Sentry.init({
   debug: process.env.NODE_ENV !== "production",
   tracesSampleRate: 1.0,
   integrations: [navigationIntegration],
-  enableNativeFramesTracking: !isRunningInExpoGo(),
+  enableNativeFramesTracking: true,
 });
 
 export default function RootLayout() {
+  const { t } = useTranslation();
   const ref = useNavigationContainerRef();
   useEffect(() => {
     if (ref?.current) {
@@ -46,7 +48,7 @@ export default function RootLayout() {
         <Stack.Screen
           name="settings"
           options={{
-            title: "設定",
+            title: t("title.settings"),
           }}
         />
       </Stack>

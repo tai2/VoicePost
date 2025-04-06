@@ -1,4 +1,5 @@
 import { Modal, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Borders } from "@/constants/Borders";
 import { BoxShadow } from "@/constants/BoxShadow";
 import { Colors } from "@/constants/Colors";
@@ -20,6 +21,8 @@ export const StorageSelectorModal = ({
   onRequestClose,
   onPress,
 }: Props) => {
+  const { t } = useTranslation();
+
   return (
     // Due to an issue on reanimated, we need to wrap Modal with a View.
     // https://github.com/software-mansion/react-native-reanimated/issues/6659#issuecomment-2704931585
@@ -49,7 +52,7 @@ export const StorageSelectorModal = ({
             ]}
           >
             <Text style={[{ color: Colors.blue1InIcon }, Typography.textBase]}>
-              保存先を選択してください
+              {t("message.selectStorage")}
             </Text>
             <StorageSelector storage={storage} onPress={onPress} />
           </View>

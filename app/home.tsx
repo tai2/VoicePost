@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useState, useRef, useLayoutEffect } from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { View, Text, Pressable, Alert } from "react-native";
+import { useTranslation } from "react-i18next";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -42,6 +42,7 @@ const DEFAULT_GIGAFILE_SERVER = "46.gigafile.nu";
 const Home = () => {
   const uploarderViewHeightRatio = 0.95;
 
+  const { t } = useTranslation();
   const [showStorageSelector, setShowStorageSelector] = useState(false);
   const [storage, setStorage] = useState<"gigafile" | "dropbox" | undefined>(
     undefined
@@ -131,6 +132,14 @@ const Home = () => {
     setUploadFilename(getRecordedFilename());
   };
 
+  const copyToClipboard = async (url: string) => {
+    await Clipboard.setStringAsync(url);
+
+    Toast.show(t("message.copiedUrl"), {
+      duration: Toast.durations.SHORT,
+    });
+  };
+
   const handleUpload = async () => {
     if (!recordedFile) {
       collectError("No recorded file");
@@ -168,7 +177,7 @@ const Home = () => {
     );
     if (result.status === "failed") {
       collectError("Failed to upload:", result.error);
-      Alert.alert("エラー", "アップロードに失敗しました");
+      Alert.alert(t("title.error"), t("message.uploadingFailed"));
       return;
     }
 
@@ -208,10 +217,10 @@ const Home = () => {
     <RootSiblingParent>
       <Stack.Screen
         options={{
-          title: "ボイスポスト",
+          title: t("title.home"),
           headerRight: () => (
             <Pressable
-              accessibilityLabel="設定画面を開く"
+              accessibilityLabel={t("accessibilityLabel.openSettings")}
               onPressIn={() => {
                 // Workaround for expo/expo#33093 https://github.com/expo/expo/issues/33093
                 // We should get back to the regular `Link` component when the issue is resolved
@@ -315,7 +324,7 @@ const Home = () => {
           ]}
         >
           <Text testID="upload_file_name" style={{ color: Colors.zinc50 }}>
-            ファイル名: {uploadFilename}
+            {t("label.filename")}: {uploadFilename}
           </Text>
           <Slider
             style={{
@@ -387,11 +396,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const copyToClipboard = async (url: string) => {
-  await Clipboard.setStringAsync(url);
-
-  Toast.show("URLをクリップボードにコピーしました", {
-    duration: Toast.durations.SHORT,
-  });
-};

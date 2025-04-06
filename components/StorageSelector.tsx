@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RadioGroup from "react-native-radio-buttons-group";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
@@ -8,6 +9,8 @@ type Props = {
 };
 
 export const StorageSelector = ({ storage, onPress }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <RadioGroup
       labelStyle={[{ color: Colors.blue1InIcon }, Typography.textLg]}
@@ -15,13 +18,13 @@ export const StorageSelector = ({ storage, onPress }: Props) => {
       radioButtons={[
         {
           id: "gigafile",
-          label: "ギガファイル便",
+          label: t("label.gigafile"),
           value: "gigafile",
           color: Colors.blue1InIcon,
         },
         {
           id: "dropbox",
-          label: "Dropbox",
+          label: t("label.dropbox"),
           value: "dropbox",
           color: Colors.blue1InIcon,
         },
