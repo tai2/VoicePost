@@ -26,9 +26,9 @@ export const TextRecordButton = ({
     <Pressable
       style={({ pressed }) => [
         {
-          width: Spacing[40],
           gap: Spacing[3],
-          padding: Spacing[4],
+          paddingVertical: Spacing[4],
+          paddingHorizontal: Spacing[6],
           backgroundColor: Colors.zinc50,
           flexDirection: "row",
           justifyContent: "center",

@@ -105,7 +105,7 @@ const Settings = () => {
         gap: Spacing[1],
       }}
     >
-      <SectionHeader>{t("title.storageSettings")}</SectionHeader>
+      <SectionHeader>{t("label.storageSettings")}</SectionHeader>
       <Section>
         <StorageSelector
           storage={storage}
@@ -115,10 +115,10 @@ const Settings = () => {
 
       <SectionSpacer />
 
-      <SectionHeader>{t("title.gigafileSettings")}</SectionHeader>
+      <SectionHeader>{t("label.gigafileSettings")}</SectionHeader>
       <Section>
         <Text style={[{ color: Colors.blue1InIcon }, Typography.textXl]}>
-          {t("title.retentionPeriod")}
+          {t("label.retentionPeriod")}
         </Text>
         <Picker
           testID="duration_picker"
@@ -138,7 +138,7 @@ const Settings = () => {
 
       <SectionSpacer />
 
-      <SectionHeader>{t("title.dropboxSettings")}</SectionHeader>
+      <SectionHeader>{t("label.dropboxSettings")}</SectionHeader>
       <Section>
         {isLoggedIn ? (
           <TextButton
