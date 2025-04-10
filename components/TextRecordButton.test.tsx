@@ -13,6 +13,7 @@ describe("<TextRecordButton />", () => {
         render(
           <TextRecordButton
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />
@@ -25,6 +26,7 @@ describe("<TextRecordButton />", () => {
         render(
           <TextRecordButton
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />
@@ -39,6 +41,7 @@ describe("<TextRecordButton />", () => {
         render(
           <TextRecordButton
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />
@@ -59,6 +62,7 @@ describe("<TextRecordButton />", () => {
         render(
           <TextRecordButton
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />
@@ -71,6 +75,7 @@ describe("<TextRecordButton />", () => {
         render(
           <TextRecordButton
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />
@@ -87,6 +92,7 @@ describe("<TextRecordButton />", () => {
         render(
           <TextRecordButton
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />

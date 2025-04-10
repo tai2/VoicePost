@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Audio } from "expo-av";
 import { Config } from "@/constants/Config";
+import { collectError } from "@/lib/collectError";
 
 export const usePlayer = () => {
   const soundRef = useRef<Audio.Sound | null>(null);
@@ -53,7 +54,7 @@ export const usePlayer = () => {
 
     const status = await sound.getStatusAsync();
     if (!status.isLoaded || !status.durationMillis) {
-      console.error("Sound is not loaded");
+      collectError("Sound is not loaded");
       return;
     }
     setSoundDuration(status.durationMillis);
@@ -69,7 +70,7 @@ export const usePlayer = () => {
 
     const sound = soundRef.current;
     if (!sound) {
-      console.error("Sound is not loaded");
+      collectError("Sound is not loaded");
       return;
     }
 
@@ -81,7 +82,7 @@ export const usePlayer = () => {
 
     const sound = soundRef.current;
     if (!sound) {
-      console.error("Sound is not loaded");
+      collectError("Sound is not loaded");
       return;
     }
 
@@ -91,13 +92,13 @@ export const usePlayer = () => {
   const forward = async () => {
     const sound = soundRef.current;
     if (!sound) {
-      console.error("Sound is not loaded");
+      collectError("Sound is not loaded");
       return;
     }
 
     const status = await sound.getStatusAsync();
     if (!status.isLoaded || !status.durationMillis) {
-      console.error("Sound is not loaded");
+      collectError("Sound is not loaded");
       return;
     }
 
@@ -111,13 +112,13 @@ export const usePlayer = () => {
   const rewind = async () => {
     const sound = soundRef.current;
     if (!sound) {
-      console.error("Sound is not loaded");
+      collectError("Sound is not loaded");
       return;
     }
 
     const status = await sound.getStatusAsync();
     if (!status.isLoaded || !status.durationMillis) {
-      console.error("Sound is not loaded");
+      collectError("Sound is not loaded");
       return;
     }
 
@@ -144,13 +145,13 @@ export const usePlayer = () => {
 
     const sound = soundRef.current;
     if (!sound) {
-      console.error("Sound is not loaded");
+      collectError("Sound is not loaded");
       return;
     }
 
     const status = await sound.getStatusAsync();
     if (!status.isLoaded) {
-      console.error("Sound is not loaded");
+      collectError("Sound is not loaded");
       return;
     }
 
