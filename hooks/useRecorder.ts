@@ -36,19 +36,21 @@ export const useRecorder = () => {
       setIsProcessing(true);
 
       const permissionResponse = await getPermission();
-
       if (!permissionResponse.granted) {
-        if (permissionResponse.canAskAgain) {
-          await requestPermission();
-        } else {
+        if (!permissionResponse.canAskAgain) {
           Alert.alert(t("title.micPermission"), t("message.micPermission"), [
             {
               text: t("label.open"),
               onPress: () => Linking.openSettings(),
             },
           ]);
+          return;
         }
-        return;
+
+        const requestResult = await requestPermission();
+        if (!requestResult.granted) {
+          return;
+        }
       }
 
       await Audio.setAudioModeAsync({

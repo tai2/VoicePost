@@ -4,6 +4,8 @@ appId: net.tai2.voicepost
 - launchApp:
     permissions:
       microphone: deny
+- extendedWaitUntil:
+    visible: Start recording
 - tapOn: Start recording
 - tapOn: "Don’t allow"
 - tapOn: Start recording
