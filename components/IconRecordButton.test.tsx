@@ -14,6 +14,7 @@ describe("<IconRecordButton />", () => {
           <IconRecordButton
             height={100}
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />
@@ -29,6 +30,7 @@ describe("<IconRecordButton />", () => {
           <IconRecordButton
             height={100}
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />
@@ -50,6 +52,7 @@ describe("<IconRecordButton />", () => {
           <IconRecordButton
             height={100}
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />
@@ -67,6 +70,7 @@ describe("<IconRecordButton />", () => {
           <IconRecordButton
             height={100}
             isRecording={isRecording}
+            isProcessing={false}
             onStart={onStart}
             onStop={onStop}
           />

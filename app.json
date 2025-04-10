@@ -1,18 +1,19 @@
 {
   "expo": {
-    "name": "ボイスポスト",
+    "name": "VoicePost",
     "slug": "voice-post",
-    "version": "1.0.7",
+    "version": "1.1.0",
     "orientation": "portrait",
     "backgroundColor": "#003c5a",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "net.tai2.voicepost",
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": ["audio"],
+        "CFBundleAllowMixedLocalizations": true
       },
       "config": {
         "usesNonExemptEncryption": false
@@ -25,22 +26,31 @@
         "backgroundColor": "#003c5a"
       }
     },
+    "locales": {
+      "en": "./locales/en.json",
+      "ja": "./locales/ja.json"
+    },
     "plugins": [
       "expo-router",
       "expo-font",
-      [
-        "expo-av",
-        {
-          "microphonePermission": "音声を録音するためにマイクへのアクセスを許可してください"
-        }
-      ],
+      "expo-av",
       [
         "expo-splash-screen",
         {
           "backgroundColor": "#003c5a",
           "image": "./assets/images/icon.png"
         }
-      ]
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "tai2net",
+          "project": "voice-post",
+          "url": "https://sentry.io/"
+        }
+      ],
+      "expo-secure-store",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

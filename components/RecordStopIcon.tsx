@@ -13,10 +13,10 @@ type Props = {
 };
 
 export const RecordStopIcon = ({ size, isRecording }: Props) => {
-  const progress = useSharedValue(0);
+  const progress = useSharedValue(1);
 
   useEffect(() => {
-    progress.value = isRecording ? 1 : 0;
+    progress.value = isRecording ? 0 : 1;
   }, [isRecording, progress]);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -24,7 +24,7 @@ export const RecordStopIcon = ({ size, isRecording }: Props) => {
     backgroundColor: interpolateColor(
       progress.value,
       [0, 1],
-      [Colors.orangeInIcon, Colors.blue1InIcon]
+      [Colors.blue1InIcon, Colors.orangeInIcon]
     ),
   }));
 
