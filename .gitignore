@@ -12,6 +12,7 @@ web-build/
 ios/
 android/
 google-play-service-account.json
+.env.local
 
 # macOS
 .DS_Store

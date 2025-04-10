@@ -1,6 +1,6 @@
 import React from "react";
-import { Text } from "react-native";
-import { Pressable } from "react-native";
+import { Text, Pressable } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";
 import { Typography } from "@/constants/Typography";
 import { Spacing } from "@/constants/Spacing";
@@ -9,18 +9,26 @@ import { RecordStopIcon } from "./RecordStopIcon";
 
 type Props = {
   isRecording: boolean;
+  isProcessing: boolean;
   onStop: () => void;
   onStart: () => void;
 };
 
-export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
+export const TextRecordButton = ({
+  isRecording,
+  isProcessing,
+  onStop,
+  onStart,
+}: Props) => {
+  const { t } = useTranslation();
+
   return (
     <Pressable
       style={({ pressed }) => [
         {
-          width: Spacing[40],
           gap: Spacing[3],
-          padding: Spacing[4],
+          paddingVertical: Spacing[4],
+          paddingHorizontal: Spacing[6],
           backgroundColor: Colors.zinc50,
           flexDirection: "row",
           justifyContent: "center",
@@ -29,7 +37,12 @@ export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
         },
         Borders.roundedFull,
       ]}
-      accessibilityLabel={isRecording ? "録音を停止する" : "録音を開始する"}
+      accessibilityLabel={
+        isRecording
+          ? t("accessibilityLabel.stopRecording")
+          : t("accessibilityLabel.startRecording")
+      }
+      disabled={isProcessing}
       onPress={isRecording ? onStop : onStart}
     >
       <RecordStopIcon size={Spacing[4]} isRecording={isRecording} />
@@ -41,7 +54,7 @@ export const TextRecordButton = ({ isRecording, onStop, onStart }: Props) => {
           Typography.textXl,
         ]}
       >
-        {isRecording ? "録音停止" : "録音開始"}
+        {isRecording ? t("label.stopRecording") : t("label.startRecording")}
       </Text>
     </Pressable>
   );
