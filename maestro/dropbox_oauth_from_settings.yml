@@ -2,8 +2,10 @@ appId: net.tai2.voicepost
 ---
 - clearState
 - launchApp
-- tapOn: 設定画面を開く
-- tapOn: ログイン
+- extendedWaitUntil:
+    visible: Open settings
+- tapOn: Open settings
+- tapOn: Log in
 - runFlow:
     when:
       platform: Android
@@ -12,5 +14,5 @@ appId: net.tai2.voicepost
     when:
       platform: iOS
     file: subflows/dropbox_oauth_ios.yml
-- tapOn: ログアウト
-- assertVisible: ログイン
+- tapOn: Log out
+- assertVisible: Log in

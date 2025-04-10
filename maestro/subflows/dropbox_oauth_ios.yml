@@ -1,6 +1,9 @@
 appId: net.tai2.voicepost
 ---
 - tapOn: Continue
+- tapOn:
+    text: Decline
+    optional: true
 - tapOn: Email
 - inputText: ${DROPBOX_EMAIL}
 - tapOn: return

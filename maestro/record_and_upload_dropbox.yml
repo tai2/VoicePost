@@ -3,20 +3,20 @@ appId: net.tai2.voicepost
 - clearState
 - launchApp
 - extendedWaitUntil:
-    visible: 録音を開始する
+    visible: Start recording
 - tapOn:
-    text: 録音を開始する
+    text: Start recording
     retryTapIfNoChange: false
-- assertNotVisible: 録音を開始する
-- tapOn: 録音を停止する
-- assertNotVisible: 録音を停止する
+- assertNotVisible: Start recording
+- tapOn: Stop recording
+- assertNotVisible: Stop recording
 - assertVisible: 00:00
 - copyTextFrom:
     id: "time_duration"
 - runScript: parse_time.js
 - assertTrue: ${output.time > 0}
-- assertVisible: "ファイル名: recording_[0-9]{8}_[0-9]{6}.m4a"
-- tapOn: 録音した音源をアップロードする
+- assertVisible: "File name: recording_[0-9]{8}_[0-9]{6}.m4a"
+- tapOn: Upload the recorded audio
 - tapOn: Dropbox
 - runFlow:
     when:
@@ -27,5 +27,5 @@ appId: net.tai2.voicepost
       platform: iOS
     file: subflows/dropbox_oauth_ios.yml
 - assertNotVisible: "https://www.dropbox.com.*" # for Android
-- tapOn: アップロードした音源のURLをコピーする
-- assertNotVisible: 録音した音源をアップロードする
+- tapOn: Copy the URL of the uploaded audio
+- assertNotVisible: Upload the recorded audio

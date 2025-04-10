@@ -3,14 +3,14 @@ appId: net.tai2.voicepost
 - clearState
 - launchApp
 - extendedWaitUntil:
-    visible: 設定画面を開く
-- tapOn: 設定画面を開く
-- assertVisible: 設定
-- assertVisible: 保存期間
-- assertVisible: 3日
-- assertNotVisible: 100日
+    visible: Open settings
+- tapOn: Open settings
+- assertVisible: Settings
+- assertVisible: Retention period
+- assertVisible: 3 days
+- assertNotVisible: 100 days
 - runFlow: subflows/select_retention_period.yml
 - runFlow: subflows/back.yml
-- tapOn: 設定画面を開く
-- assertVisible: 100日
-- assertNotVisible: 3日
+- tapOn: Open settings
+- assertVisible: 100 days
+- assertNotVisible: 3 days

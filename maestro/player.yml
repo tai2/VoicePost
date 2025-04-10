@@ -2,30 +2,34 @@ appId: net.tai2.voicepost
 ---
 - launchApp
 - tapOn:
-    text: 録音を開始する
+    text: Start recording
     retryTapIfNoChange: false
 - assertVisible: "00:10"
-- tapOn: 録音を停止する
+- tapOn: Stop recording
 - assertVisible: 00:00
-- assertVisible: 録音した音源を再生する
-- assertVisible: 15秒戻す
-- assertVisible: 15秒進める
+- assertVisible: Play the recorded audio
+- assertVisible: Rewind 15 seconds
+- assertVisible: Advance 15 seconds
 - tapOn:
-    text: 録音した音源を再生する
+    text: Play the recorded audio
     waitToSettleTimeoutMs: 3000
+- extendedWaitUntil:
+    visible: 00:05
+    timeout: 5000
+    optional: true
 - tapOn:
-    text: 再生中の音源を停止する
-    waitToSettleTimeoutMs: 100
+    text: Stop the playback
+    waitToSettleTimeoutMs: 3000
 - copyTextFrom:
     id: "time_position"
 - runScript: parse_time.js
 - assertTrue: ${output.time > 0}
-- tapOn: 15秒戻す
+- tapOn: Rewind 15 seconds
 - copyTextFrom:
     id: "time_position"
 - runScript: parse_time.js
 - assertTrue: ${output.time === 0}
-- tapOn: 15秒進める
+- tapOn: Advance 15 seconds
 - copyTextFrom:
     id: "time_position"
 - runScript: parse_time.js

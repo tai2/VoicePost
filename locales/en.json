@@ -18,8 +18,8 @@
     "dropbox": "Dropbox",
     "startRecording": "Start recording",
     "stopRecording": "Stop recording",
-    "login": "Login",
-    "logout": "Logout",
+    "login": "Log in",
+    "logout": "Log out",
     "retentionPeriod": "Retention period",
     "3days": "3 days",
     "5days": "5 days",
@@ -37,7 +37,7 @@
     "micPermission": "Allow microphone access in settings",
     "uploadingFailed": "Uploading failed",
     "copiedUrl": "Copied URL to clipboard",
-    "loginFailed": "Login failed"
+    "loginFailed": "Failed to log in"
   },
   "accessibilityLabel": {
     "fastForward": "Advance 15 seconds",
@@ -49,7 +49,7 @@
     "startPlayback": "Play the recorded audio",
     "stopPlayback": "Stop the playback",
     "openSettings": "Open settings",
-    "login": "Login",
-    "logout": "Logout"
+    "login": "Log in",
+    "logout": "Log out"
   }
 }
