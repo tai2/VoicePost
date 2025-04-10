@@ -3,6 +3,9 @@ appId: net.tai2.voicepost
 - tapOn:
     text: Use without an account
     optional: true
+- tapOn:
+    text: Decline
+    optional: true
 - tapOn: Email
 - inputText: ${DROPBOX_EMAIL}
 - tapOn: Continue
