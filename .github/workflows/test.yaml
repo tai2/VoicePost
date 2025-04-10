@@ -23,8 +23,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm ci
-      - name: Version validation
-        run: npx expo install --check
+      - name: Doctor
+        run: npx expo-doctor --verbose
         continue-on-error: true
       - name: Lint
         run: npm run lint
