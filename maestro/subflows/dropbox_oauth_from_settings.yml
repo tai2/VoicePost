@@ -1,0 +1,18 @@
+appId: net.tai2.voicepost
+---
+- clearState
+- launchApp
+- extendedWaitUntil:
+    visible: Open settings
+- tapOn: Open settings
+- tapOn: Log in
+- runFlow:
+    when:
+      platform: Android
+    file: dropbox_oauth_android.yml
+- runFlow:
+    when:
+      platform: iOS
+    file: dropbox_oauth_ios.yml
+- tapOn: Log out
+- assertVisible: Log in

@@ -1,0 +1,6 @@
+appId: net.tai2.voicepost
+---
+- runFlow:
+    when:
+      platform: Android
+    file: subflows/record_after_rejection_android.yml
