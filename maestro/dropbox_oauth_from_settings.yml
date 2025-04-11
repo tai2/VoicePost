@@ -1,18 +1,7 @@
 appId: net.tai2.voicepost
 ---
-- clearState
-- launchApp
-- extendedWaitUntil:
-    visible: Open settings
-- tapOn: Open settings
-- tapOn: Log in
 - runFlow:
     when:
-      platform: Android
-    file: subflows/dropbox_oauth_android.yml
-- runFlow:
-    when:
-      platform: iOS
-    file: subflows/dropbox_oauth_ios.yml
-- tapOn: Log out
-- assertVisible: Log in
+      # Unfortunately, Dropbox workflows cannot be stably run on cloud environment because of the MFA
+      true: ${MAESTRO_SKIP_DROPBOX != '1'}
+    file: subflows/dropbox_oauth_from_settings.yml
