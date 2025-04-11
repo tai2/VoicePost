@@ -7,6 +7,7 @@ import {
   useAuthRequest,
 } from "expo-auth-session";
 import * as SecureStore from "expo-secure-store";
+import { getLocales } from "expo-localization";
 
 const DROPBOX_REFRESH_TOKEN_KEY = "DROPBOX_REFRESH_TOKEN";
 const discovery = {
@@ -31,6 +32,7 @@ export const useDropboxOAuth = (redirectPath: string) => {
       scopes: [],
       extraParams: {
         token_access_type: "offline",
+        locale: getLocales()[0].languageCode ?? "en",
       },
       redirectUri,
     },
