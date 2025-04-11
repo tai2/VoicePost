@@ -7,13 +7,14 @@ appId: net.tai2.voicepost
     text: Decline
     optional: true
 - tapOn: Email
-- inputText: ${DROPBOX_EMAIL}
+- inputText: ${MAESTRO_DROPBOX_EMAIL}
 - tapOn: Continue
 - tapOn: Password
-- inputText: ${DROPBOX_PASSWORD}
+- inputText: ${MAESTRO_DROPBOX_PASSWORD}
 - tapOn:
     text: "Back"
     index: 1
+    optional: true
 - tapOn: "Log in"
 - tapOn: Continue
 - tapOn: Allow

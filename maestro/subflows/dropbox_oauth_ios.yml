@@ -5,10 +5,10 @@ appId: net.tai2.voicepost
     text: Decline
     optional: true
 - tapOn: Email
-- inputText: ${DROPBOX_EMAIL}
+- inputText: ${MAESTRO_DROPBOX_EMAIL}
 - tapOn: return
 - tapOn: Password
-- inputText: ${DROPBOX_PASSWORD}
+- inputText: ${MAESTRO_DROPBOX_PASSWORD}
 - tapOn: return
 - tapOn: Not Now
 - tapOn: Continue
