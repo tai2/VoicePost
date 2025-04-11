@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Icon from "@expo/vector-icons/Ionicons";
 import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
@@ -11,15 +12,17 @@ type Props = {
 };
 
 export const CopyButton = ({ disabled, onPress }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <ButtonPressable
       disabled={disabled}
       width="100%"
-      accessibilityLabel="アップロードした音源をURLをコピーする"
+      accessibilityLabel={t("accessibilityLabel.copyUrl")}
       onPress={onPress}
     >
       <Icon name="copy" size={Spacing[5]} color={Colors.zinc50} />
-      <ButtonText>コピー</ButtonText>
+      <ButtonText>{t("label.copy")}</ButtonText>
     </ButtonPressable>
   );
 };

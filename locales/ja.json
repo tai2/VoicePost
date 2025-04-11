@@ -1,0 +1,55 @@
+{
+  "CFBundleDisplayName": "ボイスポスト",
+  "NSMicrophoneUsageDescription ": "音声を録音するためにマイクへのアクセスを許可してください",
+  "title": {
+    "home": "ボイスポスト",
+    "settings": "設定",
+    "micPermission": "マイク権限",
+    "error": "エラー"
+  },
+  "label": {
+    "copy": "コピー",
+    "play": "再生",
+    "pause": "一時停止",
+    "upload": "アップロード",
+    "open": "開く",
+    "filename": "ファイル名",
+    "gigafile": "ギガファイル便",
+    "dropbox": "Dropbox",
+    "startRecording": "録音開始",
+    "stopRecording": "録音停止",
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "retentionPeriod": "保存期間",
+    "3days": "3日",
+    "5days": "5日",
+    "7days": "7日",
+    "14days": "14日",
+    "30days": "30日",
+    "60days": "60日",
+    "100days": "100日",
+    "storageSettings": "保存先",
+    "gigafileSettings": "ギガファイル便設定",
+    "dropboxSettings": "Dropbox設定"
+  },
+  "message": {
+    "selectStorage": "保存先を選択してください",
+    "micPermission": "設定からマイクの使用を許可してください",
+    "uploadingFailed": "アップロードに失敗しました",
+    "copiedUrl": "URLをクリップボードにコピーしました",
+    "loginFailed": "ログインに失敗しました"
+  },
+  "accessibilityLabel": {
+    "fastForward": "15秒進める",
+    "rewind": "15秒戻す",
+    "copyUrl": "アップロードした音源のURLをコピーする",
+    "upload": "録音した音源をアップロードする",
+    "startRecording": "録音を開始する",
+    "stopRecording": "録音を停止する",
+    "startPlayback": "録音した音源を再生する",
+    "stopPlayback": "再生中の音源を停止する",
+    "openSettings": "設定画面を開く",
+    "login": "ログインする",
+    "logout": "ログアウトする"
+  }
+}

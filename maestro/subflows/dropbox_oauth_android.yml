@@ -1,0 +1,20 @@
+appId: net.tai2.voicepost
+---
+- tapOn:
+    text: Use without an account
+    optional: true
+- tapOn:
+    text: Decline
+    optional: true
+- tapOn: Email
+- inputText: ${MAESTRO_DROPBOX_EMAIL}
+- tapOn: Continue
+- tapOn: Password
+- inputText: ${MAESTRO_DROPBOX_PASSWORD}
+- tapOn:
+    text: "Back"
+    index: 1
+    optional: true
+- tapOn: "Log in"
+- tapOn: Continue
+- tapOn: Allow
