@@ -1,0 +1,15 @@
+appId: net.tai2.voicepost
+---
+- clearState
+- launchApp
+- tapOn: Open settings
+- tapOn: Gigafile
+- runFlow: subflows/back.yml
+- tapOn:
+    text: Start recording
+    retryTapIfNoChange: false
+- assertNotVisible: Start recording
+- tapOn: Stop recording
+- tapOn: Upload the recorded audio
+- assertNotVisible: Gigafile
+- assertVisible: Copy the URL of the uploaded audio

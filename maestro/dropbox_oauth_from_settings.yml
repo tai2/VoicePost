@@ -1,0 +1,7 @@
+appId: net.tai2.voicepost
+---
+- runFlow:
+    when:
+      # Unfortunately, Dropbox workflows cannot be stably run on cloud environment because of the MFA
+      true: ${MAESTRO_SKIP_DROPBOX != '1'}
+    file: subflows/dropbox_oauth_from_settings.yml

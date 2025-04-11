@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Icon from "@expo/vector-icons/FontAwesome6";
 import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
@@ -11,14 +12,16 @@ type Props = {
 };
 
 export const PauseButton = ({ disabled, onPress }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <ButtonPressable
       disabled={disabled}
-      accessibilityLabel="再生中の音源を停止する"
+      accessibilityLabel={t("accessibilityLabel.stopPlayback")}
       onPress={onPress}
     >
       <Icon name="pause" size={Spacing[5]} color={Colors.zinc50} />
-      <ButtonText>一時停止</ButtonText>
+      <ButtonText>{t("label.pause")}</ButtonText>
     </ButtonPressable>
   );
 };
