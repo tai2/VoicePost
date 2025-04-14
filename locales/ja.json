@@ -1,6 +1,6 @@
 {
   "CFBundleDisplayName": "ボイスポスト",
-  "NSMicrophoneUsageDescription ": "音声を録音するためにマイクへのアクセスを許可してください",
+  "NSMicrophoneUsageDescription ": "ボイスポストはマイクを利用してアップロードするための音声を録音します。",
   "title": {
     "home": "ボイスポスト",
     "settings": "設定",
