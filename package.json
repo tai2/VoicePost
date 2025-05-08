@@ -67,7 +67,8 @@
     "react-native-svg": "15.8.0",
     "react-native-web": "~0.19.10",
     "react-native-webview": "~13.13.5",
-    "expo-localization": "~16.0.1"
+    "expo-localization": "~16.0.1",
+    "expo-audio": "~0.3.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
