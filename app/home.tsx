@@ -116,13 +116,14 @@ const Home = () => {
     stiffness: 150,
   };
   const handleOnStart = async () => {
+    reset();
+    await startRecording();
+
     uploaderViewPosition.value = withSpring(
       uploaderViewSize.height * uploarderViewHeightRatio,
       springConfig
     );
     uploaderButtonPosition.value = 0;
-    reset();
-    await startRecording();
   };
 
   const handleOnStop = async () => {
