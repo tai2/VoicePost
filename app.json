@@ -12,9 +12,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
       "infoPlist": {
-        "UIBackgroundModes": [
-          "audio"
-        ],
+        "UIBackgroundModes": ["audio"],
         "CFBundleAllowMixedLocalizations": true
       },
       "config": {
@@ -52,8 +50,7 @@
         }
       ],
       "expo-secure-store",
-      "expo-localization",
-      "expo-audio"
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true
