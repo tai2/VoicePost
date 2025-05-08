@@ -34,6 +34,7 @@
       "expo-router",
       "expo-font",
       "expo-av",
+      "expo-audio",
       [
         "expo-splash-screen",
         {
@@ -50,7 +51,8 @@
         }
       ],
       "expo-secure-store",
-      "expo-localization"
+      "expo-localization",
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true
