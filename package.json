@@ -27,6 +27,13 @@
         "react-native-gesture-handler@~2.20.0",
         "react-native-webview@~13.12.5"
       ]
+    },
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "i18next"
+        ]
+      }
     }
   },
   "dependencies": {
