@@ -30,7 +30,9 @@
     "100days": "100日",
     "storageSettings": "保存先",
     "gigafileSettings": "ギガファイル便設定",
-    "dropboxSettings": "Dropbox設定"
+    "dropboxSettings": "Dropbox設定",
+    "newSettings": "新しい設定",
+    "newSettingsContent": "何かあたらしいもの"
   },
   "message": {
     "selectStorage": "保存先を選択してください",

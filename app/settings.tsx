@@ -156,6 +156,10 @@ const Settings = () => {
           </TextButton>
         )}
       </Section>
+      <SectionHeader>{t("label.newSettings")}</SectionHeader>
+      <Section>
+        <Text>{t("label.newSettingsContent")}</Text>
+      </Section>
     </View>
   );
 };

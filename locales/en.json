@@ -30,7 +30,9 @@
     "100days": "100 days",
     "storageSettings": "Storage",
     "gigafileSettings": "Gigafile settings",
-    "dropboxSettings": "Dropbox settings"
+    "dropboxSettings": "Dropbox settings",
+    "newSettings": "New settings",
+    "newSettingsContent": "Something new"
   },
   "message": {
     "selectStorage": "Select storage",
