@@ -1,7 +1,6 @@
 {
-  "CFBundleDisplayName": "VoicePost",
-  "NSMicrophoneUsageDescription ": "VoicePost uses the microphone to record audio for uploading.",
   "title": {
+    "index": "VoicePost",
     "home": "VoicePost",
     "settings": "Settings",
     "micPermission": "Microphone Permission",
