@@ -24,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon_adaptive.png",
         "backgroundColor": "#003c5a"
-      }
+      },
+      "edgeToEdgeEnabled": true
     },
     "locales": {
       "en": "./locales/meta.en.json",
@@ -57,6 +58,12 @@
           "android": {
             "targetSdkVersion": 35
           }
+        }
+      ],
+      [
+        "expo-navigation-bar",
+        {
+          "position": "relative"
         }
       ]
     ],
