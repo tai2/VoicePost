@@ -43,7 +43,12 @@ export default function RootLayout() {
           headerShadowVisible: false,
         }}
       >
-        <Stack.Screen name="index" />
+        <Stack.Screen
+          name="index"
+          options={{
+            title: t("title.index"),
+          }}
+        />
         <Stack.Screen name="home" />
         <Stack.Screen
           name="settings"
