@@ -1,0 +1,6 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "ボイスポスト",
+    "NSMicrophoneUsageDescription ": "ボイスポストはマイクを利用してアップロードするための音声を録音します。"
+  }
+}

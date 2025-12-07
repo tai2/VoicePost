@@ -27,8 +27,8 @@
       }
     },
     "locales": {
-      "en": "./locales/en.json",
-      "ja": "./locales/ja.json"
+      "en": "./locales/meta.en.json",
+      "ja": "./locales/meta.ja.json"
     },
     "plugins": [
       "expo-router",
