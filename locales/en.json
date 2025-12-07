@@ -1,5 +1,6 @@
 {
   "title": {
+    "index": "VoicePost",
     "home": "VoicePost",
     "settings": "Settings",
     "micPermission": "Microphone Permission",
