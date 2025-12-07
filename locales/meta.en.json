@@ -1,0 +1,6 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "VoicePost",
+    "NSMicrophoneUsageDescription ": "VoicePost uses the microphone to record audio for uploading."
+  }
+}
