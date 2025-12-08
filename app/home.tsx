@@ -14,6 +14,7 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { WebView } from "react-native-webview";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { IconRecordButton } from "@/components/IconRecordButton";
 import { TextRecordButton } from "@/components/TextRecordButton";
@@ -216,182 +217,185 @@ const Home = () => {
   // react-native-root-toast requires the RootSiblingParent
   return (
     <RootSiblingParent>
-      <Stack.Screen
-        options={{
-          title: t("title.home"),
-          headerRight: () => (
-            <Pressable
-              accessibilityLabel={t("accessibilityLabel.openSettings")}
-              onPressIn={() => {
-                // Workaround for expo/expo#33093 https://github.com/expo/expo/issues/33093
-                // We should get back to the regular `Link` component when the issue is resolved
-                router.navigate("/settings");
-              }}
-            >
-              <AntDesign
-                name="setting"
-                size={Spacing[6]}
-                hitSlop={Spacing[6]}
-                color={Colors.zinc50}
-              />
-            </Pressable>
-          ),
-        }}
-      />
-      <StorageSelectorModal
-        visible={showStorageSelector}
-        storage={storage}
-        onRequestClose={() => {
-          setShowStorageSelector(false);
-        }}
-        onPress={catcher(handleStorageChange)}
-      />
-
-      {storage === "gigafile" ? (
-        <View
-          style={{
-            height: 0,
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.blue1InIcon }}>
+        <Stack.Screen
+          options={{
+            title: t("title.home"),
+            headerRight: () => (
+              <Pressable
+                accessibilityLabel={t("accessibilityLabel.openSettings")}
+                onPressIn={() => {
+                  // Workaround for expo/expo#33093 https://github.com/expo/expo/issues/33093
+                  // We should get back to the regular `Link` component when the issue is resolved
+                  router.navigate("/settings");
+                }}
+              >
+                <AntDesign
+                  name="setting"
+                  size={Spacing[6]}
+                  hitSlop={Spacing[6]}
+                  color={Colors.zinc50}
+                />
+              </Pressable>
+            ),
           }}
-        >
-          <WebView
-            ref={webViewRef}
-            source={{ uri: "https://gigafile.nu/" }}
-            injectedJavaScript={`(() => {
+        />
+        <StorageSelectorModal
+          visible={showStorageSelector}
+          storage={storage}
+          onRequestClose={() => {
+            setShowStorageSelector(false);
+          }}
+          onPress={catcher(handleStorageChange)}
+        />
+
+        {storage === "gigafile" ? (
+          <View
+            style={{
+              height: 0,
+            }}
+          >
+            <WebView
+              ref={webViewRef}
+              source={{ uri: "https://gigafile.nu/" }}
+              injectedJavaScript={`(() => {
           window.ReactNativeWebView.postMessage(JSON.stringify({ serverUrl: server }));
         })();`}
-            onMessage={(message) => {
-              const serverUrl = JSON.parse(message.nativeEvent.data).serverUrl;
-              if (serverUrl) {
-                gigafileServer.current = serverUrl;
-              }
-            }}
-          />
-        </View>
-      ) : null}
+              onMessage={(message) => {
+                const serverUrl = JSON.parse(
+                  message.nativeEvent.data
+                ).serverUrl;
+                if (serverUrl) {
+                  gigafileServer.current = serverUrl;
+                }
+              }}
+            />
+          </View>
+        ) : null}
 
-      <View
-        style={{
-          flex: 1,
-          paddingTop: Spacing[5],
-          gap: Spacing[5],
-          alignItems: "center",
-          backgroundColor: Colors.blue1InIcon,
-        }}
-      >
-        <View style={{ flex: 1 }}>
-          <IconRecordButton
-            height="100%"
+        <View
+          style={{
+            flex: 1,
+            paddingTop: Spacing[5],
+            gap: Spacing[5],
+            alignItems: "center",
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <IconRecordButton
+              height="100%"
+              isRecording={isRecording}
+              isProcessing={isProcessing}
+              onStop={catcher(handleOnStop)}
+              onStart={catcher(handleOnStart)}
+            />
+          </View>
+
+          <PlayTime
+            time={
+              recordedFile
+                ? {
+                    mode: "player",
+                    position: soundPosition,
+                    duration: soundDuration,
+                  }
+                : { mode: "recorder", duration: recordedDuration }
+            }
+          />
+
+          <TextRecordButton
             isRecording={isRecording}
             isProcessing={isProcessing}
             onStop={catcher(handleOnStop)}
             onStart={catcher(handleOnStart)}
           />
-        </View>
 
-        <PlayTime
-          time={
-            recordedFile
-              ? {
-                  mode: "player",
-                  position: soundPosition,
-                  duration: soundDuration,
-                }
-              : { mode: "recorder", duration: recordedDuration }
-          }
-        />
-
-        <TextRecordButton
-          isRecording={isRecording}
-          isProcessing={isProcessing}
-          onStop={catcher(handleOnStop)}
-          onStart={catcher(handleOnStart)}
-        />
-
-        <Animated.View
-          ref={uploaderViewRef}
-          style={[
-            {
-              gap: Spacing[5],
-              width: "102%",
-              padding: Spacing[6],
-              backgroundColor: Colors.blue1InIcon,
-              alignItems: "center",
-              transform: [{ translateY: uploaderViewPosition }],
-              borderColor: "rgba(0, 0, 0, 0.5)",
-            },
-            BoxShadow.shadow2Xl,
-            Borders.roundedT3Xl,
-            Borders.border,
-          ]}
-        >
-          <Text testID="upload_file_name" style={{ color: Colors.zinc50 }}>
-            {t("label.filename")}: {uploadFilename}
-          </Text>
-          <Slider
-            style={{
-              width: uploaderViewSize.width - Spacing[6] * 2,
-              height: Spacing[10],
-            }}
-            value={isSliding ? undefined : soundPosition / recordedDuration}
-            minimumTrackTintColor={Colors.orangeInIcon}
-            maximumTrackTintColor={Colors.zinc300}
-            onSlidingStart={onSlidingStart}
-            onValueChange={onSliding}
-            onSlidingComplete={onSlidingStop}
-          />
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              gap: Spacing[2.5],
-            }}
+          <Animated.View
+            ref={uploaderViewRef}
+            style={[
+              {
+                gap: Spacing[5],
+                width: "102%",
+                padding: Spacing[6],
+                backgroundColor: Colors.blue1InIcon,
+                alignItems: "center",
+                transform: [{ translateY: uploaderViewPosition }],
+                borderColor: "rgba(0, 0, 0, 0.5)",
+              },
+              BoxShadow.shadow2Xl,
+              Borders.roundedT3Xl,
+              Borders.border,
+            ]}
           >
-            <RewindButton onPress={catcher(rewind)} />
-            <View style={{ flexGrow: 1 }}>
-              {isPlaying ? (
-                <PauseButton onPress={catcher(pause)} />
-              ) : (
-                <PlayButton onPress={catcher(play)} />
-              )}
+            <Text testID="upload_file_name" style={{ color: Colors.zinc50 }}>
+              {t("label.filename")}: {uploadFilename}
+            </Text>
+            <Slider
+              style={{
+                width: uploaderViewSize.width - Spacing[6] * 2,
+                height: Spacing[10],
+              }}
+              value={isSliding ? undefined : soundPosition / recordedDuration}
+              minimumTrackTintColor={Colors.orangeInIcon}
+              maximumTrackTintColor={Colors.zinc300}
+              onSlidingStart={onSlidingStart}
+              onValueChange={onSliding}
+              onSlidingComplete={onSlidingStop}
+            />
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                gap: Spacing[2.5],
+              }}
+            >
+              <RewindButton onPress={catcher(rewind)} />
+              <View style={{ flexGrow: 1 }}>
+                {isPlaying ? (
+                  <PauseButton onPress={catcher(pause)} />
+                ) : (
+                  <PlayButton onPress={catcher(play)} />
+                )}
+              </View>
+              <FastForwardButton onPress={catcher(forward)} />
             </View>
-            <FastForwardButton onPress={catcher(forward)} />
-          </View>
-          <View
-            style={{
-              width: "100%",
-              height: Spacing[12],
-            }}
-          >
-            <Animated.View
-              style={[
-                {
-                  position: "absolute",
-                  width: "100%",
-                },
-                uploadButtonAnimation,
-              ]}
+            <View
+              style={{
+                width: "100%",
+                height: Spacing[12],
+              }}
             >
-              <UploadButton
-                disabled={uploadedFileUrl !== null}
-                isUploading={isUploading}
-                progress={uploadProgress}
-                onPress={catcher(handleUpload)}
-              />
-            </Animated.View>
-            <Animated.View
-              style={[
-                { position: "absolute", width: "100%" },
-                copyButtonAnimattion,
-              ]}
-            >
-              <CopyButton
-                disabled={uploadedFileUrl === null}
-                onPress={catcher(handleCopy)}
-              />
-            </Animated.View>
-          </View>
-        </Animated.View>
-      </View>
+              <Animated.View
+                style={[
+                  {
+                    position: "absolute",
+                    width: "100%",
+                  },
+                  uploadButtonAnimation,
+                ]}
+              >
+                <UploadButton
+                  disabled={uploadedFileUrl !== null}
+                  isUploading={isUploading}
+                  progress={uploadProgress}
+                  onPress={catcher(handleUpload)}
+                />
+              </Animated.View>
+              <Animated.View
+                style={[
+                  { position: "absolute", width: "100%" },
+                  copyButtonAnimattion,
+                ]}
+              >
+                <CopyButton
+                  disabled={uploadedFileUrl === null}
+                  onPress={catcher(handleCopy)}
+                />
+              </Animated.View>
+            </View>
+          </Animated.View>
+        </View>
+      </SafeAreaView>
     </RootSiblingParent>
   );
 };
