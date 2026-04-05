@@ -12,7 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
       "infoPlist": {
-        "CFBundleAllowMixedLocalizations": true
+        "CFBundleAllowMixedLocalizations": true,
+        "UIDesignRequiresCompatibility": true
       },
       "config": {
         "usesNonExemptEncryption": false
