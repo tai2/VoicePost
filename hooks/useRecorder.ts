@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
-import { useAudioRecorder, AudioModule, RecordingPresets } from "expo-audio";
+import {
+  useAudioRecorder,
+  setAudioModeAsync,
+  AudioModule,
+  RecordingPresets,
+} from "expo-audio";
 import * as Linking from "expo-linking";
-import { delay } from "@/lib/delay";
 
 export const useRecorder = () => {
   const { t } = useTranslation();
@@ -53,8 +57,9 @@ export const useRecorder = () => {
         }
       }
 
-      await AudioModule.setAudioModeAsync({
+      await setAudioModeAsync({
         allowsRecording: true,
+        allowsBackgroundRecording: true,
         playsInSilentMode: true,
         shouldPlayInBackground: true,
       });
