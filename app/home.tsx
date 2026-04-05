@@ -46,7 +46,7 @@ const Home = () => {
   const { t } = useTranslation();
   const [showStorageSelector, setShowStorageSelector] = useState(false);
   const [storage, setStorage] = useState<"gigafile" | "dropbox" | undefined>(
-    undefined
+    undefined,
   );
 
   const gigafileServer = useRef<string>(DEFAULT_GIGAFILE_SERVER);
@@ -122,7 +122,7 @@ const Home = () => {
 
     uploaderViewPosition.value = withSpring(
       uploaderViewSize.height * uploarderViewHeightRatio,
-      springConfig
+      springConfig,
     );
     uploaderButtonPosition.value = 0;
   };
@@ -175,7 +175,7 @@ const Home = () => {
           }
         : {
             service: storage,
-          }
+          },
     );
     if (result.status === "failed") {
       collectError("Failed to upload:", result.error);
@@ -217,7 +217,10 @@ const Home = () => {
   // react-native-root-toast requires the RootSiblingParent
   return (
     <RootSiblingParent>
-      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.blue1InIcon }}>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: Colors.blue1InIcon }}
+        edges={["top", "left", "right"]}
+      >
         <Stack.Screen
           options={{
             title: t("title.home"),
@@ -263,7 +266,7 @@ const Home = () => {
         })();`}
               onMessage={(message) => {
                 const serverUrl = JSON.parse(
-                  message.nativeEvent.data
+                  message.nativeEvent.data,
                 ).serverUrl;
                 if (serverUrl) {
                   gigafileServer.current = serverUrl;
