@@ -12,7 +12,6 @@
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"],
         "CFBundleAllowMixedLocalizations": true
       },
       "config": {
@@ -24,8 +23,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon_adaptive.png",
         "backgroundColor": "#003c5a"
-      },
-      "edgeToEdgeEnabled": true
+      }
     },
     "locales": {
       "en": "./locales/meta.en.json",
@@ -34,7 +32,13 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-av",
+      [
+        "expo-audio",
+        {
+          "enableBackgroundPlayback": true,
+          "enableBackgroundRecording": true
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -70,7 +74,6 @@
     "experiments": {
       "typedRoutes": true
     },
-    "newArchEnabled": true,
     "extra": {
       "eas": {
         "projectId": "0bfb143f-5a31-49ca-bdb7-7b323cf00639"
