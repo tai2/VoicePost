@@ -82,6 +82,7 @@ const Home = () => {
   const status = useAudioPlayerStatus(player);
   useEffect(() => {
     if (status.didJustFinish) {
+      player.pause();
       player.seekTo(0);
     }
   }, [player, status.didJustFinish]);

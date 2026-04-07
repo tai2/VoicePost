@@ -57,6 +57,8 @@ export const useRecorder = () => {
         }
       }
 
+      await AudioModule.requestNotificationPermissionsAsync();
+
       await setAudioModeAsync({
         allowsRecording: true,
         allowsBackgroundRecording: true,

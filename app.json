@@ -61,19 +61,22 @@
         "expo-build-properties",
         {
           "android": {
-            "targetSdkVersion": 35
+            "targetSdkVersion": 35,
+            "useHermesV1": true,
+            "buildReactNativeFromSource": true
+          },
+          "ios": {
+            "useHermesV1": true,
+            "buildReactNativeFromSource": true
           }
         }
       ],
-      [
-        "expo-navigation-bar",
-        {
-          "position": "relative"
-        }
-      ]
+      "expo-navigation-bar",
+      "expo-asset"
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "reactCompiler": true
     },
     "extra": {
       "eas": {
