@@ -23,7 +23,7 @@ jobs:
       - name: Generate disclaimer
         run: |
           mkdir voice-post
-          yarn licenses generate-disclaimer > voice-post/DISCLAIMER.txt
+          NODE_ENV=production yarn licenses generate-disclaimer > voice-post/DISCLAIMER.txt
       - uses: shallwefootball/s3-upload-action@master
         with:
           aws_key_id: ${{ secrets.AWS_KEY_ID }}
