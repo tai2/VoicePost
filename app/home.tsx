@@ -14,7 +14,10 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { WebView } from "react-native-webview";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 
 import { IconRecordButton } from "@/components/IconRecordButton";
@@ -43,6 +46,7 @@ const DEFAULT_GIGAFILE_SERVER = "46.gigafile.nu";
 
 const Home = () => {
   const uploarderViewHeightRatio = 0.95;
+  const insets = useSafeAreaInsets();
 
   const { t } = useTranslation();
   const [showStorageSelector, setShowStorageSelector] = useState(false);
@@ -59,16 +63,22 @@ const Home = () => {
     height: number;
   }>({ width: 0, height: 0 });
   const uploaderViewRef = useRef<View>(null);
-  const uploaderViewPosition = useSharedValue(0);
+  const uploaderViewPosition = useSharedValue(-insets.bottom);
   const uploaderButtonPosition = useSharedValue(0);
 
   useLayoutEffect(() => {
     uploaderViewRef.current?.measure((x_, y_, width, height) => {
       setUploaderViewSize({ width, height: height });
-      uploaderViewPosition.value = height * uploarderViewHeightRatio;
+      uploaderViewPosition.value =
+        height * uploarderViewHeightRatio - insets.bottom;
       uploaderButtonPosition.value = 0;
     });
-  }, [setUploaderViewSize, uploaderViewPosition, uploaderButtonPosition]);
+  }, [
+    setUploaderViewSize,
+    uploaderViewPosition,
+    uploaderButtonPosition,
+    insets.bottom,
+  ]);
 
   useEffect(() => {
     AsyncStorage.getItem("storage").then((value) => {
@@ -116,14 +126,14 @@ const Home = () => {
     await startRecording();
 
     uploaderViewPosition.value = withSpring(
-      uploaderViewSize.height * uploarderViewHeightRatio,
+      uploaderViewSize.height * uploarderViewHeightRatio - insets.bottom,
       springConfig,
     );
     uploaderButtonPosition.value = 0;
   };
 
   const handleOnStop = async () => {
-    uploaderViewPosition.value = withSpring(0, springConfig);
+    uploaderViewPosition.value = withSpring(-insets.bottom, springConfig);
     const uri = await stopRecording();
     player.replace(uri);
     setUploadFilename(getRecordedFilename());
@@ -325,7 +335,13 @@ const Home = () => {
               Borders.border,
             ]}
           >
-            <Text testID="upload_file_name" style={{ color: Colors.zinc50 }}>
+            <Text
+              testID="upload_file_name"
+              style={{
+                color: Colors.zinc50,
+                opacity: recordedFile ? 1 : 0,
+              }}
+            >
               {t("label.filename")}: {uploadFilename}
             </Text>
             <Slider
