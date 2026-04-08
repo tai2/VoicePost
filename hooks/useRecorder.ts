@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 import { useTranslation } from "react-i18next";
 import {
   useAudioRecorder,
   setAudioModeAsync,
   AudioModule,
   RecordingPresets,
+  requestNotificationPermissionsAsync,
+  requestRecordingPermissionsAsync,
 } from "expo-audio";
 import * as Linking from "expo-linking";
 
@@ -50,14 +52,15 @@ export const useRecorder = () => {
           return;
         }
 
-        const requestResult =
-          await await AudioModule.requestRecordingPermissionsAsync();
+        const requestResult = await requestRecordingPermissionsAsync();
         if (!requestResult.granted) {
           return;
         }
       }
 
-      await AudioModule.requestNotificationPermissionsAsync();
+      if (Platform.OS === "android") {
+        await requestNotificationPermissionsAsync();
+      }
 
       await setAudioModeAsync({
         allowsRecording: true,
