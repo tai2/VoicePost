@@ -14,7 +14,10 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { WebView } from "react-native-webview";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 
 import { IconRecordButton } from "@/components/IconRecordButton";
@@ -52,6 +55,7 @@ const Home = () => {
 
   const gigafileServer = useRef<string>(DEFAULT_GIGAFILE_SERVER);
   const webViewRef = useRef<WebView>(null);
+  const insets = useSafeAreaInsets();
 
   const [uploadFilename, setUploadFilename] = useState<string>("");
   const [uploaderViewSize, setUploaderViewSize] = useState<{
@@ -65,10 +69,16 @@ const Home = () => {
   useLayoutEffect(() => {
     uploaderViewRef.current?.measure((x_, y_, width, height) => {
       setUploaderViewSize({ width, height: height });
-      uploaderViewPosition.value = height * uploarderViewHeightRatio;
+      uploaderViewPosition.value =
+        -height * uploarderViewHeightRatio + insets.bottom;
       uploaderButtonPosition.value = 0;
     });
-  }, [setUploaderViewSize, uploaderViewPosition, uploaderButtonPosition]);
+  }, [
+    setUploaderViewSize,
+    uploaderViewPosition,
+    uploaderButtonPosition,
+    insets.bottom,
+  ]);
 
   useEffect(() => {
     AsyncStorage.getItem("storage").then((value) => {
@@ -116,7 +126,7 @@ const Home = () => {
     await startRecording();
 
     uploaderViewPosition.value = withSpring(
-      uploaderViewSize.height * uploarderViewHeightRatio,
+      -uploaderViewSize.height * uploarderViewHeightRatio + insets.bottom,
       springConfig,
     );
     uploaderButtonPosition.value = 0;
@@ -279,7 +289,7 @@ const Home = () => {
             alignItems: "center",
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 0.4 }}>
             <IconRecordButton
               height="100%"
               isRecording={isRecording}
@@ -312,12 +322,15 @@ const Home = () => {
             ref={uploaderViewRef}
             style={[
               {
+                position: "absolute",
+                bottom: uploaderViewPosition,
                 gap: Spacing[5],
                 width: "102%",
-                padding: Spacing[6],
+                paddingTop: Spacing[6],
+                paddingHorizontal: Spacing[6],
+                paddingBottom: Spacing[6] + insets.bottom,
                 backgroundColor: Colors.blue1InIcon,
                 alignItems: "center",
-                transform: [{ translateY: uploaderViewPosition }],
                 borderColor: "rgba(0, 0, 0, 0.5)",
               },
               BoxShadow.shadow2Xl,
@@ -325,7 +338,13 @@ const Home = () => {
               Borders.border,
             ]}
           >
-            <Text testID="upload_file_name" style={{ color: Colors.zinc50 }}>
+            <Text
+              testID="upload_file_name"
+              style={{
+                color: Colors.zinc50,
+                opacity: uploadFilename ? 1 : 0,
+              }}
+            >
               {t("label.filename")}: {uploadFilename}
             </Text>
             <Slider
