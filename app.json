@@ -2,7 +2,7 @@
   "expo": {
     "name": "VoicePost",
     "slug": "voice-post",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "orientation": "portrait",
     "backgroundColor": "#003c5a",
     "icon": "./assets/images/icon.png",
@@ -12,8 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "net.tai2.voicepost",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"],
-        "CFBundleAllowMixedLocalizations": true
+        "CFBundleAllowMixedLocalizations": true,
+        "UIDesignRequiresCompatibility": true
       },
       "config": {
         "usesNonExemptEncryption": false
@@ -24,8 +24,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon_adaptive.png",
         "backgroundColor": "#003c5a"
-      },
-      "edgeToEdgeEnabled": true
+      }
     },
     "locales": {
       "en": "./locales/meta.en.json",
@@ -34,7 +33,13 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-av",
+      [
+        "expo-audio",
+        {
+          "enableBackgroundPlayback": true,
+          "enableBackgroundRecording": true
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -56,21 +61,23 @@
         "expo-build-properties",
         {
           "android": {
-            "targetSdkVersion": 35
+            "targetSdkVersion": 35,
+            "useHermesV1": true,
+            "buildReactNativeFromSource": true
+          },
+          "ios": {
+            "useHermesV1": true,
+            "buildReactNativeFromSource": true
           }
         }
       ],
-      [
-        "expo-navigation-bar",
-        {
-          "position": "relative"
-        }
-      ]
+      "expo-navigation-bar",
+      "expo-asset"
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "reactCompiler": true
     },
-    "newArchEnabled": true,
     "extra": {
       "eas": {
         "projectId": "0bfb143f-5a31-49ca-bdb7-7b323cf00639"

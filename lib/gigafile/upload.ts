@@ -14,6 +14,7 @@ export const upload = async (
     fileUri,
     {
       uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+      sessionType: FileSystem.FileSystemSessionType.FOREGROUND,
       fieldName: "file",
       parameters: {
         id: Crypto.randomUUID(),

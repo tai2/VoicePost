@@ -14,7 +14,11 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { WebView } from "react-native-webview";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 
 import { IconRecordButton } from "@/components/IconRecordButton";
 import { TextRecordButton } from "@/components/TextRecordButton";
@@ -27,7 +31,6 @@ import { CopyButton } from "@/components/CopyButton";
 import { StorageSelectorModal } from "@/components/StorageSelectorModal";
 import { getRecordedFilename } from "@/lib/getRecordedFilename";
 import { useRecorder } from "@/hooks/useRecorder";
-import { usePlayer } from "@/hooks/usePlayer";
 import { useUploader } from "@/hooks/useUploader";
 import { Colors } from "@/constants/Colors";
 import { Spacing } from "@/constants/Spacing";
@@ -37,6 +40,7 @@ import { PlayTime } from "@/components/PlayTime";
 import { delay } from "@/lib/delay";
 import { catcher } from "@/lib/catcher";
 import { collectError } from "@/lib/collectError";
+import { Config } from "@/constants/Config";
 
 const DEFAULT_GIGAFILE_SERVER = "46.gigafile.nu";
 
@@ -46,11 +50,12 @@ const Home = () => {
   const { t } = useTranslation();
   const [showStorageSelector, setShowStorageSelector] = useState(false);
   const [storage, setStorage] = useState<"gigafile" | "dropbox" | undefined>(
-    undefined
+    undefined,
   );
 
   const gigafileServer = useRef<string>(DEFAULT_GIGAFILE_SERVER);
   const webViewRef = useRef<WebView>(null);
+  const insets = useSafeAreaInsets();
 
   const [uploadFilename, setUploadFilename] = useState<string>("");
   const [uploaderViewSize, setUploaderViewSize] = useState<{
@@ -64,10 +69,16 @@ const Home = () => {
   useLayoutEffect(() => {
     uploaderViewRef.current?.measure((x_, y_, width, height) => {
       setUploaderViewSize({ width, height: height });
-      uploaderViewPosition.value = height * uploarderViewHeightRatio;
+      uploaderViewPosition.value =
+        -height * uploarderViewHeightRatio + insets.bottom;
       uploaderButtonPosition.value = 0;
     });
-  }, [setUploaderViewSize, uploaderViewPosition, uploaderButtonPosition]);
+  }, [
+    setUploaderViewSize,
+    uploaderViewPosition,
+    uploaderButtonPosition,
+    insets.bottom,
+  ]);
 
   useEffect(() => {
     AsyncStorage.getItem("storage").then((value) => {
@@ -77,6 +88,15 @@ const Home = () => {
     });
   }, []);
 
+  const player = useAudioPlayer();
+  const status = useAudioPlayerStatus(player);
+  useEffect(() => {
+    if (status.didJustFinish) {
+      player.pause();
+      player.seekTo(0);
+    }
+  }, [player, status.didJustFinish]);
+
   const {
     isRecording,
     isProcessing,
@@ -85,21 +105,6 @@ const Home = () => {
     startRecording,
     stopRecording,
   } = useRecorder();
-
-  const {
-    isPlaying,
-    soundPosition,
-    soundDuration,
-    load,
-    play,
-    pause,
-    forward,
-    rewind,
-    isSliding,
-    onSlidingStart,
-    onSliding,
-    onSlidingStop,
-  } = usePlayer();
 
   const { isUploading, uploadProgress, uploadedFileUrl, reset, upload } =
     useUploader();
@@ -121,8 +126,8 @@ const Home = () => {
     await startRecording();
 
     uploaderViewPosition.value = withSpring(
-      uploaderViewSize.height * uploarderViewHeightRatio,
-      springConfig
+      -uploaderViewSize.height * uploarderViewHeightRatio + insets.bottom,
+      springConfig,
     );
     uploaderButtonPosition.value = 0;
   };
@@ -130,7 +135,7 @@ const Home = () => {
   const handleOnStop = async () => {
     uploaderViewPosition.value = withSpring(0, springConfig);
     const uri = await stopRecording();
-    await load(uri, recordedDuration);
+    player.replace(uri);
     setUploadFilename(getRecordedFilename());
   };
 
@@ -175,7 +180,7 @@ const Home = () => {
           }
         : {
             service: storage,
-          }
+          },
     );
     if (result.status === "failed") {
       collectError("Failed to upload:", result.error);
@@ -217,7 +222,10 @@ const Home = () => {
   // react-native-root-toast requires the RootSiblingParent
   return (
     <RootSiblingParent>
-      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.blue1InIcon }}>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: Colors.blue1InIcon }}
+        edges={["top", "left", "right"]}
+      >
         <Stack.Screen
           options={{
             title: t("title.home"),
@@ -263,7 +271,7 @@ const Home = () => {
         })();`}
               onMessage={(message) => {
                 const serverUrl = JSON.parse(
-                  message.nativeEvent.data
+                  message.nativeEvent.data,
                 ).serverUrl;
                 if (serverUrl) {
                   gigafileServer.current = serverUrl;
@@ -281,7 +289,7 @@ const Home = () => {
             alignItems: "center",
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 0.4 }}>
             <IconRecordButton
               height="100%"
               isRecording={isRecording}
@@ -296,8 +304,8 @@ const Home = () => {
               recordedFile
                 ? {
                     mode: "player",
-                    position: soundPosition,
-                    duration: soundDuration,
+                    position: status.currentTime * 1000,
+                    duration: recordedDuration,
                   }
                 : { mode: "recorder", duration: recordedDuration }
             }
@@ -314,12 +322,15 @@ const Home = () => {
             ref={uploaderViewRef}
             style={[
               {
+                position: "absolute",
+                bottom: uploaderViewPosition,
                 gap: Spacing[5],
                 width: "102%",
-                padding: Spacing[6],
+                paddingTop: Spacing[6],
+                paddingHorizontal: Spacing[6],
+                paddingBottom: Spacing[6] + insets.bottom,
                 backgroundColor: Colors.blue1InIcon,
                 alignItems: "center",
-                transform: [{ translateY: uploaderViewPosition }],
                 borderColor: "rgba(0, 0, 0, 0.5)",
               },
               BoxShadow.shadow2Xl,
@@ -327,7 +338,13 @@ const Home = () => {
               Borders.border,
             ]}
           >
-            <Text testID="upload_file_name" style={{ color: Colors.zinc50 }}>
+            <Text
+              testID="upload_file_name"
+              style={{
+                color: Colors.zinc50,
+                opacity: uploadFilename ? 1 : 0,
+              }}
+            >
               {t("label.filename")}: {uploadFilename}
             </Text>
             <Slider
@@ -335,12 +352,12 @@ const Home = () => {
                 width: uploaderViewSize.width - Spacing[6] * 2,
                 height: Spacing[10],
               }}
-              value={isSliding ? undefined : soundPosition / recordedDuration}
+              value={(status.currentTime * 1000) / recordedDuration}
               minimumTrackTintColor={Colors.orangeInIcon}
               maximumTrackTintColor={Colors.zinc300}
-              onSlidingStart={onSlidingStart}
-              onValueChange={onSliding}
-              onSlidingComplete={onSlidingStop}
+              onSlidingComplete={(position: number) => {
+                player.seekTo(status.duration * position);
+              }}
             />
             <View
               style={{
@@ -349,15 +366,35 @@ const Home = () => {
                 gap: Spacing[2.5],
               }}
             >
-              <RewindButton onPress={catcher(rewind)} />
+              <RewindButton
+                onPress={() => {
+                  const positionMillis =
+                    status.currentTime - Config.skipDuration / 1000;
+                  player.seekTo(positionMillis);
+                }}
+              />
               <View style={{ flexGrow: 1 }}>
-                {isPlaying ? (
-                  <PauseButton onPress={catcher(pause)} />
+                {status.playing ? (
+                  <PauseButton
+                    onPress={() => {
+                      player.pause();
+                    }}
+                  />
                 ) : (
-                  <PlayButton onPress={catcher(play)} />
+                  <PlayButton
+                    onPress={() => {
+                      player.play();
+                    }}
+                  />
                 )}
               </View>
-              <FastForwardButton onPress={catcher(forward)} />
+              <FastForwardButton
+                onPress={() => {
+                  player.seekTo(
+                    status.currentTime + Config.skipDuration / 1000,
+                  );
+                }}
+              />
             </View>
             <View
               style={{

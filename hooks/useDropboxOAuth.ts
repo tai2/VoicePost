@@ -42,9 +42,14 @@ export const useDropboxOAuth = (redirectPath: string) => {
 
   // issueAccessToken returns null when the process is canceled.
   const issueAccessToken = async (): Promise<TokenResponse | null> => {
-    const refreshToken = await SecureStore.getItemAsync(
-      DROPBOX_REFRESH_TOKEN_KEY
-    );
+    let refreshToken: string | null = null;
+    try {
+      refreshToken = await SecureStore.getItemAsync(
+        DROPBOX_REFRESH_TOKEN_KEY
+      );
+    } catch (e) {
+      console.error("Failed to read refresh token from SecureStore", e);
+    }
 
     if (refreshToken) {
       try {
@@ -78,10 +83,14 @@ export const useDropboxOAuth = (redirectPath: string) => {
           throw "Failed to get refresh token";
         }
 
-        await SecureStore.setItemAsync(
-          DROPBOX_REFRESH_TOKEN_KEY,
-          token.refreshToken
-        );
+        try {
+          await SecureStore.setItemAsync(
+            DROPBOX_REFRESH_TOKEN_KEY,
+            token.refreshToken
+          );
+        } catch (e) {
+          console.error("Failed to save refresh token to SecureStore", e);
+        }
 
         return token;
       case "cancel":

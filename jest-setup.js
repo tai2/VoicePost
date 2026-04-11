@@ -6,6 +6,10 @@ import ja from "./locales/ja.json";
 // ref: github.com/callstack/react-native-paper/issues/4561#issuecomment-2500877723
 jest.mock("expo-font");
 
+jest.mock("react-native-reanimated", () =>
+  require("react-native-reanimated/mock"),
+);
+
 i18n.use(initReactI18next).init({
   resources: {
     ja: {

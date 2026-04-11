@@ -13,6 +13,7 @@ export const upload = async (
     localPath,
     {
       uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
+      sessionType: FileSystem.FileSystemSessionType.FOREGROUND,
       headers: {
         "Content-Type": "application/octet-stream",
         Authorization: `Bearer ${accessToken}`,

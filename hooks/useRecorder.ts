@@ -1,13 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 import { useTranslation } from "react-i18next";
-import { Audio } from "expo-av";
+import {
+  useAudioRecorder,
+  setAudioModeAsync,
+  AudioModule,
+  RecordingPresets,
+  requestNotificationPermissionsAsync,
+  requestRecordingPermissionsAsync,
+} from "expo-audio";
 import * as Linking from "expo-linking";
-import { delay } from "@/lib/delay";
 
 export const useRecorder = () => {
   const { t } = useTranslation();
-  const recordingRef = useRef<Audio.Recording | null>(null);
+  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const recordingStartedAt = useRef<number>(0);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -25,17 +31,16 @@ export const useRecorder = () => {
     }
   }, [isRecording, recordedDuration]);
 
-  const [, requestPermission, getPermission] = Audio.usePermissions();
-
   const startRecording = async () => {
-    if (isRecording || recordingRef.current) {
+    if (isRecording) {
       throw "Recording is already started";
     }
 
     try {
       setIsProcessing(true);
 
-      const permissionResponse = await getPermission();
+      const permissionResponse =
+        await AudioModule.getRecordingPermissionsAsync();
       if (!permissionResponse.granted) {
         if (!permissionResponse.canAskAgain) {
           Alert.alert(t("title.micPermission"), t("message.micPermission"), [
@@ -47,26 +52,29 @@ export const useRecorder = () => {
           return;
         }
 
-        const requestResult = await requestPermission();
+        const requestResult = await requestRecordingPermissionsAsync();
         if (!requestResult.granted) {
           return;
         }
       }
 
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-        staysActiveInBackground: true,
+      if (Platform.OS === "android") {
+        await requestNotificationPermissionsAsync();
+      }
+
+      await setAudioModeAsync({
+        allowsRecording: true,
+        allowsBackgroundRecording: true,
+        playsInSilentMode: true,
+        shouldPlayInBackground: true,
       });
 
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY
-      );
+      await audioRecorder.prepareToRecordAsync();
+      audioRecorder.record();
 
       recordingStartedAt.current = performance.now();
       setRecordedDuration(0);
       setRecordedFile(null);
-      recordingRef.current = recording;
       setIsRecording(true);
     } finally {
       setIsProcessing(false);
@@ -74,28 +82,21 @@ export const useRecorder = () => {
   };
 
   const stopRecording = async (): Promise<string> => {
-    if (!isRecording || !recordingRef.current) {
+    if (!isRecording) {
       throw "Recording is not started";
     }
 
     try {
       setIsProcessing(true);
 
-      // Immediate stop after the start sometimes makes the stopAndUnloadAsync unresponsive. To avoid that issue, we need
-      // a small delay.
-      await delay(100);
+      await audioRecorder.stop();
 
-      await recordingRef.current.stopAndUnloadAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-      });
-      const uri = recordingRef.current.getURI();
+      const uri = audioRecorder.uri;
       if (!uri) {
         throw "Recording is not stored";
       }
 
       setRecordedFile(uri);
-      recordingRef.current = null;
       setIsRecording(false);
 
       return uri;
